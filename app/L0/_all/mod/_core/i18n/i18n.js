@@ -199,6 +199,7 @@ async function initI18n() {
     // Persist initial locale to cookie so backend honors the active choice on
     // subsequent requests, even when navigator.language disagrees.
     writeStoredLocale(initialLocale);
+    syncDocumentLang(initialLocale);
 
     // Expose a tiny runtime API so UI surfaces (e.g. the language selector)
     // can read/change the locale without importing this module directly.
@@ -241,8 +242,19 @@ async function setLocale(rawLocale) {
   await ensureLocaleLoaded(target);
   await i18next.changeLanguage(target);
   writeStoredLocale(target);
+  syncDocumentLang(target);
   dispatchLocaleChanged(target);
   return target;
+}
+
+function syncDocumentLang(locale) {
+  try {
+    if (typeof document !== "undefined" && document.documentElement) {
+      document.documentElement.lang = locale;
+    }
+  } catch {
+    /* noop */
+  }
 }
 
 function onLocaleChanged(handler) {
