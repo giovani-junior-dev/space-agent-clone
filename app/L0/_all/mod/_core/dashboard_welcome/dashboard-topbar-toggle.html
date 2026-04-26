@@ -9,12 +9,12 @@
           type="button"
           class="space-topbar-button"
           :disabled="savingPreference"
-          aria-label="Show welcome panel"
-          title="Show welcome panel"
+          :aria-label="$t('dashboard:welcome.showAriaLabel')"
+          :title="$t('dashboard:welcome.showAriaLabel')"
           @click="showWelcome()"
         >
           <x-icon x-text="savingPreference ? 'hourglass_top' : 'visibility'"></x-icon>
-          <span>Welcome</span>
+          <span x-t="'dashboard:welcome.showButtonLabel'"></span>
         </button>
       </template>
     </div>

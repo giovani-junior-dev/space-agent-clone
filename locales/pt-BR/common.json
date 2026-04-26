@@ -1,1 +1,33 @@
-{}
+{
+  "actions": {
+    "cancel": "Cancelar",
+    "save": "Salvar",
+    "saving": "Salvando...",
+    "create": "Criar",
+    "creating": "Criando...",
+    "remove": "Remover",
+    "removing": "Removendo...",
+    "rename": "Renomear",
+    "edit": "Editar",
+    "download": "Baixar",
+    "cut": "Recortar",
+    "copy": "Copiar",
+    "paste": "Colar",
+    "select": "Selecionar",
+    "unselect": "Desselecionar",
+    "selectAll": "Selecionar tudo",
+    "close": "Fechar",
+    "refresh": "Atualizar",
+    "back": "Voltar"
+  },
+  "labels": {
+    "name": "Nome",
+    "contents": "Conteúdo",
+    "loading": "Carregando...",
+    "ready": "Pronto",
+    "welcome": "Bem-vindo"
+  },
+  "errors": {
+    "unknown": "Ocorreu um erro inesperado."
+  }
+}

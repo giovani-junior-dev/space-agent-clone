@@ -4,6 +4,7 @@ import {
   setDashboardWelcomeHidden,
   subscribeDashboardWelcomeHiddenChange
 } from "/mod/_core/dashboard_welcome/dashboard-prefs.js";
+import { t } from "/mod/_core/i18n/i18n.js";
 
 function logDashboardWelcomeError(context, error) {
   console.error(`[dashboard-welcome] ${context}`, error);
@@ -26,7 +27,7 @@ globalThis.dashboardWelcomeTopbarToggle = function dashboardWelcomeTopbarToggle(
         this.hidden = prefs.welcomeHidden;
       } catch (error) {
         logDashboardWelcomeError("topbar toggle init failed", error);
-        showToast(String(error?.message || "Unable to load the dashboard welcome setting."), {
+        showToast(String(error?.message || t("dashboard:welcome.loadFailed")), {
           tone: "error"
         });
       } finally {
@@ -54,7 +55,7 @@ globalThis.dashboardWelcomeTopbarToggle = function dashboardWelcomeTopbarToggle(
         this.hidden = false;
       } catch (error) {
         logDashboardWelcomeError("topbar toggle showWelcome failed", error);
-        showToast(String(error?.message || "Unable to save that setting."), {
+        showToast(String(error?.message || t("dashboard:welcome.savePrefFailed")), {
           tone: "error"
         });
       } finally {

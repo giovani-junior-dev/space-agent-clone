@@ -1,22 +1,34 @@
+import { t } from "/mod/_core/i18n/i18n.js";
+
 const ADMIN_AGENT_AVATAR_PATH = "/mod/_core/visual/res/chat/admin/helmet_no_bg_256.webp";
 const ADMIN_GROUP_ID = "_admin";
 
-const tabs = [
-  { id: "dashboard", icon: "space_dashboard", label: "Dashboard" },
-  { id: "agent", avatarPath: ADMIN_AGENT_AVATAR_PATH, label: "Agent" },
-  { id: "files", icon: "folder_open", label: "Files" },
-  { id: "time_travel", icon: "history", label: "Time Travel" },
-  { id: "modules", icon: "package_2", label: "Modules" }
+// Tab and quickAction labels are derived via i18n keys. The descriptors keep a
+// `labelKey` reference so the UI can resolve the localized label reactively
+// through the `tabs`/`quickActions` getters.
+const tabDescriptors = [
+  { id: "dashboard", icon: "space_dashboard", labelKey: "admin:tabs.dashboard" },
+  { id: "agent", avatarPath: ADMIN_AGENT_AVATAR_PATH, labelKey: "admin:tabs.agent" },
+  { id: "files", icon: "folder_open", labelKey: "admin:tabs.files" },
+  { id: "time_travel", icon: "history", labelKey: "admin:tabs.timeTravel" },
+  { id: "modules", icon: "package_2", labelKey: "admin:tabs.modules" }
 ];
 
 const ACTIVE_TAB_STORAGE_KEY = "space.admin.activeTab";
 
-const quickActions = [
-  { id: "open-agent", avatarPath: ADMIN_AGENT_AVATAR_PATH, label: "Admin agent", targetTab: "agent" },
-  { id: "open-files", icon: "folder_open", label: "Files", targetTab: "files" },
-  { id: "open-time-travel", icon: "history", label: "Time Travel", targetTab: "time_travel" },
-  { id: "open-modules", icon: "package_2", label: "Modules", targetTab: "modules" }
+const quickActionDescriptors = [
+  { id: "open-agent", avatarPath: ADMIN_AGENT_AVATAR_PATH, labelKey: "admin:quickActions.openAgent", targetTab: "agent" },
+  { id: "open-files", icon: "folder_open", labelKey: "admin:quickActions.openFiles", targetTab: "files" },
+  { id: "open-time-travel", icon: "history", labelKey: "admin:quickActions.openTimeTravel", targetTab: "time_travel" },
+  { id: "open-modules", icon: "package_2", labelKey: "admin:quickActions.openModules", targetTab: "modules" }
 ];
+
+function localizeDescriptors(descriptors) {
+  return descriptors.map((descriptor) => ({
+    ...descriptor,
+    label: t(descriptor.labelKey)
+  }));
+}
 
 const arrowKeyOffset = {
   ArrowLeft: -1,
@@ -37,14 +49,20 @@ const pageModel = {
   tabsCollapsed: false,
   tabsCompact: false,
   refs: {},
-  quickActions,
-  tabs,
+
+  get tabs() {
+    return localizeDescriptors(tabDescriptors);
+  },
+
+  get quickActions() {
+    return localizeDescriptors(quickActionDescriptors);
+  },
 
   init() {
     this.restoreActiveTab();
 
     if (!this.isKnownTab(this.activeTab)) {
-      this.activeTab = tabs[0].id;
+      this.activeTab = tabDescriptors[0].id;
     }
   },
 

@@ -11,7 +11,7 @@
             type="button"
             class="secondary-button dashboard-welcome-dismiss"
             :disabled="savingPreference || isInstalling"
-            aria-label="Hide welcome panel"
+            :aria-label="$t('dashboard:welcome.hideAriaLabel')"
             @click="hideWelcome()"
           >
             <x-icon>close</x-icon>
@@ -19,14 +19,14 @@
 
           <div class="dashboard-welcome-content">
             <div class="dashboard-welcome-copy">
-              <p class="page-eyebrow">Welcome</p>
-              <h2>Start fast</h2>
-              <p>Open the project links or launch one of the bundled demo spaces.</p>
+              <p class="page-eyebrow" x-t="'dashboard:welcome.eyebrow'"></p>
+              <h2 x-t="'dashboard:welcome.headline'"></h2>
+              <p x-t="'dashboard:welcome.intro'"></p>
             </div>
 
             <div class="dashboard-welcome-sections">
-              <section class="dashboard-welcome-section" aria-label="Resources">
-                <h3 class="dashboard-welcome-section-title">Resources</h3>
+              <section class="dashboard-welcome-section" :aria-label="$t('dashboard:welcome.resourcesAriaLabel')">
+                <h3 class="dashboard-welcome-section-title" x-t="'dashboard:welcome.resourcesHeading'"></h3>
 
                 <div class="dashboard-welcome-actions dashboard-welcome-resources">
                   <template x-for="resource in resources" :key="resource.id">
@@ -46,8 +46,8 @@
                 </div>
               </section>
 
-              <section class="dashboard-welcome-section" aria-label="Demo spaces">
-                <h3 class="dashboard-welcome-section-title">Demo Spaces</h3>
+              <section class="dashboard-welcome-section" :aria-label="$t('dashboard:welcome.demoSpacesAriaLabel')">
+                <h3 class="dashboard-welcome-section-title" x-t="'dashboard:welcome.demoSpacesHeading'"></h3>
 
                 <div class="dashboard-welcome-actions dashboard-welcome-examples">
                   <template x-for="example in examples" :key="example.id">

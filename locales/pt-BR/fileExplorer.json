@@ -1,1 +1,79 @@
-{}
+{
+  "dialogTitle": "Navegador de Arquivos",
+  "toolbar": {
+    "goToParent": "Ir para a pasta acima",
+    "goToHome": "Ir para a pasta inicial",
+    "refresh": "Atualizar pasta atual",
+    "createFile": "Criar arquivo",
+    "createFolder": "Criar pasta"
+  },
+  "summary": {
+    "pasteHere": "Colar aqui",
+    "selectAllInFolder": "Selecionar todos os itens nesta pasta",
+    "selectionActions": "Ações da seleção",
+    "clearSelection": "Limpar seleção",
+    "removeFromQueue": "Remover {{name}} de {{queue}}",
+    "actionsFor": "Ações para {{name}}",
+    "toggleEntry": "{{action}} {{name}}"
+  },
+  "clipboard": {
+    "cutQueue": "fila de recorte",
+    "copyQueue": "fila de cópia",
+    "hideList": "Ocultar lista",
+    "showList": "Mostrar lista",
+    "cutLabel_one": "{{count}} item recortado",
+    "cutLabel_other": "{{count}} itens recortados",
+    "copyLabel_one": "{{count}} item copiado",
+    "copyLabel_other": "{{count}} itens copiados"
+  },
+  "counts": {
+    "items_one": "{{count}} item",
+    "items_other": "{{count}} itens",
+    "selected_one": "{{count}} item selecionado",
+    "selected_other": "{{count}} itens selecionados"
+  },
+  "list": {
+    "loadingTitle": "Carregando pasta...",
+    "loadingDetail": "Aguarde enquanto o navegador lê o caminho atual.",
+    "emptyTitle": "Esta pasta está vazia.",
+    "emptyDetail": "Nenhum arquivo ou subpasta legível foi retornado para o caminho atual."
+  },
+  "errors": {
+    "loadFailed": "Falha ao carregar os arquivos.",
+    "accessDenied": "Acesso negado",
+    "pathNotFound": "Caminho não encontrado",
+    "openFolderFailed": "Não foi possível abrir a pasta",
+    "notAllowedView": "Você não tem permissão para ver {{path}}.",
+    "noFolderAt": "Nenhuma pasta encontrada em {{path}}.",
+    "nameEmpty": "O nome não pode estar vazio.",
+    "nameRelativeMarker": "O nome não pode ser um marcador de caminho relativo.",
+    "nameSlashes": "O nome não pode conter barras.",
+    "nameExists": "Já existe um item com esse nome.",
+    "openWritableFolderFirst": "Abra uma pasta gravável antes de criar um item.",
+    "onlyFilesEditable": "Apenas arquivos podem ser editados.",
+    "fileTooLarge": "O arquivo é grande demais para edição no navegador ({{size}}). O limite é 1 MB.",
+    "downloadNoPermission": "Você não tem permissão para baixar {{name}}.",
+    "downloadUnavailable": "{{name}} não está mais disponível para download.",
+    "thisItem": "este item",
+    "thisItemCap": "Este item"
+  },
+  "contextMenu": {
+    "rename": "Renomear",
+    "edit": "Editar",
+    "download": "Baixar",
+    "cut": "Recortar",
+    "copy": "Copiar",
+    "remove": "Remover"
+  },
+  "dialogs": {
+    "createFile": "Novo arquivo",
+    "createFolder": "Nova pasta",
+    "renameTitle": "Renomear {{name}}",
+    "renameTitleFallback": "Renomear item",
+    "editTitle": "Editar {{name}}",
+    "editTitleFallback": "Editar arquivo",
+    "deletionConfirmation": "Confirmação de exclusão",
+    "noFileSelected": "[Nenhum arquivo selecionado]",
+    "loadingContents": "Carregando conteúdo do arquivo..."
+  }
+}

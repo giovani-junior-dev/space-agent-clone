@@ -10,6 +10,7 @@ import {
   getSpaceDisplayIconColor,
   getSpaceDisplayTitle
 } from "/mod/_core/spaces/space-metadata.js";
+import { t } from "/mod/_core/i18n/i18n.js";
 
 const EXAMPLE_MANIFEST_PATTERN = "mod/_core/dashboard_welcome/examples/*/space.yaml";
 const EXAMPLE_ORDER = Object.freeze([
@@ -22,32 +23,32 @@ const RESOURCE_LINKS = Object.freeze([
   {
     href: "https://github.com/agent0ai/space-agent",
     id: "github-repo",
-    label: "GitHub Repo"
+    labelKey: "dashboard:resources.githubRepo"
   },
   {
     href: "https://deepwiki.com/agent0ai/space-agent",
     id: "deepwiki-docs",
-    label: "DeepWiki Docs"
+    labelKey: "dashboard:resources.deepwikiDocs"
   },
   {
     href: "https://agent-zero.ai",
     id: "agent-zero-site",
-    label: "Agent Zero"
+    labelKey: "dashboard:resources.agentZeroSite"
   },
   {
     href: "https://discord.gg/B8KZKNsPpj",
     id: "discord",
-    label: "Discord"
+    labelKey: "dashboard:resources.discord"
   },
   {
     href: "https://www.youtube.com/@AgentZeroFW",
     id: "youtube",
-    label: "YouTube"
+    labelKey: "dashboard:resources.youtube"
   },
   {
     href: "https://x.com/Agent0ai",
     id: "x",
-    label: "X"
+    labelKey: "dashboard:resources.x"
   }
 ]);
 const EXAMPLE_ORDER_INDEX = new Map(EXAMPLE_ORDER.map((id, index) => [id, index]));
@@ -191,8 +192,15 @@ globalThis.dashboardWelcome = function dashboardWelcome() {
     hidden: false,
     installingExampleId: "",
     ready: false,
-    resources: RESOURCE_LINKS,
     savingPreference: false,
+
+    get resources() {
+      // Computed each render so resource labels react to locale changes.
+      return RESOURCE_LINKS.map((resource) => ({
+        ...resource,
+        label: t(resource.labelKey)
+      }));
+    },
 
     async init() {
       this.dashboardWelcomeHiddenChangeCleanup = subscribeDashboardWelcomeHiddenChange((nextHidden) => {
@@ -205,7 +213,7 @@ globalThis.dashboardWelcome = function dashboardWelcome() {
         this.examples = examples;
       } catch (error) {
         logDashboardWelcomeError("init failed", error);
-        showToast(String(error?.message || "Unable to load the dashboard welcome panel."), {
+        showToast(String(error?.message || t("dashboard:welcome.loadFailed")), {
           tone: "error"
         });
       } finally {
@@ -239,7 +247,7 @@ globalThis.dashboardWelcome = function dashboardWelcome() {
         this.hidden = requestedHidden;
       } catch (error) {
         logDashboardWelcomeError("setHidden failed", error);
-        showToast(String(error?.message || "Unable to save that setting."), {
+        showToast(String(error?.message || t("dashboard:welcome.savePrefFailed")), {
           tone: "error"
         });
       } finally {
@@ -271,12 +279,12 @@ globalThis.dashboardWelcome = function dashboardWelcome() {
           sourcePath: example.sourcePath
         });
 
-        showToast(`Opened "${getSpaceDisplayTitle(createdSpace)}".`, {
+        showToast(t("dashboard:welcome.openedSpace", { title: getSpaceDisplayTitle(createdSpace) }), {
           tone: "success"
         });
       } catch (error) {
         logDashboardWelcomeError("installExample failed", error);
-        showToast(String(error?.message || "Unable to open that demo space."), {
+        showToast(String(error?.message || t("dashboard:welcome.openDemoFailed")), {
           tone: "error"
         });
       } finally {
