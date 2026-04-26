@@ -255,6 +255,29 @@ export function buildAdminAgentPromptMessages(systemPromptOrContext, messages, o
   return requestMessages;
 }
 
+const ALLOWED_MESSAGE_FIELDS = new Set([
+  "role",
+  "content",
+  "name",
+  "tool_calls",
+  "tool_call_id",
+  "function_call"
+]);
+
+function sanitizeRequestMessage(message) {
+  if (!message || typeof message !== "object") {
+    return message;
+  }
+
+  const sanitized = {};
+  for (const key of Object.keys(message)) {
+    if (ALLOWED_MESSAGE_FIELDS.has(key)) {
+      sanitized[key] = message[key];
+    }
+  }
+  return sanitized;
+}
+
 function createRequestBody(settings, systemPrompt, messages, options = {}) {
   return {
     ...llmParams.parseAdminAgentParamsText(settings.paramsText || ""),
@@ -264,7 +287,7 @@ function createRequestBody(settings, systemPrompt, messages, options = {}) {
       buildAdminAgentPromptMessages(systemPrompt, messages, {
         promptContext: options.promptContext
       })
-    )
+    ).map(sanitizeRequestMessage)
   };
 }
 

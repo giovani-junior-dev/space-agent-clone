@@ -1549,8 +1549,31 @@ function createRequestBody(settings, promptInput) {
     ...llmParams.parseOnscreenAgentParamsText(settings.paramsText || ""),
     model: settings.model || config.DEFAULT_ONSCREEN_AGENT_SETTINGS.model,
     stream: true,
-    messages: requestMessages
+    messages: requestMessages.map(sanitizeRequestMessage)
   };
+}
+
+const ALLOWED_MESSAGE_FIELDS = new Set([
+  "role",
+  "content",
+  "name",
+  "tool_calls",
+  "tool_call_id",
+  "function_call"
+]);
+
+function sanitizeRequestMessage(message) {
+  if (!message || typeof message !== "object") {
+    return message;
+  }
+
+  const sanitized = {};
+  for (const key of Object.keys(message)) {
+    if (ALLOWED_MESSAGE_FIELDS.has(key)) {
+      sanitized[key] = message[key];
+    }
+  }
+  return sanitized;
 }
 
 function resolveChatRequestUrl(apiEndpoint) {
