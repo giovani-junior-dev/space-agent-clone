@@ -12,6 +12,7 @@ import { sendApiResult, sendJson } from "./responses.js";
 import { applyApiCorsHeaders, handleApiPreflight } from "./cors.js";
 import { handleModuleRequest } from "./mod_handler.js";
 import { handleAppFetchRequest } from "./app_fetch_handler.js";
+import { handleLocaleRequest, isLocaleRequest } from "./locales_handler.js";
 import { readParsedRequestBody } from "./request_body.js";
 import { resolveProjectVersion } from "../lib/utils/project_version.js";
 import {
@@ -355,6 +356,11 @@ function createRequestHandler(options) {
           requestContext,
           user: requestContext.user
         });
+        return;
+      }
+
+      if (isLocaleRequest(requestUrl.pathname)) {
+        handleLocaleRequest(res, requestUrl.pathname);
         return;
       }
 

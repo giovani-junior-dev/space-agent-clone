@@ -95,6 +95,8 @@
   "dependencies": {
     "archiver": "^7.0.1",
     "electron-updater": "^6.8.3",
+    "i18next": "^26.0.8",
+    "i18next-browser-languagedetector": "^8.2.1",
     "isomorphic-git": "^1.37.4"
   }
 }

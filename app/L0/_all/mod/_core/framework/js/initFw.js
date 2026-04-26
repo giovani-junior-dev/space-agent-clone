@@ -6,6 +6,7 @@ import * as _components from "./components.js";
 import * as _icons from "./icons.js";
 import { registerAlpineMagic } from "./confirmClick.js";
 import { HTML_EXTENSION_READY_ATTRIBUTE } from "./extensions.js";
+import { initI18n, registerAlpineBindings as registerI18nBindings } from "../../i18n/i18n.js";
 
 initializeRuntime({
   proxyPath: "/api/proxy"
@@ -14,11 +15,17 @@ initializeRuntime({
 // initialize required elements
 await initializer.initialize();
 
+// initialize i18n BEFORE Alpine starts so $t / x-t are usable in the first render
+await initI18n();
+
 // import alpine library
 // @ts-ignore
 await import("./alpine.min.js");
 
 const Alpine = globalThis.Alpine;
+
+// register i18n Alpine bindings ($t magic + x-t directive) before Alpine.start runs on DOMContentLoaded
+registerI18nBindings(Alpine);
 
 const warnAlpine = (message, el) => {
   console.warn(`Alpine Warning: ${message}`, el);
