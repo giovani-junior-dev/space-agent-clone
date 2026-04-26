@@ -145,7 +145,10 @@ export async function importComponent(path, targetElement) {
           if (script.src) {
             const promise = new Promise((resolve, reject) => {
               script.onload = resolve;
-              script.onerror = reject;
+              script.onerror = (event) => {
+                const src = script.src || "(unknown src)";
+                reject(new Error(`Failed to load script: ${src}`));
+              };
             });
             loadPromises.push(promise);
           }
@@ -161,7 +164,10 @@ export async function importComponent(path, targetElement) {
         if (clone.tagName === "LINK" && clone.rel === "stylesheet") {
           const promise = new Promise((resolve, reject) => {
             clone.onload = resolve;
-            clone.onerror = reject;
+            clone.onerror = (event) => {
+              const href = clone.href || clone.getAttribute("href") || "(unknown href)";
+              reject(new Error(`Failed to load stylesheet: ${href}`));
+            };
           });
           loadPromises.push(promise);
         }

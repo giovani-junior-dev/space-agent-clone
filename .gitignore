@@ -20,3 +20,6 @@ server/data/*
 !server/data/.gitignore
 csr.csr
 key.pem
+
+# Agent worktrees (transient)
+.claude/worktrees/

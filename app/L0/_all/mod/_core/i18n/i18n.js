@@ -305,22 +305,11 @@ function registerAlpineBindings(Alpine) {
     });
   }
 
-  // Force a global re-render on locale change so that {{ $t(...) }} interpolations refresh.
-  window.addEventListener(LOCALE_CHANGED_EVENT, () => {
-    try {
-      if (Array.isArray(Alpine?._stores)) {
-        return;
-      }
-      // Walk the document and re-evaluate Alpine trees.
-      document.querySelectorAll("[x-data]").forEach((el) => {
-        if (el._x_dataStack) {
-          Alpine.nextTick(() => Alpine.initTree(el));
-        }
-      });
-    } catch {
-      /* noop */
-    }
-  });
+  // Reactive store (spaceLocale.version) above is what drives reactive
+  // re-evaluation of $t(...) bindings. We intentionally do NOT call
+  // Alpine.initTree on locale change because that re-mounts router outlets
+  // and re-triggers importComponent, which can fail with [object Event]
+  // when a <script>/<link> onerror fires.
 }
 
 export {
