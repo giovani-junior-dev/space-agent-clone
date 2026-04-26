@@ -4,6 +4,10 @@ schema: spaces/v2
 updated_at: 2026-04-14T00:00:00.000Z
 title: Retro Arcade
 description: Tetris, Minesweeper, Snake, and a neon retro marquee.
+title_i18n:
+  pt-BR: Fliperama Retrô
+description_i18n:
+  pt-BR: Tetris, Campo Minado, Snake e um letreiro retrô em neon.
 icon: gamepad
 icon_color: "#00ffd5"
 layout_order:

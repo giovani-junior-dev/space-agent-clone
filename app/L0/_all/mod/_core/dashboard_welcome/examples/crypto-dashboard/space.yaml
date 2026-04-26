@@ -4,6 +4,10 @@ schema: spaces/v2
 updated_at: 2026-04-14T00:00:00.000Z
 title: Crypto Dashboard
 description: Live prices, BTC versus the S&P 500, and a crypto news feed.
+title_i18n:
+  pt-BR: Painel de Cripto
+description_i18n:
+  pt-BR: Preços ao vivo, BTC vs S&P 500 e um feed de notícias de cripto.
 icon: currency_bitcoin
 icon_color: "#f6be63"
 layout_order:

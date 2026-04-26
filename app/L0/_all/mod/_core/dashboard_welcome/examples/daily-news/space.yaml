@@ -4,6 +4,10 @@ schema: spaces/v2
 updated_at: 2026-04-14T00:00:00.000Z
 title: Daily News
 description: Top headlines, a live news feed, and weather in one space.
+title_i18n:
+  pt-BR: Notícias do Dia
+description_i18n:
+  pt-BR: Principais manchetes, feed de notícias ao vivo e previsão do tempo em um só espaço.
 icon: newspaper
 icon_color: "#93c5ff"
 layout_order:

@@ -29,6 +29,7 @@ import {
   getSpaceDisplayIcon,
   getSpaceDisplayIconColor,
   getSpaceDisplayTitle,
+  localizedField,
   normalizeSpaceAgentInstructions,
   normalizeSpaceIcon,
   normalizeSpaceIconColor,
@@ -1870,14 +1871,23 @@ export async function installExampleSpace(options = {}) {
   }
 
   const sourceManifestResult = await runtime.api.fileRead(`${sourcePath}${SPACE_MANIFEST_FILE}`);
+  const rawSourceManifest = runtime.utils.yaml.parse(String(sourceManifestResult?.content || ""));
   const sourceManifest = normalizeManifest(
-    runtime.utils.yaml.parse(String(sourceManifestResult?.content || "")),
+    rawSourceManifest,
     getLastPathSegment(sourcePath)
   );
+  // `localizedField` falls back to the base value when no locale variant exists,
+  // preserving the EN fallback contract (Phase 4 i18n).
+  const localizedRawTitle = localizedField(rawSourceManifest, "title", options.locale);
+  const localizedRawAgentInstructions =
+    localizedField(rawSourceManifest, "agent_instructions", options.locale) ??
+    localizedField(rawSourceManifest, "agentInstructions", options.locale) ??
+    localizedField(rawSourceManifest, "special_instructions", options.locale) ??
+    localizedField(rawSourceManifest, "specialInstructions", options.locale);
   const title =
     options.title !== undefined
       ? normalizeSpaceTitle(options.title)
-      : normalizeSpaceTitle(sourceManifest.title);
+      : normalizeSpaceTitle(localizedRawTitle ?? sourceManifest.title);
   const icon =
     options.icon !== undefined
       ? normalizeSpaceIcon(options.icon)
@@ -1902,6 +1912,7 @@ export async function installExampleSpace(options = {}) {
       options.agentInstructions ??
         options.specialInstructions ??
         options.instructions ??
+        localizedRawAgentInstructions ??
         sourceManifest.agentInstructions ??
         sourceManifest.specialInstructions
     ),
