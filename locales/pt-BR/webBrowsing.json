@@ -1,0 +1,23 @@
+{
+  "window": {
+    "controls": "Controles da janela do navegador para {{id}}",
+    "newWindow": "Abrir outra janela do navegador",
+    "newWindowTitle": "Nova janela",
+    "minimize": "Minimizar {{id}}",
+    "restore": "Restaurar {{id}}",
+    "minimizeTitle": "Minimizar",
+    "restoreTitle": "Restaurar",
+    "close": "Fechar {{id}}",
+    "closeTitle": "Fechar",
+    "resize": "Redimensionar janela do navegador",
+    "resizeTitle": "Redimensionar"
+  },
+  "frame": {
+    "placeholderLabel": "Espaço reservado do navegador",
+    "browserOnly": "O navegador embutido só funciona em aplicativos desktop nativos por enquanto.",
+    "downloadCta": "Baixar aplicativo nativo",
+    "downloadAriaLabel": "Baixe a versão mais recente do aplicativo desktop nativo em uma nova janela",
+    "appHint": "O navegador embutido está em desenvolvimento ativo e ainda pode ter algumas limitações.",
+    "appNote": "Use a barra de endereço acima para abrir uma página, ou diga ao Space Agent o que fazer."
+  }
+}

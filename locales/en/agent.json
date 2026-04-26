@@ -1,0 +1,22 @@
+{
+  "page": {
+    "eyebrow": "Browser-First AI Runtime",
+    "title": "Space Agent",
+    "introA": "Space Agent lives in the browser runtime itself, so the agent can work inside the same interface it is changing.",
+    "introB": "Instead of being trapped inside a fixed product surface, it can build pages, tools, widgets, and workflows directly into the running workspace.",
+    "highlightsLabel": "Space Agent highlights",
+    "highlight1Title": "The interface can evolve live",
+    "highlight1Body": "Ask for a new tool or workflow and the agent can extend the workspace from within the system itself.",
+    "highlight2Title": "Built for personal and shared use",
+    "highlight2Body": "Start with your own layer, then grow into shared group spaces, tools, and admin control when the scope expands.",
+    "repo": "Repo",
+    "personalityTitle": "Agent Personality",
+    "personalityHelp": "These instructions are loaded from and saved to your user prompt-include file.",
+    "personalityAria": "Agent personality instructions",
+    "personalityPlaceholder": "Write tone, standing preferences, or durable instructions for your agent here.",
+    "reload": "Reload",
+    "save": "Save",
+    "saving": "Saving…",
+    "personalityFootnote": "Stored in <code>~/conf/personality.system.include.md</code>. Readable <code>*.system.include.md</code> files are injected into the agent system prompt."
+  }
+}

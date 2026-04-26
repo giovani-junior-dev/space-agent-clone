@@ -38,5 +38,17 @@
   "language": {
     "label": "Language",
     "selectLanguage": "Select language"
+  },
+  "iconPicker": {
+    "selectedIcon": "Selected Icon",
+    "search": "Search",
+    "searchPlaceholder": "Search Material icons",
+    "color": "Color",
+    "loading": "Loading Material icons…",
+    "none": "None",
+    "previousPage": "Previous page",
+    "nextPage": "Next page",
+    "cancel": "Cancel",
+    "apply": "Apply"
   }
 }

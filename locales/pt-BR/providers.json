@@ -1,0 +1,46 @@
+{
+  "common": {
+    "currentModel": "Modelo atual",
+    "models": "Modelos",
+    "shown": "{{count}} exibido(s)",
+    "saved": "{{count}} salvo(s)",
+    "show": "Exibir",
+    "hide": "Ocultar",
+    "advanced": "Avançado",
+    "advancedCustomModel": "Modelo personalizado avançado",
+    "load": "Carregar",
+    "downloaded": "Baixado",
+    "discardCachedTitle": "Descartar arquivos de modelo em cache",
+    "discardingCachedTitle": "Descartando arquivos de modelo em cache",
+    "discardCachedAria": "Descartar arquivos de modelo em cache",
+    "openTestingChat": "Abrir chat de teste"
+  },
+  "webllm": {
+    "searchPlaceholder": "gemma, qwen, llama, 4b...",
+    "advancedNote": "Apenas para uso avançado. Requer uma URL de modelo compilado para MLC/WebLLM e um <code>model_lib</code> wasm correspondente, não um repositório arbitrário do Hugging Face.",
+    "modelUrl": "URL do modelo",
+    "modelUrlPlaceholder": "https://huggingface.co/usuario/modelo",
+    "modelLibUrl": "URL da biblioteca do modelo",
+    "modelLibUrlPlaceholder": "https://.../model-webgpu.wasm",
+    "modelId": "ID do modelo",
+    "modelIdPlaceholder": "Opcional. Derivado da URL do modelo quando em branco.",
+    "loadCustom": "Carregar personalizado",
+    "vramRequired": "{{mb}} MB de VRAM"
+  },
+  "huggingface": {
+    "modelLabel": "Modelo Hugging Face",
+    "modelPlaceholder": "onnx-community/gemma-4-E4B-it-ONNX ou https://huggingface.co/...",
+    "modelPlaceholderShort": "onnx-community/gemma-4-E4B-it-ONNX",
+    "compatibleModels": "Modelos compatíveis",
+    "noSavedModels": "Nenhum modelo salvo ainda. Carregue um repositório compatível do Hugging Face uma vez e ele ficará aqui para reuso rápido.",
+    "noDownloadedModels": "Nenhum modelo do Hugging Face baixado foi encontrado neste navegador ainda.",
+    "dtype": "Dtype",
+    "maxNewTokens": "Máx. de novos tokens",
+    "savedShortcut": "Atalho de modelo salvo",
+    "chooseFromSaved": "Escolha entre modelos salvos",
+    "selected": "Selecionado:",
+    "loadingFallback": "Carregando modelo",
+    "runtimeNote": "Executa localmente neste navegador com WebGPU. Apenas repositórios compatíveis com Transformers.js que tenham assets ONNX podem ser carregados, e o navegador armazena em cache os arquivos baixados após o primeiro carregamento.",
+    "providerIntro": "O Hugging Face ONNX executa o modelo localmente neste navegador através do Transformers.js em WebGPU. Digite qualquer ID de repositório compatível aqui ou escolha um modelo salvo, e carregue-o diretamente deste diálogo. O primeiro carregamento baixará os assets para o navegador e mostrará o progresso abaixo."
+  }
+}

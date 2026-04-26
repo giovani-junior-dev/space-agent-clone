@@ -15,19 +15,19 @@
             type="button"
             class="space-topbar-button time-travel-refresh"
             :disabled="$store.timeTravel.loading || $store.timeTravel.rollingBack || $store.timeTravel.reverting"
-            aria-label="Refresh history"
-            title="Refresh history"
+            :aria-label="$t('timeTravel:refreshHistory')"
+            :title="$t('timeTravel:refreshHistory')"
             @click="$store.timeTravel.refreshHistory()"
           >
             <x-icon x-text="$store.timeTravel.loading ? 'hourglass_top' : 'refresh'"></x-icon>
-            <span x-text="$store.timeTravel.loading ? 'Loading...' : 'Refresh'"></span>
+            <span x-text="$store.timeTravel.loading ? $t('timeTravel:loading') : $t('timeTravel:refresh')"></span>
           </button>
           <button
             type="button"
             class="space-topbar-button time-travel-repository-button"
             :disabled="$store.timeTravel.rollingBack || $store.timeTravel.reverting"
-            :aria-label="`Choose Git repository (${ $store.timeTravel.currentRepositoryName })`"
-            :title="`Choose Git repository (${ $store.timeTravel.currentRepositoryName })`"
+            :aria-label="$t('timeTravel:chooseRepository', { name: $store.timeTravel.currentRepositoryName })"
+            :title="$t('timeTravel:chooseRepository', { name: $store.timeTravel.currentRepositoryName })"
             @click="$store.timeTravel.openRepositoryDialog()"
           >
             <x-icon>folder_open</x-icon>
@@ -38,22 +38,22 @@
 
       <div class="time-travel-shell">
         <header class="time-travel-header">
-          <h1 class="time-travel-title">Time Travel</h1>
-          <p class="time-travel-subtitle">
+          <h1 class="time-travel-title" x-t="'timeTravel:title'">Time Travel</h1>
+          <p class="time-travel-subtitle" x-t="'timeTravel:subtitle'">
             Time Travel lets you undo your changes, including settings, spaces, and custom development.
           </p>
         </header>
 
         <div class="time-travel-grid">
-          <aside class="time-travel-sidebar" aria-label="History commits">
+          <aside class="time-travel-sidebar" :aria-label="$t('timeTravel:historyCommits')">
             <div class="time-travel-panel-heading time-travel-commit-heading">
-              <h2>Commits</h2>
+              <h2 x-t="'timeTravel:commits'">Commits</h2>
               <form class="time-travel-filter" @submit.prevent="$store.timeTravel.applyFileFilter()">
                 <x-icon>search</x-icon>
                 <input
                   type="search"
-                  aria-label="Filter commits by file"
-                  placeholder="Filter by file"
+                  :aria-label="$t('timeTravel:filterCommitsByFile')"
+                  :placeholder="$t('timeTravel:filterByFile')"
                   x-model="$store.timeTravel.fileFilter"
                 />
                 <button
@@ -61,7 +61,7 @@
                   class="time-travel-filter-clear"
                   x-show="$store.timeTravel.fileFilter"
                   @click="$store.timeTravel.clearFileFilter()"
-                  aria-label="Clear file filter"
+                  :aria-label="$t('timeTravel:clearFileFilter')"
                 >
                   <x-icon>close</x-icon>
                 </button>
@@ -71,7 +71,7 @@
             <template x-if="$store.timeTravel.loading">
               <div class="time-travel-empty">
                 <x-icon>hourglass_top</x-icon>
-                <p>Loading history...</p>
+                <p x-t="'timeTravel:loadingHistory'">Loading history...</p>
               </div>
             </template>
 
@@ -85,7 +85,7 @@
             <template x-if="!$store.timeTravel.loading && !$store.timeTravel.errorText && !$store.timeTravel.hasCommits">
               <div class="time-travel-empty">
                 <x-icon>history</x-icon>
-                <p x-text="$store.timeTravel.fileFilter ? 'No changes match that file filter.' : 'No history yet. Make a change after Time Travel is enabled.'"></p>
+                <p x-text="$store.timeTravel.fileFilter ? $t('timeTravel:noChangesMatch') : $t('timeTravel:noHistoryYet')"></p>
               </div>
             </template>
 
@@ -111,7 +111,7 @@
                       <span class="time-travel-commit-time-row">
                         <span class="time-travel-commit-relative" x-text="$store.timeTravel.formatRelativeTimestamp(commit.timestamp)"></span>
                         <template x-if="$store.timeTravel.isCurrentCommit(commit)">
-                          <span class="time-travel-current-pill">Current</span>
+                          <span class="time-travel-current-pill" x-t="'timeTravel:current'">Current</span>
                         </template>
                         <span class="time-travel-commit-date" x-text="$store.timeTravel.formatFullTimestamp(commit.timestamp)"></span>
                       </span>
@@ -121,7 +121,7 @@
                         x-init="$store.timeTravel.registerPreviewElement($el, commit)"
                       >
                         <template x-if="$store.timeTravel.getRemainingFileCount(commit)">
-                          <span class="time-travel-file-pill is-more" x-text="`+${$store.timeTravel.getRemainingFileCount(commit)} more`"></span>
+                          <span class="time-travel-file-pill is-more" x-text="$t('timeTravel:moreFiles', { count: $store.timeTravel.getRemainingFileCount(commit) })"></span>
                         </template>
                         <template x-for="file in $store.timeTravel.getPreviewFiles(commit)" :key="`${commit.hash}:${file.path}`">
                           <span
@@ -147,7 +147,7 @@
                 @click="$store.timeTravel.goToPreviousPage()"
               >
                 <x-icon>chevron_left</x-icon>
-                <span>Previous</span>
+                <span x-t="'timeTravel:previous'">Previous</span>
               </button>
               <span class="time-travel-page-count" x-text="$store.timeTravel.pageLabel"></span>
               <button
@@ -156,19 +156,19 @@
                 :disabled="!$store.timeTravel.canGoNextPage"
                 @click="$store.timeTravel.goToNextPage()"
               >
-                <span>Next</span>
+                <span x-t="'timeTravel:next'">Next</span>
                 <x-icon>chevron_right</x-icon>
               </button>
             </div>
           </aside>
 
-          <section class="time-travel-detail" aria-label="Selected commit details">
+          <section class="time-travel-detail" :aria-label="$t('timeTravel:selectedCommitDetails')">
             <header class="time-travel-detail-header">
               <div
                 class="time-travel-selected-meta"
                 :class="{ 'is-current': $store.timeTravel.isCurrentCommit($store.timeTravel.selectedCommit) }"
               >
-                <span class="time-travel-selected-hash" x-text="$store.timeTravel.selectedCommit?.shortHash || 'No commit'"></span>
+                <span class="time-travel-selected-hash" x-text="$store.timeTravel.selectedCommit?.shortHash || $t('timeTravel:noCommit')"></span>
                 <template x-if="$store.timeTravel.isCurrentCommit($store.timeTravel.selectedCommit)">
                   <span class="time-travel-current-pill">Current</span>
                 </template>
@@ -177,17 +177,17 @@
                 <span
                   class="time-travel-selected-count is-added"
                   x-show="$store.timeTravel.selectedFileActionCounts.added"
-                  x-text="`${$store.timeTravel.selectedFileActionCounts.added} added`"
+                  x-text="$t('timeTravel:added', { count: $store.timeTravel.selectedFileActionCounts.added })"
                 ></span>
                 <span
                   class="time-travel-selected-count is-modified"
                   x-show="$store.timeTravel.selectedFileActionCounts.modified"
-                  x-text="`${$store.timeTravel.selectedFileActionCounts.modified} modified`"
+                  x-text="$t('timeTravel:modified', { count: $store.timeTravel.selectedFileActionCounts.modified })"
                 ></span>
                 <span
                   class="time-travel-selected-count is-deleted"
                   x-show="$store.timeTravel.selectedFileActionCounts.deleted"
-                  x-text="`${$store.timeTravel.selectedFileActionCounts.deleted} deleted`"
+                  x-text="$t('timeTravel:deleted', { count: $store.timeTravel.selectedFileActionCounts.deleted })"
                 ></span>
               </div>
 
@@ -200,7 +200,7 @@
                     @click="$store.timeTravel.openActionDialog('travel')"
                   >
                     <x-icon x-text="$store.timeTravel.rollingBack ? 'hourglass_top' : 'settings_backup_restore'"></x-icon>
-                    <span x-text="$store.timeTravel.rollingBack ? 'Travelling...' : 'Travel In Time'"></span>
+                    <span x-text="$store.timeTravel.rollingBack ? $t('timeTravel:travelling') : $t('timeTravel:travelInTime')"></span>
                   </button>
                   <button
                     type="button"
@@ -209,7 +209,7 @@
                     @click="$store.timeTravel.openActionDialog('revert')"
                   >
                     <x-icon x-text="$store.timeTravel.reverting ? 'hourglass_top' : 'undo'"></x-icon>
-                    <span x-text="$store.timeTravel.reverting ? 'Reverting...' : 'Revert Changes'"></span>
+                    <span x-text="$store.timeTravel.reverting ? $t('timeTravel:reverting') : $t('timeTravel:revertChanges')"></span>
                   </button>
                 </div>
               </div>
@@ -241,14 +241,14 @@
               <template x-if="$store.timeTravel.selectedCommit && !$store.timeTravel.selectedChangedFiles.length">
                 <div class="time-travel-empty">
                   <x-icon>draft</x-icon>
-                  <p>This point has no visible changed files after history ignore rules.</p>
+                  <p x-t="'timeTravel:noVisibleChangedFiles'">This point has no visible changed files after history ignore rules.</p>
                 </div>
               </template>
 
               <template x-if="!$store.timeTravel.selectedCommit">
                 <div class="time-travel-empty">
                   <x-icon>travel_explore</x-icon>
-                  <p>Select a point in time to inspect its changed files.</p>
+                  <p x-t="'timeTravel:selectPoint'">Select a point in time to inspect its changed files.</p>
                 </div>
               </template>
             </div>
@@ -276,7 +276,7 @@
             </div>
             <button type="button" class="secondary-button time-travel-diff-close" @click="$store.timeTravel.closeActionDialog()">
               <x-icon>close</x-icon>
-              <span>Close</span>
+              <span x-t="'timeTravel:close'">Close</span>
             </button>
           </header>
 
@@ -286,7 +286,7 @@
             <template x-if="$store.timeTravel.actionPreviewLoading">
               <div class="time-travel-empty">
                 <x-icon>hourglass_top</x-icon>
-                <p>Loading affected files...</p>
+                <p x-t="'timeTravel:loadingAffectedFiles'">Loading affected files...</p>
               </div>
             </template>
 
@@ -300,7 +300,7 @@
                   </template>
                   <template x-if="$store.timeTravel.actionPreviewErrorDetails">
                     <details class="time-travel-action-error-details">
-                      <summary>Show technical details</summary>
+                      <summary x-t="'timeTravel:showTechnicalDetails'">Show technical details</summary>
                       <pre x-text="$store.timeTravel.actionPreviewErrorDetails"></pre>
                     </details>
                   </template>
@@ -333,14 +333,14 @@
             <template x-if="!$store.timeTravel.actionPreviewLoading && !$store.timeTravel.actionPreviewErrorText && !$store.timeTravel.actionPreviewChangedFiles.length">
               <div class="time-travel-empty">
                 <x-icon>check_circle</x-icon>
-                <p>No visible files would change.</p>
+                <p x-t="'timeTravel:noVisibleFilesWouldChange'">No visible files would change.</p>
               </div>
             </template>
           </div>
 
           <footer class="time-travel-action-footer">
             <button type="button" class="secondary-button time-travel-diff-close" @click="$store.timeTravel.closeActionDialog()">
-              <span>Cancel</span>
+              <span x-t="'timeTravel:cancel'">Cancel</span>
             </button>
             <button
               type="button"
@@ -359,12 +359,12 @@
         <div class="time-travel-repository-card">
           <header class="time-travel-diff-header">
             <div>
-              <p class="time-travel-diff-eyebrow time-travel-repository-eyebrow">Select Time Travel scope (git repository folder)</p>
-              <h2>Repository</h2>
+              <p class="time-travel-diff-eyebrow time-travel-repository-eyebrow" x-t="'timeTravel:repositoryEyebrow'">Select Time Travel scope (git repository folder)</p>
+              <h2 x-t="'timeTravel:repository'">Repository</h2>
             </div>
             <button type="button" class="secondary-button time-travel-diff-close" @click="$store.timeTravel.closeRepositoryDialog()">
               <x-icon>close</x-icon>
-              <span>Close</span>
+              <span x-t="'timeTravel:close'">Close</span>
             </button>
           </header>
 
@@ -372,7 +372,7 @@
             <template x-if="$store.timeTravel.repositoryLoading">
               <div class="time-travel-empty">
                 <x-icon>hourglass_top</x-icon>
-                <p>Finding writable Git repositories...</p>
+                <p x-t="'timeTravel:findingRepositories'">Finding writable Git repositories...</p>
               </div>
             </template>
 
@@ -386,7 +386,7 @@
             <template x-if="!$store.timeTravel.repositoryLoading && !$store.timeTravel.repositoryErrorText && !$store.timeTravel.hasRepositories">
               <div class="time-travel-empty">
                 <x-icon>folder_off</x-icon>
-                <p>No writable Git repositories found.</p>
+                <p x-t="'timeTravel:noRepositories'">No writable Git repositories found.</p>
               </div>
             </template>
 
@@ -422,12 +422,12 @@
         <div class="time-travel-diff-card">
           <header class="time-travel-diff-header">
             <div>
-              <p class="time-travel-diff-eyebrow" x-text="$store.timeTravel.diffFile ? $store.timeTravel.getFileActionLabel($store.timeTravel.diffFile) : 'Diff'"></p>
-              <h2 x-text="$store.timeTravel.diffFile?.path || 'File diff'"></h2>
+              <p class="time-travel-diff-eyebrow" x-text="$store.timeTravel.diffFile ? $store.timeTravel.getFileActionLabel($store.timeTravel.diffFile) : $t('timeTravel:diffFallbackEyebrow')"></p>
+              <h2 x-text="$store.timeTravel.diffFile?.path || $t('timeTravel:diffFallbackTitle')"></h2>
             </div>
             <button type="button" class="secondary-button time-travel-diff-close" @click="$store.timeTravel.closeDiffDialog()">
               <x-icon>close</x-icon>
-              <span>Close</span>
+              <span x-t="'timeTravel:close'">Close</span>
             </button>
           </header>
 
@@ -435,7 +435,7 @@
             <template x-if="$store.timeTravel.diffLoading">
               <div class="time-travel-empty">
                 <x-icon>hourglass_top</x-icon>
-                <p>Loading diff...</p>
+                <p x-t="'timeTravel:loadingDiff'">Loading diff...</p>
               </div>
             </template>
             <template x-if="!$store.timeTravel.diffLoading && $store.timeTravel.diffErrorText">
@@ -451,7 +451,7 @@
               </div>
             </template>
             <template x-if="!$store.timeTravel.diffLoading && !$store.timeTravel.diffErrorText && !$store.timeTravel.diffNoticeText">
-              <div class="time-travel-diff-output" aria-label="File diff">
+              <div class="time-travel-diff-output" :aria-label="$t('timeTravel:fileDiff')">
                 <template x-for="line in $store.timeTravel.diffLines" :key="line.id">
                   <span
                     class="time-travel-diff-line"

@@ -13,7 +13,13 @@ const NAMESPACES = [
   "user",
   "spaces",
   "onscreenAgent",
-  "timeTravel"
+  "timeTravel",
+  "auth",
+  "agent",
+  "memory",
+  "documentation",
+  "providers",
+  "webBrowsing"
 ];
 const STORAGE_KEY = "spaceLocale";
 const COOKIE_KEY = "space_locale";

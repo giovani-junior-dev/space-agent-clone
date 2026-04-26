@@ -1,6 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 
+import { getLocale, t } from "../lib/i18n.js";
 import { areGuestUsersAllowed, isSingleUserApp } from "../lib/utils/runtime_params.js";
 import { runTrackedMutation } from "../runtime/request_mutations.js";
 import { createNoStoreHeaders, sendFile, sendJson, sendNotFound, sendRedirect } from "./responses.js";
@@ -118,6 +119,49 @@ function injectEnterGuard(sourceText, options = {}) {
   return sourceText.replace(ENTER_GUARD_PLACEHOLDER, ENTER_GUARD_SCRIPT_TAG);
 }
 
+// Server-side i18n template substitution. Supports:
+//   {{t:namespace:key.path}}        - raw HTML body text
+//   {{t:namespace:key.path|attr}}   - HTML attribute (escapes &, ", <, >)
+//   {{t:namespace:key.path|js}}     - JS string literal value (JSON-stringified
+//                                     without surrounding quotes), safe to drop
+//                                     between existing "..." quotes in scripts
+// Used by pre-auth pages (login) where the frontend i18n runtime is not
+// available before sign-in. Locale is resolved from cookie, query, or
+// Accept-Language via `getLocale(req)`.
+const I18N_PLACEHOLDER_PATTERN = /\{\{t:([a-zA-Z][a-zA-Z0-9]*):([^}|]+?)(?:\|(attr|js))?\}\}/g;
+
+function injectI18nPlaceholders(sourceText, req) {
+  const locale = getLocale(req);
+
+  let body = sourceText;
+
+  // Set <html lang="..."> to the active locale on every page so assistive
+  // tooling and the browser pick the right language hooks. Idempotent.
+  body = body.replace(/<html\b([^>]*?)\blang="[^"]*"([^>]*)>/iu, `<html$1lang="${locale}"$2>`);
+
+  if (!body.includes("{{t:")) {
+    return body;
+  }
+
+  return body.replace(I18N_PLACEHOLDER_PATTERN, (match, namespace, key, modifier) => {
+    const value = t(`${namespace}:${key}`, { lng: locale });
+    if (typeof value !== "string") {
+      return match;
+    }
+    if (modifier === "attr") {
+      return escapeHtmlAttribute(value);
+    }
+    if (modifier === "js") {
+      // JSON.stringify produces a quoted string. Strip the surrounding quotes
+      // so the call site can keep its existing "..." wrappers and remain a
+      // syntactically valid JS literal.
+      const json = JSON.stringify(value);
+      return json.slice(1, json.length - 1);
+    }
+    return value;
+  });
+}
+
 function injectProjectVersion(sourceText, projectVersion) {
   if (!sourceText.includes(PROJECT_VERSION_PLACEHOLDER)) {
     return sourceText;
@@ -139,16 +183,19 @@ async function sendPageHtml(res, filePath, options = {}) {
     return;
   }
 
-  const body = injectFrontendConfigMetaTags(
-    injectProjectVersion(
-      injectEnterGuard(sourceText, {
-        pageName: options.pageName,
-        requestContext: options.requestContext,
-        runtimeParams: options.runtimeParams
-      }),
-      options.projectVersion
+  const body = injectI18nPlaceholders(
+    injectFrontendConfigMetaTags(
+      injectProjectVersion(
+        injectEnterGuard(sourceText, {
+          pageName: options.pageName,
+          requestContext: options.requestContext,
+          runtimeParams: options.runtimeParams
+        }),
+        options.projectVersion
+      ),
+      options.runtimeParams
     ),
-    options.runtimeParams
+    options.req
   );
 
   res.writeHead(200, createNoStoreHeaders({
@@ -331,6 +378,7 @@ async function handlePageRequest(res, requestUrl, options = {}) {
       headers: createSessionCleanupHeaders(requestContext, auth),
       pageName: sharePageRequest.pageName,
       projectVersion: options.projectVersion,
+      req: options.req,
       requestContext,
       runtimeParams
     });
@@ -377,6 +425,7 @@ async function handlePageRequest(res, requestUrl, options = {}) {
     headers: createSessionCleanupHeaders(requestContext, auth),
     pageName: pageRequest.pageName,
     projectVersion: options.projectVersion,
+    req: options.req,
     requestContext,
     runtimeParams
   });

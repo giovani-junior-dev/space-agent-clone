@@ -32,7 +32,7 @@
     <meta name="twitter:url" content="https://space-agent.ai/" />
     <meta name="twitter:image" content="https://space-agent.ai/pages/res/readme-banner.webp" />
     <meta name="twitter:image:alt" content="Space Agent banner" />
-    <title>Login | Space Agent</title>
+    <title>{{t:auth:page.title}}</title>
     <link rel="shortcut icon" href="/favicon.ico" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
@@ -912,6 +912,26 @@
     </style>
   </head>
   <body class="space-theme-canvas">
+    <script>
+      // Server-side rendered i18n strings for the login shell. Pre-auth pages
+      // run before the frontend i18next runtime is bootstrapped, so we ship a
+      // static translation map resolved by the backend using the request's
+      // locale (cookie / Accept-Language).
+      window.__SPACE_LOGIN_I18N = {
+        submit: "{{t:auth:buttons.submit|js}}",
+        submitContinue: "{{t:auth:buttons.submitContinue|js}}",
+        signingIn: "{{t:auth:status.signingIn|js}}",
+        signedIn: "{{t:auth:status.signedIn|js}}",
+        creatingGuest: "{{t:auth:status.creatingGuest|js}}",
+        signInFailed: "{{t:auth:status.signInFailed|js}}",
+        guestFailed: "{{t:auth:status.guestFailed|js}}",
+        credentialsRequired: "{{t:auth:status.credentialsRequired|js}}",
+        loginDisabled: "{{t:auth:notes.loginDisabled|js}}",
+        loginShellFailed: "{{t:auth:status.loginShellFailed|js}}",
+        passwordLoginRequiresHttps: "{{t:auth:status.passwordLoginRequiresHttps|js}}",
+        passwordLoginUnsupported: "{{t:auth:status.passwordLoginUnsupported|js}}"
+      };
+    </script>
     <div class="space-backdrop" data-space-backdrop aria-hidden="true">
       <div class="space-backdrop-layer space-backdrop-glow"></div>
       <div class="space-backdrop-layer space-backdrop-stars space-backdrop-stars-deep"></div>
@@ -925,7 +945,7 @@
       </div>
     </div>
     <main class="shell">
-      <section class="intro" aria-label="Space Agent overview">
+      <section class="intro" aria-label="{{t:auth:page.introLabel|attr}}">
         <div id="intro-floating-cluster" class="intro-floating-cluster">
           <div id="intro-title" class="intro-title">
             <h1>Space Agent</h1>
@@ -942,21 +962,19 @@
           </div>
         </div>
         <p class="intro-copy">
-          Free and open-source AI agent<br />
-          that builds your space.<br />
-          Right in the browser.
+          {{t:auth:page.intro}}
         </p>
       </section>
 
-      <section class="login-panel" aria-label="Login form" data-space-browser-compat-hide-on-fail>
+      <section class="login-panel" aria-label="{{t:auth:page.panelLabel|attr}}" data-space-browser-compat-hide-on-fail>
         <div id="login-actions">
           <form id="login-form">
             <label>
-              <span>Username</span>
+              <span>{{t:auth:fields.username}}</span>
               <input id="username" name="username" type="text" autocomplete="username" required />
             </label>
             <label>
-              <span>Password</span>
+              <span>{{t:auth:fields.password}}</span>
               <input
                 id="password"
                 name="password"
@@ -966,7 +984,7 @@
               />
             </label>
             <p id="field-note" class="field-note" hidden>
-            Guest account ready, save your credentials.
+            {{t:auth:notes.guestReady}}
             <span class="field-note-secondary">
               <svg
                 class="field-note-warning-icon"
@@ -979,22 +997,22 @@
                   fill="currentColor"
                 />
               </svg>
-              Guest accounts are temporary and may be removed any time.
+              {{t:auth:notes.guestTemporary}}
             </span>
             </p>
-            <button id="submit-button" class="secondary-button" type="submit">Enter your Space</button>
+            <button id="submit-button" class="secondary-button" type="submit">{{t:auth:buttons.submit}}</button>
           </form>
           <div id="guest-option-group">
-            <div class="login-separator">or</div>
+            <div class="login-separator">{{t:auth:notes.or}}</div>
             <button id="guest-create-button" class="primary-button" type="button">
-              Use Guest Account
+              {{t:auth:buttons.guest}}
             </button>
           </div>
         </div>
         <p id="login-disabled-copy" class="field-note" hidden>
-          Login is disabled in this system.
+          {{t:auth:notes.loginDisabled}}
         </p>
-        <div class="login-separator">or</div>
+        <div class="login-separator">{{t:auth:notes.or}}</div>
         <button
           id="run-options-button"
           class="secondary-link run-options-trigger"
@@ -1002,21 +1020,21 @@
           aria-haspopup="dialog"
           aria-controls="run-options-modal"
         >
-          Run it yourself for privacy and control
+          {{t:auth:buttons.runYourself}}
         </button>
         <div id="status" class="status" role="status" aria-live="polite"></div>
       </section>
 
       <section
         class="browser-compat-panel"
-        aria-label="Browser compatibility warning"
+        aria-label="{{t:auth:page.compatLabel|attr}}"
         aria-live="assertive"
         data-space-browser-compat-target
         hidden
       ></section>
 
       <div class="shell-footer">
-        <nav class="public-links" aria-label="Space Agent links">
+        <nav class="public-links" aria-label="{{t:auth:page.linksLabel|attr}}">
           <ul class="public-links-list">
             <li>
               <a
@@ -1024,7 +1042,7 @@
                 href="https://github.com/agent0ai/space-agent"
                 target="_blank"
                 rel="noreferrer"
-                aria-label="GitHub repository"
+                aria-label="{{t:auth:links.github|attr}}"
               >
                 <img
                   class="public-link-icon"
@@ -1040,7 +1058,7 @@
                 href="https://discord.gg/B8KZKNsPpj"
                 target="_blank"
                 rel="noreferrer"
-                aria-label="Discord community"
+                aria-label="{{t:auth:links.discord|attr}}"
               >
                 <img
                   class="public-link-icon"
@@ -1056,7 +1074,7 @@
                 href="https://x.com/Agent0ai"
                 target="_blank"
                 rel="noreferrer"
-                aria-label="Agent Zero on X"
+                aria-label="{{t:auth:links.x|attr}}"
               >
                 <img
                   class="public-link-icon"
@@ -1072,7 +1090,7 @@
                 href="https://agent-zero.ai"
                 target="_blank"
                 rel="noreferrer"
-                aria-label="Agent Zero website"
+                aria-label="{{t:auth:links.agentZero|attr}}"
               >
                 <img
                   class="public-link-icon public-link-icon-agent-zero"
@@ -1084,7 +1102,7 @@
             </li>
           </ul>
         </nav>
-        <p class="instance-version" aria-label="Instance version">
+        <p class="instance-version" aria-label="{{t:auth:page.instanceVersionLabel|attr}}">
           <span><!-- SPACE_PROJECT_VERSION --></span>
         </p>
       </div>
@@ -1103,7 +1121,7 @@
           id="run-modal-close-button"
           class="run-modal-close"
           type="button"
-          aria-label="Close run options"
+          aria-label="{{t:auth:buttons.closeRunOptions|attr}}"
         >
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path
@@ -1112,16 +1130,15 @@
             />
           </svg>
         </button>
-        <h2 id="run-modal-title" class="run-modal-title">Run it yourself</h2>
+        <h2 id="run-modal-title" class="run-modal-title">{{t:auth:runModal.title}}</h2>
         <p class="run-modal-subtitle">
-          For complete privacy and security, use the standalone application or host the
-          Space Agent server yourself. Both options include full extensibility and all features.
+          {{t:auth:runModal.subtitle}}
         </p>
         <div class="run-choices">
           <section class="run-choice" aria-labelledby="run-native-title">
-            <h3 id="run-native-title" class="run-choice-title">Native App</h3>
+            <h3 id="run-native-title" class="run-choice-title">{{t:auth:runModal.nativeTitle}}</h3>
             <p class="run-choice-copy">
-              Includes both the browser runtime and backend layer in one package.
+              {{t:auth:runModal.nativeCopy}}
             </p>
             <svg class="run-choice-icon" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M20 18q.825 0 1.413-.587Q22 16.825 22 16V6q0-.825-.587-1.413Q20.825 4 20 4H4q-.825 0-1.413.587Q2 5.175 2 6v10q0 .825.587 1.413Q3.175 18 4 18H0v2h24v-2h-4ZM4 6h16v10H4V6Z" fill="currentColor" />
@@ -1132,7 +1149,7 @@
               target="_blank"
               rel="noreferrer"
             >
-              <span class="run-action-label">Download native App</span>
+              <span class="run-action-label">{{t:auth:runModal.nativeAction}}</span>
               <span class="run-icon-group" aria-hidden="true">
                 <svg class="run-icon" viewBox="-1.5 0 20 20">
                   <g transform="translate(-102 -7439)" fill="currentColor">
@@ -1158,9 +1175,9 @@
             </a>
           </section>
           <section class="run-choice" aria-labelledby="run-server-title">
-            <h3 id="run-server-title" class="run-choice-title">Own Server</h3>
+            <h3 id="run-server-title" class="run-choice-title">{{t:auth:runModal.serverTitle}}</h3>
             <p class="run-choice-copy">
-              Designed for multi-user setups, including group management.
+              {{t:auth:runModal.serverCopy}}
             </p>
             <svg class="run-choice-icon" viewBox="0 -960 960 960" aria-hidden="true">
               <path d="M300-720q-25 0-42.5 17.5T240-660q0 25 17.5 42.5T300-600q25 0 42.5-17.5T360-660q0-25-17.5-42.5T300-720Zm0 400q-25 0-42.5 17.5T240-260q0 25 17.5 42.5T300-200q25 0 42.5-17.5T360-260q0-25-17.5-42.5T300-320ZM160-840h640q17 0 28.5 11.5T840-800v280q0 17-11.5 28.5T800-480H160q-17 0-28.5-11.5T120-520v-280q0-17 11.5-28.5T160-840Zm40 80v200h560v-200H200Zm-40 320h640q17 0 28.5 11.5T840-400v280q0 17-11.5 28.5T800-80H160q-17 0-28.5-11.5T120-120v-280q0-17 11.5-28.5T160-440Zm40 80v200h560v-200H200Zm0-400v200-200Zm0 400v200-200Z" fill="currentColor" />
@@ -1171,7 +1188,7 @@
               target="_blank"
               rel="noreferrer"
             >
-              <span class="run-action-label">See how to host Space Agent</span>
+              <span class="run-action-label">{{t:auth:runModal.serverAction}}</span>
             </a>
           </section>
         </div>
@@ -1323,11 +1340,14 @@
       }
 
       function getUnsupportedPasswordLoginMessage() {
+        const i18n = window.__SPACE_LOGIN_I18N || {};
         if (window.isSecureContext === false) {
-          return "Password login requires HTTPS or localhost in this browser. Plain HTTP disables the Web Crypto APIs used by sign-in.";
+          return i18n.passwordLoginRequiresHttps
+            || "Password login requires HTTPS or localhost in this browser. Plain HTTP disables the Web Crypto APIs used by sign-in.";
         }
 
-        return "This browser does not expose the Web Crypto APIs required for password login.";
+        return i18n.passwordLoginUnsupported
+          || "This browser does not expose the Web Crypto APIs required for password login.";
       }
 
       function readFrontendConfigValue(name, fallback) {
@@ -1508,7 +1528,9 @@
         usernameInput.readOnly = isGuestReady;
         passwordInput.readOnly = isGuestReady;
         passwordInput.type = isGuestReady ? "text" : "password";
-        submitButton.textContent = isGuestReady ? "Continue" : "Enter your Space";
+        submitButton.textContent = isGuestReady
+          ? (window.__SPACE_LOGIN_I18N?.submitContinue || "Continue")
+          : (window.__SPACE_LOGIN_I18N?.submit || "Enter your Space");
         submitButton.classList.toggle("primary-button", isGuestReady);
         submitButton.classList.toggle("secondary-button", !isGuestReady);
         fieldNote.hidden = !isGuestReady;
@@ -1765,23 +1787,25 @@
       async function handleLogin(event) {
         event.preventDefault();
 
+        const i18n = window.__SPACE_LOGIN_I18N || {};
+
         try {
           if (!allowLogin) {
-            throw new Error("Login is disabled in this system.");
+            throw new Error(i18n.loginDisabled || "Login is disabled in this system.");
           }
 
           if (!passwordLoginSupported) {
             throw new Error(getUnsupportedPasswordLoginMessage());
           }
 
-          setStatus("Signing in...");
+          setStatus(i18n.signingIn || "Signing in...");
           syncButtonState(true);
 
           const username = usernameInput.value.trim();
           const password = passwordInput.value;
 
           if (!username || !password) {
-            throw new Error("Username and password are required.");
+            throw new Error(i18n.credentialsRequired || "Username and password are required.");
           }
 
           const clientNonce = createNonce();
@@ -1866,30 +1890,31 @@
             throw new Error("Login completed without a usable user crypto record. Try again.");
           }
 
-          setStatus("Signed in. Redirecting...", "ok");
+          setStatus(i18n.signedIn || "Signed in. Redirecting...", "ok");
           grantEnterTabAccess();
           window.location.replace("/");
         } catch (error) {
           logLoginError("Sign-in failed", error, {
             username: usernameInput.value.trim()
           });
-          setStatus(error.message || "Sign-in failed.", "error");
+          setStatus(error.message || i18n.signInFailed || "Sign-in failed.", "error");
           syncButtonState(false);
           passwordInput.select();
         }
       }
 
       async function handleGuestCreate() {
+        const i18n = window.__SPACE_LOGIN_I18N || {};
         try {
           if (!allowLogin) {
-            throw new Error("Login is disabled in this system.");
+            throw new Error(i18n.loginDisabled || "Login is disabled in this system.");
           }
 
           if (!passwordLoginSupported) {
             throw new Error(getUnsupportedPasswordLoginMessage());
           }
 
-          setStatus("Creating guest account...");
+          setStatus(i18n.creatingGuest || "Creating guest account...");
           syncButtonState(true);
 
           const guestAccount = await postJson("/api/guest_create", {});
@@ -1898,7 +1923,7 @@
         } catch (error) {
           logLoginError("Guest account creation failed", error);
           syncButtonState(false);
-          setStatus(error.message || "Guest account creation failed.", "error");
+          setStatus(error.message || i18n.guestFailed || "Guest account creation failed.", "error");
         }
       }
 
@@ -1975,7 +2000,7 @@
           const statusNode = document.getElementById("status");
 
           if (statusNode) {
-            statusNode.textContent = error?.message || "Login shell failed to start.";
+            statusNode.textContent = error?.message || (window.__SPACE_LOGIN_I18N?.loginShellFailed || "Login shell failed to start.");
             statusNode.className = "status error";
           }
         }

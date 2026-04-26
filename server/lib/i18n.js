@@ -23,7 +23,13 @@ const NAMESPACES = [
   "user",
   "spaces",
   "onscreenAgent",
-  "timeTravel"
+  "timeTravel",
+  "auth",
+  "agent",
+  "memory",
+  "documentation",
+  "providers",
+  "webBrowsing"
 ];
 
 let initializationPromise = null;

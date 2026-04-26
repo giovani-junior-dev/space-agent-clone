@@ -30,14 +30,14 @@
         >
           <header
             class="web-browsing-window-titlebar"
-            :aria-label="`Browser window controls for ${browserWindow.id}`"
+            :aria-label="$t('webBrowsing:window.controls', { id: browserWindow.id })"
             @pointerdown="$store.webBrowsing.startDrag(browserWindow.id, $event)"
           >
             <button
               type="button"
               class="web-browsing-window-control web-browsing-window-control-create"
-              aria-label="Open another browser window"
-              title="New window"
+              :aria-label="$t('webBrowsing:window.newWindow')"
+              :title="$t('webBrowsing:window.newWindowTitle')"
               @pointerdown.stop
               @click.stop="$store.webBrowsing.createWindow()"
             >
@@ -52,8 +52,12 @@
               <button
                 type="button"
                 class="web-browsing-window-control"
-                :aria-label="browserWindow.isMinimized ? `Restore ${browserWindow.id}` : `Minimize ${browserWindow.id}`"
-                :title="browserWindow.isMinimized ? 'Restore' : 'Minimize'"
+                :aria-label="browserWindow.isMinimized
+                  ? $t('webBrowsing:window.restore', { id: browserWindow.id })
+                  : $t('webBrowsing:window.minimize', { id: browserWindow.id })"
+                :title="browserWindow.isMinimized
+                  ? $t('webBrowsing:window.restoreTitle')
+                  : $t('webBrowsing:window.minimizeTitle')"
                 @pointerdown.stop
                 @click.stop="$store.webBrowsing.toggleMinimized(browserWindow.id)"
               >
@@ -63,8 +67,8 @@
               <button
                 type="button"
                 class="web-browsing-window-control web-browsing-window-control-close"
-                :aria-label="`Close ${browserWindow.id}`"
-                title="Close"
+                :aria-label="$t('webBrowsing:window.close', { id: browserWindow.id })"
+                :title="$t('webBrowsing:window.closeTitle')"
                 @pointerdown.stop
                 @click.stop="$store.webBrowsing.closeWindow(browserWindow.id)"
               >
@@ -85,8 +89,8 @@
           <button
             type="button"
             class="web-browsing-resize-handle"
-            aria-label="Resize browser window"
-            title="Resize"
+            :aria-label="$t('webBrowsing:window.resize')"
+            :title="$t('webBrowsing:window.resizeTitle')"
             @pointerdown.stop="$store.webBrowsing.startResize(browserWindow.id, $event)"
           ></button>
         </section>

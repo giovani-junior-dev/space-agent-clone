@@ -1,0 +1,46 @@
+{
+  "common": {
+    "currentModel": "Current model",
+    "models": "Models",
+    "shown": "{{count}} shown",
+    "saved": "{{count}} saved",
+    "show": "Show",
+    "hide": "Hide",
+    "advanced": "Advanced",
+    "advancedCustomModel": "Advanced custom model",
+    "load": "Load",
+    "downloaded": "Downloaded",
+    "discardCachedTitle": "Discard cached model files",
+    "discardingCachedTitle": "Discarding cached model files",
+    "discardCachedAria": "Discard cached model files",
+    "openTestingChat": "Open Testing Chat"
+  },
+  "webllm": {
+    "searchPlaceholder": "gemma, qwen, llama, 4b...",
+    "advancedNote": "For advanced use only. This requires an MLC/WebLLM-compiled model URL and a matching <code>model_lib</code> wasm, not an arbitrary Hugging Face repo.",
+    "modelUrl": "Model URL",
+    "modelUrlPlaceholder": "https://huggingface.co/username/model",
+    "modelLibUrl": "Model library URL",
+    "modelLibUrlPlaceholder": "https://.../model-webgpu.wasm",
+    "modelId": "Model id",
+    "modelIdPlaceholder": "Optional. Derived from the model URL when blank.",
+    "loadCustom": "Load custom",
+    "vramRequired": "{{mb}} MB VRAM"
+  },
+  "huggingface": {
+    "modelLabel": "Hugging Face model",
+    "modelPlaceholder": "onnx-community/gemma-4-E4B-it-ONNX or https://huggingface.co/...",
+    "modelPlaceholderShort": "onnx-community/gemma-4-E4B-it-ONNX",
+    "compatibleModels": "Compatible models",
+    "noSavedModels": "No saved models yet. Load a compatible Hugging Face repo once and it will stay here for quick reuse.",
+    "noDownloadedModels": "No downloaded Hugging Face models were found in this browser yet.",
+    "dtype": "Dtype",
+    "maxNewTokens": "Max new tokens",
+    "savedShortcut": "Saved model shortcut",
+    "chooseFromSaved": "Choose from saved models",
+    "selected": "Selected:",
+    "loadingFallback": "Loading model",
+    "runtimeNote": "Runs locally in this browser with WebGPU. Only Transformers.js-compatible repos with ONNX assets can load, and the browser caches the downloaded files after the first load.",
+    "providerIntro": "Hugging Face ONNX runs the model locally in this browser through Transformers.js on WebGPU. Enter any compatible repo id here or pick a saved model, then load it directly from this dialog. First load will download the browser assets and show progress below."
+  }
+}

@@ -19,7 +19,7 @@
         </div>
 
         <div class="visual-icon-selector-lead-copy">
-          <p class="visual-icon-selector-eyebrow">Selected Icon</p>
+          <p class="visual-icon-selector-eyebrow" x-t="'common:iconPicker.selectedIcon'">Selected Icon</p>
           <strong x-text="$store.visualIconColorSelector.selectionSummaryLabel"></strong>
           <p class="visual-icon-selector-help" x-text="$store.visualIconColorSelector.selectionHelpLabel"></p>
         </div>
@@ -27,19 +27,19 @@
 
       <div class="visual-icon-selector-toolbar">
         <label class="visual-icon-selector-search">
-          <span class="visual-icon-selector-field-label">Search</span>
+          <span class="visual-icon-selector-field-label" x-t="'common:iconPicker.search'">Search</span>
           <input
             x-ref="search"
             type="search"
             class="visual-icon-selector-search-input"
-            placeholder="Search Material icons"
+            :placeholder="$t('common:iconPicker.searchPlaceholder')"
             x-model="$store.visualIconColorSelector.searchDraft"
             @input="$store.visualIconColorSelector.handleSearchInput()"
           />
         </label>
 
         <label class="visual-icon-selector-color">
-          <span class="visual-icon-selector-field-label">Color</span>
+          <span class="visual-icon-selector-field-label" x-t="'common:iconPicker.color'">Color</span>
           <div class="visual-icon-selector-color-row">
             <input
               type="color"
@@ -53,7 +53,7 @@
       </div>
 
       <template x-if="$store.visualIconColorSelector.loadingCatalog">
-        <p class="visual-icon-selector-status">Loading Material icons…</p>
+        <p class="visual-icon-selector-status" x-t="'common:iconPicker.loading'">Loading Material icons…</p>
       </template>
 
       <template x-if="!$store.visualIconColorSelector.loadingCatalog && $store.visualIconColorSelector.loadErrorText">
@@ -72,7 +72,7 @@
               @click="$store.visualIconColorSelector.selectNone()"
             >
               <x-icon>hide_image</x-icon>
-              <span>None</span>
+              <span x-t="'common:iconPicker.none'">None</span>
             </button>
 
             <p class="visual-icon-selector-results-summary" x-text="$store.visualIconColorSelector.pageSummary"></p>
@@ -100,7 +100,7 @@
               type="button"
               class="visual-icon-selector-page-button"
               :disabled="!$store.visualIconColorSelector.canGoToPreviousPage"
-              aria-label="Previous page"
+              :aria-label="$t('common:iconPicker.previousPage')"
               @click="$store.visualIconColorSelector.goToPreviousPage()"
             >
               <x-icon>chevron_left</x-icon>
@@ -112,7 +112,7 @@
               type="button"
               class="visual-icon-selector-page-button"
               :disabled="!$store.visualIconColorSelector.canGoToNextPage"
-              aria-label="Next page"
+              :aria-label="$t('common:iconPicker.nextPage')"
               @click="$store.visualIconColorSelector.goToNextPage()"
             >
               <x-icon>chevron_right</x-icon>
@@ -130,12 +130,8 @@
         ></button>
 
         <div class="visual-icon-selector-footer-actions">
-          <button type="button" class="secondary-button" @click="void $store.visualIconColorSelector.cancelSelection()">
-            Cancel
-          </button>
-          <button type="button" class="primary-button" @click="void $store.visualIconColorSelector.applySelection()">
-            Apply
-          </button>
+          <button type="button" class="secondary-button" @click="void $store.visualIconColorSelector.cancelSelection()" x-t="'common:iconPicker.cancel'">Cancel</button>
+          <button type="button" class="primary-button" @click="void $store.visualIconColorSelector.applySelection()" x-t="'common:iconPicker.apply'">Apply</button>
         </div>
       </div>
     </section>

@@ -142,21 +142,22 @@
   </head>
   <body>
     <x-context hidden data-browser-frame-runtime></x-context>
-    <main class="browser-frame-empty-state" aria-label="Browser placeholder">
+    <main class="browser-frame-empty-state" aria-label="Browser placeholder" data-i18n-aria-label="webBrowsing.frame.placeholderLabel">
       <div class="browser-frame-empty-state-figure" aria-hidden="true">
         <img src="/mod/_core/visual/res/engineer/astronaut_red_no_bg.png" alt="" />
       </div>
       <div class="browser-frame-empty-state-copy">
         <div class="browser-frame-runtime-variant" data-browser-frame-variant="browser" hidden>
-          <p>Embedded browser only works in native desktop apps for now.</p>
+          <p data-i18n="webBrowsing.frame.browserOnly">Embedded browser only works in native desktop apps for now.</p>
           <a
             class="browser-frame-download-link"
             href="https://github.com/agent0ai/space-agent/releases/latest"
             target="_blank"
             rel="noreferrer noopener"
             aria-label="Download the latest native desktop app release in a new window"
+            data-i18n-aria-label="webBrowsing.frame.downloadAriaLabel"
           >
-            <span class="browser-frame-download-label">Download native App</span>
+            <span class="browser-frame-download-label" data-i18n="webBrowsing.frame.downloadCta">Download native App</span>
             <span class="browser-frame-icon-group" aria-hidden="true">
               <svg class="browser-frame-icon" viewBox="-1.5 0 20 20">
                 <g transform="translate(-102 -7439)" fill="currentColor">
@@ -180,8 +181,8 @@
         </div>
 
         <div class="browser-frame-runtime-variant" data-browser-frame-variant="app" hidden>
-          <p>Embedded browser is in active development and may still have some limitations.</p>
-          <p class="browser-frame-empty-state-note">Use the address bar above to open a page, or tell Space Agent what to do.</p>
+          <p data-i18n="webBrowsing.frame.appHint">Embedded browser is in active development and may still have some limitations.</p>
+          <p class="browser-frame-empty-state-note" data-i18n="webBrowsing.frame.appNote">Use the address bar above to open a page, or tell Space Agent what to do.</p>
         </div>
       </div>
     </main>
@@ -248,6 +249,64 @@
         }
 
         applyRuntimeVariant(resolveRuntimeContext());
+      }());
+
+      // Lightweight i18n for this iframe: it does not load Alpine or the
+      // full i18next runtime, so we resolve the active locale from the
+      // space_locale cookie and fetch the webBrowsing namespace directly.
+      (async function applyBrowserFrameI18n() {
+        try {
+          function readCookie(name) {
+            const cookies = (globalThis.document?.cookie || "").split(";");
+            for (const piece of cookies) {
+              const eq = piece.indexOf("=");
+              if (eq < 0) continue;
+              const cookieName = piece.slice(0, eq).trim();
+              if (cookieName === name) {
+                try {
+                  return decodeURIComponent(piece.slice(eq + 1).trim());
+                } catch {
+                  return piece.slice(eq + 1).trim();
+                }
+              }
+            }
+            return "";
+          }
+
+          const locale = readCookie("space_locale") || "en";
+          if (locale === "en") {
+            return;
+          }
+
+          const response = await fetch(
+            "/locales/" + encodeURIComponent(locale) + "/webBrowsing.json",
+            { credentials: "same-origin", headers: { Accept: "application/json" } }
+          );
+          if (!response.ok) {
+            return;
+          }
+          const bundle = await response.json();
+          function lookup(path) {
+            return path.split(".").reduce(
+              (acc, key) => (acc && typeof acc === "object" ? acc[key] : undefined),
+              bundle
+            );
+          }
+          globalThis.document.querySelectorAll("[data-i18n]").forEach((el) => {
+            const value = lookup(el.getAttribute("data-i18n"));
+            if (typeof value === "string" && value) {
+              el.textContent = value;
+            }
+          });
+          globalThis.document.querySelectorAll("[data-i18n-aria-label]").forEach((el) => {
+            const value = lookup(el.getAttribute("data-i18n-aria-label"));
+            if (typeof value === "string" && value) {
+              el.setAttribute("aria-label", value);
+            }
+          });
+        } catch {
+          /* noop - fall back to embedded English copy */
+        }
       }());
     </script>
   </body>

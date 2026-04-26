@@ -1,0 +1,22 @@
+{
+  "page": {
+    "eyebrow": "Runtime de IA no navegador",
+    "title": "Space Agent",
+    "introA": "O Space Agent vive dentro do próprio runtime do navegador, então o agente pode trabalhar dentro da mesma interface que está modificando.",
+    "introB": "Em vez de ficar preso em uma superfície de produto fixa, ele pode construir páginas, ferramentas, widgets e fluxos de trabalho diretamente no workspace em execução.",
+    "highlightsLabel": "Destaques do Space Agent",
+    "highlight1Title": "A interface pode evoluir ao vivo",
+    "highlight1Body": "Peça uma nova ferramenta ou fluxo e o agente pode estender o workspace de dentro do próprio sistema.",
+    "highlight2Title": "Feito para uso pessoal e compartilhado",
+    "highlight2Body": "Comece com sua própria camada e, em seguida, cresça para spaces de grupo compartilhados, ferramentas e controle admin quando o escopo aumentar.",
+    "repo": "Repositório",
+    "personalityTitle": "Personalidade do Agente",
+    "personalityHelp": "Estas instruções são carregadas e salvas no seu arquivo de prompt-include de usuário.",
+    "personalityAria": "Instruções de personalidade do agente",
+    "personalityPlaceholder": "Escreva aqui o tom, preferências permanentes ou instruções duradouras para o seu agente.",
+    "reload": "Recarregar",
+    "save": "Salvar",
+    "saving": "Salvando…",
+    "personalityFootnote": "Armazenado em <code>~/conf/personality.system.include.md</code>. Arquivos <code>*.system.include.md</code> legíveis são injetados no prompt de sistema do agente."
+  }
+}

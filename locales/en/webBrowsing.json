@@ -1,0 +1,23 @@
+{
+  "window": {
+    "controls": "Browser window controls for {{id}}",
+    "newWindow": "Open another browser window",
+    "newWindowTitle": "New window",
+    "minimize": "Minimize {{id}}",
+    "restore": "Restore {{id}}",
+    "minimizeTitle": "Minimize",
+    "restoreTitle": "Restore",
+    "close": "Close {{id}}",
+    "closeTitle": "Close",
+    "resize": "Resize browser window",
+    "resizeTitle": "Resize"
+  },
+  "frame": {
+    "placeholderLabel": "Browser placeholder",
+    "browserOnly": "Embedded browser only works in native desktop apps for now.",
+    "downloadCta": "Download native App",
+    "downloadAriaLabel": "Download the latest native desktop app release in a new window",
+    "appHint": "Embedded browser is in active development and may still have some limitations.",
+    "appNote": "Use the address bar above to open a page, or tell Space Agent what to do."
+  }
+}

@@ -397,6 +397,7 @@ function createRequestHandler(options) {
         mutationSync,
         pagesDir,
         projectVersion,
+        req,
         runtimeParams,
         requestContext
       });
