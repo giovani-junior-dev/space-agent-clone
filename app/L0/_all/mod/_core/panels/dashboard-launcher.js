@@ -1,4 +1,5 @@
-import { listPanels } from "/mod/_core/panels/panel-index.js";
+import { listPanels, resolveLocalizedPanelField } from "/mod/_core/panels/panel-index.js";
+import { getLocale } from "/mod/_core/i18n/i18n.js";
 
 function logDashboardPanelsError(context, error) {
   console.error(`[panels-dashboard] ${context}`, error);
@@ -8,9 +9,17 @@ function buildFallbackHref(routePath) {
   return `#/${String(routePath || "").replace(/^\/?#+\/?/u, "")}`;
 }
 
+function localizePanelEntry(panel, locale) {
+  return {
+    ...panel,
+    name: resolveLocalizedPanelField(panel, "name", locale) || panel.name,
+    description: resolveLocalizedPanelField(panel, "description", locale) || panel.description
+  };
+}
+
 globalThis.panelsDashboardLauncher = function panelsDashboardLauncher() {
   return {
-    entries: [],
+    rawEntries: [],
     loadErrorText: "",
     loading: false,
 
@@ -19,7 +28,20 @@ globalThis.panelsDashboardLauncher = function panelsDashboardLauncher() {
     },
 
     get hasEntries() {
-      return this.entries.length > 0;
+      return this.rawEntries.length > 0;
+    },
+
+    // Reactive: re-evaluate whenever locale changes (Alpine.store('spaceLocale').version
+    // is read inside the getter so Alpine subscribes this binding to locale flips).
+    get entries() {
+      try {
+        // eslint-disable-next-line no-unused-expressions
+        globalThis.Alpine?.store?.("spaceLocale")?.version;
+      } catch {
+        /* noop */
+      }
+      const locale = getLocale();
+      return this.rawEntries.map((panel) => localizePanelEntry(panel, locale));
     },
 
     hrefFor(routePath) {
@@ -31,7 +53,7 @@ globalThis.panelsDashboardLauncher = function panelsDashboardLauncher() {
       this.loadErrorText = "";
 
       try {
-        this.entries = await listPanels();
+        this.rawEntries = await listPanels();
       } catch (error) {
         logDashboardPanelsError("loadPanels failed", error);
         this.loadErrorText = String(error?.message || "Unable to load panels.");

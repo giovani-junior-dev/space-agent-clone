@@ -39,6 +39,12 @@
     "label": "Language",
     "selectLanguage": "Select language"
   },
+  "pageTitles": {
+    "spaceAgent": "Space Agent",
+    "adminMode": "Admin Mode | Space Agent",
+    "enterSpace": "Enter Space | Space Agent",
+    "sharedSpace": "Shared Space | Space Agent"
+  },
   "iconPicker": {
     "selectedIcon": "Selected Icon",
     "search": "Search",

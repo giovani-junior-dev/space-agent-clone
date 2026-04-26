@@ -19,5 +19,15 @@
   "rawOutputEyebrow": "LLM Output",
   "noRawOutputAvailable": "[No raw output available]",
   "contextWindowEyebrow": "Context Window",
-  "ready": "Ready"
+  "ready": "Ready",
+  "sendMessageLabel": "Send message",
+  "stopCurrentLoop": "Stop current loop",
+  "addMessageToQueue": "Add message to queue",
+  "queueMessageForNextStep": "Queue message for next step",
+  "messageQueuedOne_one": "{{count}} message queued for next step",
+  "messageQueuedOne_other": "{{count}} messages queued for next steps",
+  "revealAgentChat": "Reveal agent chat",
+  "switchToFullChatMode": "Switch to full chat mode",
+  "switchToCompactChatMode": "Switch to compact chat mode",
+  "startupHint": "<strong>Drag</strong> me, <strong>tap</strong> me."
 }

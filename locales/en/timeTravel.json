@@ -40,5 +40,37 @@
   "diffFallbackEyebrow": "Diff",
   "diffFallbackTitle": "File diff",
   "loadingDiff": "Loading diff...",
-  "fileDiff": "File diff"
+  "fileDiff": "File diff",
+  "pageOf": "{{from}}-{{to}} of {{total}}",
+  "pageRange": "{{from}}-{{to}}",
+  "showingOne_one": "Showing {{range}} history point.",
+  "showingOne_other": "Showing {{range}} history points.",
+  "showingWithBackend_one": "Showing {{range}} history point. (git: {{backend}})",
+  "showingWithBackend_other": "Showing {{range}} history points. (git: {{backend}})",
+  "noHistoryPointsYet": "No history points yet. Save a file after Time Travel is enabled.",
+  "unableToLoadHistory": "Unable to load Git history.",
+  "unableToFindRepositories": "Unable to find writable Git repositories.",
+  "travellingTo": "Travelling to {{when}}...",
+  "revertingChanges": "Reverting changes...",
+  "travelledInTime": "Travelled in time. Other history points are still available.",
+  "revertedAsNewPoint": "Reverted those changes as a new history point.",
+  "unableToLoadFileDiff": "Unable to load file diff.",
+  "noTextDiff": "No text diff is available for this file.",
+  "diffTooLarge": "This diff is larger than 1 MB, so Time Travel will not render it.",
+  "fileActions": {
+    "added": "Added",
+    "modified": "Modified",
+    "deleted": "Deleted",
+    "removed": "Removed",
+    "changed": "Changed"
+  },
+  "modal": {
+    "reviewRevertEyebrow": "Review Revert",
+    "reviewTravelEyebrow": "Review Travel",
+    "thisPoint": "this point",
+    "revertChangesFrom": "Revert changes from {{when}}",
+    "travelInTimeTo": "Travel in time to {{when}}",
+    "revertDescription": "This will create a new history point that undoes the affected files below.",
+    "travelDescription": "This will move your files, settings, spaces, and custom development to match the affected files below."
+  }
 }

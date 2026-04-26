@@ -17,6 +17,18 @@
     "reload": "Recarregar",
     "save": "Salvar",
     "saving": "Salvando…",
-    "personalityFootnote": "Armazenado em <code>~/conf/personality.system.include.md</code>. Arquivos <code>*.system.include.md</code> legíveis são injetados no prompt de sistema do agente."
+    "personalityFootnote": "Armazenado em <code>~/conf/personality.system.include.md</code>. Arquivos <code>*.system.include.md</code> legíveis são injetados no prompt de sistema do agente.",
+    "status": {
+      "loadedFrom": "Instruções de personalidade carregadas de {{path}}.",
+      "noneSavedYet": "Nenhuma instrução de personalidade salva ainda.",
+      "reloadingInstructions": "Recarregando instruções de personalidade...",
+      "reloadedFrom": "Instruções de personalidade recarregadas de {{path}}.",
+      "currentlyEmpty": "As instruções de personalidade estão vazias no momento.",
+      "savingTo": "Salvando {{path}}...",
+      "savedTo": "Instruções de personalidade salvas em {{path}}.",
+      "loadFailed": "Não foi possível carregar a personalidade do agente.",
+      "reloadFailed": "Não foi possível recarregar a personalidade do agente.",
+      "saveFailed": "Não foi possível salvar a personalidade do agente."
+    }
   }
 }

@@ -1,5 +1,7 @@
 examples:
   - text: Create a weather report
+    text_i18n:
+      pt-BR: Criar um relatório do tempo
     prompt: Create a weather report. Use https://ipapi.co/json/ to get an approximate location. Do not use exact browser geolocation. Fetch weather from https://api.met.no/weatherapi/locationforecast/2.0/compact. Use the `pdf-report` skill to create and download a browser PDF report with structure and styling chosen for this report instead of a canned template, then reply with a brief weather summary.
     kind: chat
     icon: chat_bubble
@@ -7,6 +9,8 @@ examples:
     code: |
       await helpers.submitPrompt(example.prompt)
   - text: Retro Arcade
+    text_i18n:
+      pt-BR: Fliperama Retrô
     kind: widget
     icon: gamepad
     color: "#00ffd5"
@@ -24,6 +28,8 @@ examples:
         "retro-arcade/retro-marquee.yaml"
       ])
   - text: Agent Zero Videos
+    text_i18n:
+      pt-BR: Vídeos do Agent Zero
     kind: widget
     icon: smart_display
     color: "#ff5a4f"
@@ -39,12 +45,16 @@ examples:
         "agent-zero-videos/yt-video-player.yaml"
       ])
   - text: Rickroll me
+    text_i18n:
+      pt-BR: Me Rickrollar
     kind: widget
     icon: play_circle
     color: "#ff7566"
     code: |
       await helpers.installOnboardingExampleWidget("rickroll-player.yaml")
   - text: Flip the space
+    text_i18n:
+      pt-BR: Virar o espaço
     prompt: Rotate the whole page by another 180 degrees from whatever its current rotation is. Do not reset it to an absolute orientation or reuse the same fixed transform value; preserve the current rotation state and add 180 degrees with a two-second CSS transition.
     kind: chat
     icon: chat_bubble
@@ -52,6 +62,8 @@ examples:
     code: |
       await helpers.submitPrompt(example.prompt)
   - text: Daily News
+    text_i18n:
+      pt-BR: Notícias do dia
     kind: widget
     icon: newspaper
     color: "#93c5ff"
@@ -68,6 +80,8 @@ examples:
         "daily-news/weather.yaml"
       ])
   - text: WYSIWYG Editor
+    text_i18n:
+      pt-BR: Editor WYSIWYG
     kind: widget
     icon: wysiwyg
     color: "#89baff"
@@ -80,6 +94,8 @@ examples:
       }
       await helpers.installOnboardingExampleWidget("wysiwyg-editor.yaml")
   - text: Crypto Dashboard
+    text_i18n:
+      pt-BR: Painel de Cripto
     kind: widget
     icon: currency_bitcoin
     color: "#f6be63"
@@ -96,6 +112,8 @@ examples:
         "crypto-dashboard/crypto-news-feed.yaml"
       ])
   - text: Check documentation
+    text_i18n:
+      pt-BR: Consultar documentação
     prompt: >
       Do the following in order. 1. Load the documentation skill. 2. When it is
       loaded, ask the user exactly: `What would you like to know from the

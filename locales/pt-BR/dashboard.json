@@ -32,5 +32,27 @@
     "noPanels": "Nenhum painel disponível para esta conta.",
     "panelsAriaLabel": "Painéis do dashboard",
     "openItem": "Abrir {{name}}"
+  },
+  "panels": {
+    "agent": {
+      "name": "Agente",
+      "description": "Informações básicas e ajuste pessoal do prompt do agente do navegador."
+    },
+    "fileExplorer": {
+      "name": "Arquivos",
+      "description": "Navegar e editar os arquivos do app."
+    },
+    "huggingface": {
+      "name": "LLM Local",
+      "description": "Carregar e testar LLMs locais com WebGPU e Hugging Face."
+    },
+    "timeTravel": {
+      "name": "Histórico",
+      "description": "Desfazer configurações, espaços e alterações de desenvolvimento personalizado."
+    },
+    "user": {
+      "name": "Usuário",
+      "description": "Atualize seu nome completo e a senha de acesso."
+    }
   }
 }

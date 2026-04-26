@@ -170,7 +170,7 @@
               >
                 <span class="time-travel-selected-hash" x-text="$store.timeTravel.selectedCommit?.shortHash || $t('timeTravel:noCommit')"></span>
                 <template x-if="$store.timeTravel.isCurrentCommit($store.timeTravel.selectedCommit)">
-                  <span class="time-travel-current-pill">Current</span>
+                  <span class="time-travel-current-pill" x-t="'timeTravel:current'">Current</span>
                 </template>
                 <span x-text="$store.timeTravel.selectedCommit ? $store.timeTravel.formatRelativeTimestamp($store.timeTravel.selectedCommit.timestamp) : ''"></span>
                 <span x-text="$store.timeTravel.selectedCommit ? $store.timeTravel.formatFullTimestamp($store.timeTravel.selectedCommit.timestamp) : ''"></span>
@@ -407,7 +407,7 @@
                         <span class="time-travel-file-path" x-text="repository.path"></span>
                       </span>
                       <template x-if="$store.timeTravel.isCurrentRepository(repository)">
-                        <span class="time-travel-current-pill">Current</span>
+                        <span class="time-travel-current-pill" x-t="'timeTravel:current'">Current</span>
                       </template>
                     </button>
                   </li>

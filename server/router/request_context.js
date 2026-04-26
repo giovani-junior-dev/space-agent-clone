@@ -1,6 +1,7 @@
 import { AsyncLocalStorage } from "node:async_hooks";
 
 import { normalizePathSegment } from "../lib/utils/app_files.js";
+import { tError } from "../lib/i18n.js";
 
 const requestContextStorage = new AsyncLocalStorage();
 
@@ -103,7 +104,7 @@ function ensureAuthenticatedRequestContext(requestContext) {
   const user = requestContext && requestContext.user ? requestContext.user : getRequestUser();
 
   if (!user || !user.isAuthenticated || !normalizePrincipalId(user.username)) {
-    const error = new Error("Authentication required.");
+    const error = new Error(tError("errors:auth.authenticationRequired"));
     error.statusCode = 401;
     throw error;
   }

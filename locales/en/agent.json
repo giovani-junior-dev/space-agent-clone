@@ -17,6 +17,18 @@
     "reload": "Reload",
     "save": "Save",
     "saving": "Saving…",
-    "personalityFootnote": "Stored in <code>~/conf/personality.system.include.md</code>. Readable <code>*.system.include.md</code> files are injected into the agent system prompt."
+    "personalityFootnote": "Stored in <code>~/conf/personality.system.include.md</code>. Readable <code>*.system.include.md</code> files are injected into the agent system prompt.",
+    "status": {
+      "loadedFrom": "Loaded personality instructions from {{path}}.",
+      "noneSavedYet": "No personality instructions saved yet.",
+      "reloadingInstructions": "Reloading personality instructions...",
+      "reloadedFrom": "Reloaded personality instructions from {{path}}.",
+      "currentlyEmpty": "Personality instructions are currently empty.",
+      "savingTo": "Saving {{path}}...",
+      "savedTo": "Saved personality instructions to {{path}}.",
+      "loadFailed": "Unable to load agent personality.",
+      "reloadFailed": "Unable to reload agent personality.",
+      "saveFailed": "Unable to save agent personality."
+    }
   }
 }

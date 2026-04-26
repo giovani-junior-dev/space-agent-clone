@@ -1,5 +1,9 @@
 name: User
 path: user
 description: Update your full name and sign-in password.
+name_i18n:
+  pt-BR: Usuário
+description_i18n:
+  pt-BR: Atualize seu nome completo e a senha de acesso.
 icon: manage_accounts
 color: "#ffd08a"

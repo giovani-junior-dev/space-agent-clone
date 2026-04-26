@@ -3,6 +3,7 @@ import {
   loadAgentPersonality,
   saveAgentPersonality
 } from "/mod/_core/agent/storage.js";
+import { t as i18nT } from "/mod/_core/i18n/i18n.js";
 
 function logAgentPageError(context, error) {
   console.error(`[agent-page] ${context}`, error);
@@ -26,12 +27,12 @@ const model = {
       this.lastSavedPersonalityText = personalityText;
       this.setStatus(
         personalityText
-          ? `Loaded personality instructions from ${AGENT_PERSONALITY_PATH}.`
-          : "No personality instructions saved yet."
+          ? i18nT("agent:page.status.loadedFrom", { path: AGENT_PERSONALITY_PATH })
+          : i18nT("agent:page.status.noneSavedYet")
       );
     } catch (error) {
       logAgentPageError("loadAgentPersonality failed", error);
-      this.setStatus(String(error?.message || "Unable to load agent personality."), "error");
+      this.setStatus(String(error?.message || i18nT("agent:page.status.loadFailed")), "error");
     } finally {
       this.loading = false;
     }
@@ -47,7 +48,7 @@ const model = {
     }
 
     this.loading = true;
-    this.setStatus("Reloading personality instructions...");
+    this.setStatus(i18nT("agent:page.status.reloadingInstructions"));
 
     try {
       const nextText = await loadAgentPersonality();
@@ -55,12 +56,12 @@ const model = {
       this.lastSavedPersonalityText = nextText;
       this.setStatus(
         nextText
-          ? `Reloaded personality instructions from ${AGENT_PERSONALITY_PATH}.`
-          : `Personality instructions are currently empty.`
+          ? i18nT("agent:page.status.reloadedFrom", { path: AGENT_PERSONALITY_PATH })
+          : i18nT("agent:page.status.currentlyEmpty")
       );
     } catch (error) {
       logAgentPageError("reloadPersonality failed", error);
-      this.setStatus(String(error?.message || "Unable to reload agent personality."), "error");
+      this.setStatus(String(error?.message || i18nT("agent:page.status.reloadFailed")), "error");
     } finally {
       this.loading = false;
     }
@@ -72,15 +73,15 @@ const model = {
     }
 
     this.saving = true;
-    this.setStatus(`Saving ${AGENT_PERSONALITY_PATH}...`);
+    this.setStatus(i18nT("agent:page.status.savingTo", { path: AGENT_PERSONALITY_PATH }));
 
     try {
       await saveAgentPersonality(this.personalityText);
       this.lastSavedPersonalityText = this.personalityText;
-      this.setStatus(`Saved personality instructions to ${AGENT_PERSONALITY_PATH}.`, "success");
+      this.setStatus(i18nT("agent:page.status.savedTo", { path: AGENT_PERSONALITY_PATH }), "success");
     } catch (error) {
       logAgentPageError("savePersonality failed", error);
-      this.setStatus(String(error?.message || "Unable to save agent personality."), "error");
+      this.setStatus(String(error?.message || i18nT("agent:page.status.saveFailed")), "error");
     } finally {
       this.saving = false;
     }

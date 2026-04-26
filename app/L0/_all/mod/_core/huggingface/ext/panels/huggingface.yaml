@@ -1,5 +1,9 @@
 name: Local LLM
 path: huggingface
 description: Load and test local LLMs with WebGPU and Hugging Face.
+name_i18n:
+  pt-BR: LLM Local
+description_i18n:
+  pt-BR: Carregar e testar LLMs locais com WebGPU e Hugging Face.
 icon: hub
 color: "#7de3c9"

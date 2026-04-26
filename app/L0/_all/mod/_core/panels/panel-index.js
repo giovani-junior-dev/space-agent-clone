@@ -52,6 +52,21 @@ function normalizePanelDescription(value) {
   return collapseWhitespace(value);
 }
 
+function normalizePanelI18nMap(rawMap) {
+  if (!rawMap || typeof rawMap !== "object" || Array.isArray(rawMap)) {
+    return {};
+  }
+  const out = {};
+  for (const [locale, value] of Object.entries(rawMap)) {
+    const normalizedLocale = String(locale || "").trim();
+    const normalizedValue = collapseWhitespace(value);
+    if (normalizedLocale && normalizedValue) {
+      out[normalizedLocale] = normalizedValue;
+    }
+  }
+  return out;
+}
+
 function normalizePanelIcon(value) {
   return normalizeMaterialSymbolName(value) || DEFAULT_PANEL_ICON;
 }
@@ -171,13 +186,52 @@ export function normalizePanelManifest(manifest = {}, options = {}) {
     description: normalizePanelDescription(
       normalizedManifest.description ?? normalizedManifest.summary
     ),
+    descriptionI18n: normalizePanelI18nMap(
+      normalizedManifest.description_i18n ??
+      normalizedManifest.descriptionI18n ??
+      normalizedManifest.summary_i18n ??
+      normalizedManifest.summaryI18n
+    ),
     icon: normalizePanelIcon(normalizedManifest.icon),
     id: String(options.id || options.manifestPath || routePath),
     manifestPath: String(options.manifestPath || ""),
     modulePath: String(options.modulePath || ""),
     name,
+    nameI18n: normalizePanelI18nMap(
+      normalizedManifest.name_i18n ?? normalizedManifest.nameI18n ??
+      normalizedManifest.title_i18n ?? normalizedManifest.titleI18n
+    ),
     routePath
   };
+}
+
+/**
+ * Resolve a localized field on a normalized panel record. Looks up
+ * `<field>I18n[locale]` and falls back to base language ("pt" for "pt-BR")
+ * before returning the base `panel[field]` value. Mirrors the contract used
+ * by `localizedField` in spaces/space-metadata.js.
+ */
+export function resolveLocalizedPanelField(panel, fieldName, locale) {
+  if (!panel || typeof panel !== "object") {
+    return "";
+  }
+  const baseValue = panel[fieldName] ?? "";
+  const targetLocale = String(locale || "").trim();
+  if (!targetLocale) {
+    return baseValue;
+  }
+  const i18nMap = panel[`${fieldName}I18n`];
+  if (i18nMap && typeof i18nMap === "object" && !Array.isArray(i18nMap)) {
+    const exact = i18nMap[targetLocale];
+    if (exact) {
+      return exact;
+    }
+    const base = targetLocale.split(/[-_]/u)[0];
+    if (base && base !== targetLocale && i18nMap[base]) {
+      return i18nMap[base];
+    }
+  }
+  return baseValue;
 }
 
 async function listPanelManifestFiles() {

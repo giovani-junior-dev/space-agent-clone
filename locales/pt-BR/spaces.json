@@ -16,5 +16,51 @@
     "empty": "Vazio",
     "duplicate": "Duplicar {{name}}",
     "delete": "Excluir {{name}}"
+  },
+  "view": {
+    "goBack": "Voltar",
+    "shareSpace": "Compartilhar espaço",
+    "rearrangeSpace": "Reorganizar espaço",
+    "openSpaceSettings": "Abrir configurações do espaço",
+    "closeSpaceSettings": "Fechar configurações do espaço",
+    "spaceName": "Nome do espaço",
+    "untitledPlaceholder": "Sem título",
+    "agentInstructions": "Instruções do agente",
+    "agentInstructionsPlaceholder": "Adicione instruções específicas deste espaço para o Space Agent.",
+    "changeSpaceIcon": "Trocar ícone do espaço",
+    "changeSpaceIconWithName": "Trocar ícone do espaço ({{name}})",
+    "closeExample": "Fechar exemplo",
+    "clearAllWidgets": "Limpar todos os widgets",
+    "clearWidgetsConfirmOne": "Remover o único widget de \"{{title}}\"? Isso apaga todos os widgets do espaço atual.",
+    "clearWidgetsConfirmMany": "Remover todos os {{count}} widgets de \"{{title}}\"? Isso apaga todos os widgets do espaço atual.",
+    "loadingSpace": "Carregando espaço..."
+  },
+  "shareModal": {
+    "currentSpaceEyebrow": "Espaço atual",
+    "intro": "Crie um link de compartilhamento hospedado ou movimente o espaço atual como um ZIP.",
+    "hostedShareEyebrow": "Compartilhamento hospedado",
+    "shareViaPrefix": "Compartilhar via",
+    "hostedShareNote": "Crie um link público de compartilhamento para convidados. Adicione uma senha para criptografar o ZIP no navegador antes do envio.",
+    "optionalPassword": "Senha opcional",
+    "passwordPlaceholder": "Deixe em branco para compartilhamento aberto",
+    "createShareLink": "Criar link de compartilhamento",
+    "shareLink": "Link de compartilhamento",
+    "copyShareLink": "Copiar link de compartilhamento",
+    "openLink": "Abrir link",
+    "zipTransferEyebrow": "Transferência ZIP",
+    "zipTransferTitle": "Baixar ou enviar ZIP",
+    "zipTransferNote": "Baixe o espaço atual como um ZIP ou importe um ZIP para este espaço. Importações podem substituir o espaço atual ou criar um novo espaço <code>imported-N</code>.",
+    "downloadZip": "Baixar ZIP",
+    "downloadZipDesc": "Salvar a pasta completa do espaço atual como arquivo ZIP.",
+    "uploadZip": "Enviar ZIP",
+    "uploadZipDesc": "Importar um ZIP e decidir se substitui este espaço ou mantém os dois.",
+    "close": "Fechar"
+  },
+  "emptyCanvas": {
+    "introPrimary": "Apenas um espaço vazio aqui",
+    "introSecondary": "por enquanto",
+    "prompt": "Diga ao seu agente o que criar",
+    "examplesCopy": "ou experimente um dos exemplos acima",
+    "showGuidance": "Mostrar todas as orientações de espaço vazio"
   }
 }

@@ -72,6 +72,7 @@ import {
   sizeToToken,
 } from "/mod/_core/spaces/widget-sdk-core.js";
 import { renderWidgetOutput } from "/mod/_core/spaces/widget-render.js";
+import { t as i18nT } from "/mod/_core/i18n/i18n.js";
 
 let activeSpacesStore = null;
 const SPACES_STORE_NAME = "spacesPage";
@@ -3018,7 +3019,16 @@ const spacesModel = {
   },
 
   get currentSpaceMetaToggleLabel() {
-    return this.isConfigPanelOpen ? "Close space settings" : "Open space settings";
+    // Subscribe this getter to locale changes via the reactive store version.
+    try {
+      // eslint-disable-next-line no-unused-expressions
+      globalThis.Alpine?.store?.("spaceLocale")?.version;
+    } catch {
+      /* noop */
+    }
+    return this.isConfigPanelOpen
+      ? i18nT("spaces:view.closeSpaceSettings")
+      : i18nT("spaces:view.openSpaceSettings");
   },
 
   get currentSpaceHasOnlyExampleWidgets() {
@@ -3029,7 +3039,15 @@ const spacesModel = {
   },
 
   get currentSpaceClearAllWidgetsLabel() {
-    return this.currentSpaceHasOnlyExampleWidgets ? "Close example" : "Clear all widgets";
+    try {
+      // eslint-disable-next-line no-unused-expressions
+      globalThis.Alpine?.store?.("spaceLocale")?.version;
+    } catch {
+      /* noop */
+    }
+    return this.currentSpaceHasOnlyExampleWidgets
+      ? i18nT("spaces:view.closeExample")
+      : i18nT("spaces:view.clearAllWidgets");
   },
 
   get currentSpaceClearAllWidgetsIcon() {
@@ -3038,18 +3056,29 @@ const spacesModel = {
 
   get currentSpaceClearAllWidgetsConfirmMessage() {
     const widgetCount = this.currentSpace?.widgetIds?.length || 0;
-    const widgetLabel = widgetCount === 1 ? "the only widget" : `all ${widgetCount} widgets`;
-    return `Clear ${widgetLabel} from "${this.currentSpaceDisplayTitle}"? This removes every widget in the current space.`;
+    const key = widgetCount === 1
+      ? "spaces:view.clearWidgetsConfirmOne"
+      : "spaces:view.clearWidgetsConfirmMany";
+    return i18nT(key, {
+      count: widgetCount,
+      title: this.currentSpaceDisplayTitle
+    });
   },
 
   get currentSpaceIconPickerLabel() {
+    try {
+      // eslint-disable-next-line no-unused-expressions
+      globalThis.Alpine?.store?.("spaceLocale")?.version;
+    } catch {
+      /* noop */
+    }
     const iconName = normalizeSpaceIcon(this.currentSpaceIconDraft);
 
     if (iconName) {
-      return `Change space icon (${iconName})`;
+      return i18nT("spaces:view.changeSpaceIconWithName", { name: iconName });
     }
 
-    return "Change space icon";
+    return i18nT("spaces:view.changeSpaceIcon");
   },
 
   get currentSpaceConfigPopoverStyle() {

@@ -19,5 +19,15 @@
   "rawOutputEyebrow": "Saída do LLM",
   "noRawOutputAvailable": "[Nenhuma saída bruta disponível]",
   "contextWindowEyebrow": "Janela de Contexto",
-  "ready": "Pronto"
+  "ready": "Pronto",
+  "sendMessageLabel": "Enviar mensagem",
+  "stopCurrentLoop": "Parar o loop atual",
+  "addMessageToQueue": "Adicionar mensagem à fila",
+  "queueMessageForNextStep": "Enfileirar mensagem para a próxima etapa",
+  "messageQueuedOne_one": "{{count}} mensagem na fila para a próxima etapa",
+  "messageQueuedOne_other": "{{count}} mensagens na fila para as próximas etapas",
+  "revealAgentChat": "Mostrar chat do agente",
+  "switchToFullChatMode": "Mudar para modo de chat completo",
+  "switchToCompactChatMode": "Mudar para modo de chat compacto",
+  "startupHint": "<strong>Arraste</strong> e <strong>toque</strong> em mim."
 }

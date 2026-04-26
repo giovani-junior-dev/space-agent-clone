@@ -146,8 +146,20 @@ const syncCurrentRoute = globalThis.space.extend(
         return;
       }
 
+      // Serialize the error defensively so the console line is readable even
+      // when `error` is a plain object or an Event with no useful toString.
+      const errorDetail =
+        error?.stack ||
+        error?.message ||
+        (() => {
+          try {
+            return JSON.stringify(error);
+          } catch {
+            return String(error);
+          }
+        })();
       console.error("[router] route load failed", {
-        error,
+        errorDetail,
         route
       });
       store.error = error instanceof Error ? error.message : String(error || "Unknown route error");

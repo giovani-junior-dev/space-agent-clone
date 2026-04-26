@@ -16,5 +16,51 @@
     "empty": "Empty",
     "duplicate": "Duplicate {{name}}",
     "delete": "Delete {{name}}"
+  },
+  "view": {
+    "goBack": "Go back",
+    "shareSpace": "Share space",
+    "rearrangeSpace": "Rearrange space",
+    "openSpaceSettings": "Open space settings",
+    "closeSpaceSettings": "Close space settings",
+    "spaceName": "Space Name",
+    "untitledPlaceholder": "Untitled",
+    "agentInstructions": "Agent Instructions",
+    "agentInstructionsPlaceholder": "Add space-specific instructions for the Space Agent.",
+    "changeSpaceIcon": "Change space icon",
+    "changeSpaceIconWithName": "Change space icon ({{name}})",
+    "closeExample": "Close example",
+    "clearAllWidgets": "Clear all widgets",
+    "clearWidgetsConfirmOne": "Clear the only widget from \"{{title}}\"? This removes every widget in the current space.",
+    "clearWidgetsConfirmMany": "Clear all {{count}} widgets from \"{{title}}\"? This removes every widget in the current space.",
+    "loadingSpace": "Loading space..."
+  },
+  "shareModal": {
+    "currentSpaceEyebrow": "Current Space",
+    "intro": "Create a hosted share link, or move the current space around as a ZIP.",
+    "hostedShareEyebrow": "Hosted Share",
+    "shareViaPrefix": "Share via",
+    "hostedShareNote": "Create a public guest-share link. Add a password to encrypt the ZIP in the browser before upload.",
+    "optionalPassword": "Optional password",
+    "passwordPlaceholder": "Leave blank for an open share",
+    "createShareLink": "Create Share Link",
+    "shareLink": "Share link",
+    "copyShareLink": "Copy share link",
+    "openLink": "Open link",
+    "zipTransferEyebrow": "ZIP Transfer",
+    "zipTransferTitle": "Download or upload ZIP",
+    "zipTransferNote": "Download the current space as a ZIP, or import a ZIP into this space. Imports can replace the current space or land as a new <code>imported-N</code> space.",
+    "downloadZip": "Download ZIP",
+    "downloadZipDesc": "Save the full current space folder as a ZIP archive.",
+    "uploadZip": "Upload ZIP",
+    "uploadZipDesc": "Import a ZIP and decide whether to replace this space or keep both.",
+    "close": "Close"
+  },
+  "emptyCanvas": {
+    "introPrimary": "Just an empty space here",
+    "introSecondary": "for now",
+    "prompt": "Tell your agent what to create",
+    "examplesCopy": "or try one of the examples above",
+    "showGuidance": "Show all empty space guidance"
   }
 }

@@ -1,7 +1,7 @@
+import { t as i18nT } from "/mod/_core/i18n/i18n.js";
+
 const PAGE_SIZE = 100;
 const MAX_DIFF_DISPLAY_BYTES = 1000 * 1000;
-const NO_TEXT_DIFF_MESSAGE = "No text diff is available for this file.";
-const DIFF_TOO_LARGE_MESSAGE = "This diff is larger than 1 MB, so Time Travel will not render it.";
 const PREVIEW_FILE_LIMIT = 10;
 const PREVIEW_FILE_ROWS = 3;
 const GIT_REPOSITORY_PATTERN = "**/.git/";
@@ -344,14 +344,20 @@ const model = {
   },
 
   get pageLabel() {
+    try {
+      // eslint-disable-next-line no-unused-expressions
+      globalThis.Alpine?.store?.("spaceLocale")?.version;
+    } catch {
+      /* noop */
+    }
     const start = this.commits.length ? this.offset + 1 : 0;
     const end = this.offset + this.commits.length;
 
     if (this.total !== null) {
-      return `${start}-${end} of ${this.total}`;
+      return i18nT("timeTravel:pageOf", { from: start, to: end, total: this.total });
     }
 
-    return this.hasMore ? `${start}-${end}` : `${start}-${end}`;
+    return i18nT("timeTravel:pageRange", { from: start, to: end });
   },
 
   get selectedCommit() {
@@ -384,30 +390,34 @@ const model = {
   },
 
   get actionModalEyebrow() {
-    return this.pendingAction === "revert" ? "Review Revert" : "Review Travel";
+    return this.pendingAction === "revert"
+      ? i18nT("timeTravel:modal.reviewRevertEyebrow")
+      : i18nT("timeTravel:modal.reviewTravelEyebrow");
   },
 
   get actionModalTitle() {
     const timestamp = this.actionPreviewCommit?.timestamp;
-    const relativeTime = timestamp ? this.formatRelativeTimestamp(timestamp) : "this point";
+    const relativeTime = timestamp
+      ? this.formatRelativeTimestamp(timestamp)
+      : i18nT("timeTravel:modal.thisPoint");
 
     return this.pendingAction === "revert"
-      ? `Revert changes from ${relativeTime}`
-      : `Travel in time to ${relativeTime}`;
+      ? i18nT("timeTravel:modal.revertChangesFrom", { when: relativeTime })
+      : i18nT("timeTravel:modal.travelInTimeTo", { when: relativeTime });
   },
 
   get actionModalDescription() {
     return this.pendingAction === "revert"
-      ? "This will create a new history point that undoes the affected files below."
-      : "This will move your files, settings, spaces, and custom development to match the affected files below.";
+      ? i18nT("timeTravel:modal.revertDescription")
+      : i18nT("timeTravel:modal.travelDescription");
   },
 
   get actionConfirmLabel() {
     if (this.pendingAction === "revert") {
-      return this.reverting ? "Reverting..." : "Revert Changes";
+      return this.reverting ? i18nT("timeTravel:reverting") : i18nT("timeTravel:revertChanges");
     }
 
-    return this.rollingBack ? "Travelling..." : "Travel In Time";
+    return this.rollingBack ? i18nT("timeTravel:travelling") : i18nT("timeTravel:travelInTime");
   },
 
   get actionConfirmIcon() {
@@ -533,14 +543,27 @@ const model = {
 
       this.selectedHash = selectedCommit?.hash || "";
       this.selectedCommitSnapshot = selectedCommit;
-      this.setStatus(
-        commits.length
-          ? `Showing ${this.pageLabel} history point${commits.length === 1 ? "" : "s"}. ${this.gitBackend ? `(git: ${this.gitBackend})` : ""}`.trim()
-          : this.fileFilter
-            ? "No changes match that file filter."
-            : "No history points yet. Save a file after Time Travel is enabled.",
-        commits.length ? "success" : ""
-      );
+      let statusMessage;
+      if (commits.length) {
+        const range = this.pageLabel;
+        if (this.gitBackend) {
+          statusMessage = i18nT("timeTravel:showingWithBackend", {
+            range,
+            backend: this.gitBackend,
+            count: commits.length
+          });
+        } else {
+          statusMessage = i18nT("timeTravel:showingOne", {
+            range,
+            count: commits.length
+          });
+        }
+      } else if (this.fileFilter) {
+        statusMessage = i18nT("timeTravel:noChangesMatch");
+      } else {
+        statusMessage = i18nT("timeTravel:noHistoryPointsYet");
+      }
+      this.setStatus(statusMessage, commits.length ? "success" : "");
     } catch (error) {
       logTimeTravelError("loadHistory failed", error);
       this.commits = [];
@@ -549,7 +572,7 @@ const model = {
       this.historyResolvedPath = normalizeRepositoryPath(this.historyResolvedPath || this.historyPath);
       this.selectedHash = "";
       this.selectedCommitSnapshot = null;
-      this.errorText = String(error?.message || "Unable to load Git history.");
+      this.errorText = String(error?.message || i18nT("timeTravel:unableToLoadHistory"));
       this.setStatus(this.errorText, "error");
     } finally {
       this.loading = false;
@@ -602,7 +625,7 @@ const model = {
     } catch (error) {
       logTimeTravelError("loadRepositories failed", error);
       this.repositories = [];
-      this.repositoryErrorText = String(error?.message || "Unable to find writable Git repositories.");
+      this.repositoryErrorText = String(error?.message || i18nT("timeTravel:unableToFindRepositories"));
     } finally {
       this.repositoryLoading = false;
     }
@@ -888,7 +911,7 @@ const model = {
     }
 
     this.rollingBack = true;
-    this.setStatus(`Travelling to ${this.formatRelativeTimestamp(commit.timestamp)}...`);
+    this.setStatus(i18nT("timeTravel:travellingTo", { when: this.formatRelativeTimestamp(commit.timestamp) }));
 
     try {
       const runtime = getRuntime();
@@ -903,7 +926,7 @@ const model = {
       await this.loadHistory({
         keepMissingSelection: true
       });
-      this.setStatus("Travelled in time. Other history points are still available.", "success");
+      this.setStatus(i18nT("timeTravel:travelledInTime"), "success");
     } catch (error) {
       logTimeTravelError("rollbackSelected failed", error);
       this.setActionPreviewError(error, {
@@ -923,7 +946,7 @@ const model = {
     }
 
     this.reverting = true;
-    this.setStatus("Reverting changes...");
+    this.setStatus(i18nT("timeTravel:revertingChanges"));
 
     try {
       const runtime = getRuntime();
@@ -939,7 +962,7 @@ const model = {
         keepMissingSelection: true,
         pageIndex: 0
       });
-      this.setStatus("Reverted those changes as a new history point.", "success");
+      this.setStatus(i18nT("timeTravel:revertedAsNewPoint"), "success");
     } catch (error) {
       logTimeTravelError("revertSelected failed", error);
       this.setActionPreviewError(error, {
@@ -976,7 +999,7 @@ const model = {
       this.applyDiffResult(result, file);
     } catch (error) {
       logTimeTravelError("openFileDiff failed", error);
-      this.diffErrorText = String(error?.message || "Unable to load file diff.");
+      this.diffErrorText = String(error?.message || i18nT("timeTravel:unableToLoadFileDiff"));
     } finally {
       this.diffLoading = false;
     }
@@ -1085,11 +1108,11 @@ const model = {
   getFileActionLabel(file) {
     switch (normalizeFileAction(file?.action)) {
       case "added":
-        return "Added";
+        return i18nT("timeTravel:fileActions.added");
       case "deleted":
-        return "Removed";
+        return i18nT("timeTravel:fileActions.removed");
       default:
-        return "Changed";
+        return i18nT("timeTravel:fileActions.changed");
     }
   },
 
@@ -1105,12 +1128,12 @@ const model = {
     this.diffNoticeText = "";
 
     if (!patch) {
-      this.diffPatch = NO_TEXT_DIFF_MESSAGE;
+      this.diffPatch = i18nT("timeTravel:noTextDiff");
       return;
     }
 
     if (getTextByteLength(patch) > MAX_DIFF_DISPLAY_BYTES) {
-      this.diffNoticeText = DIFF_TOO_LARGE_MESSAGE;
+      this.diffNoticeText = i18nT("timeTravel:diffTooLarge");
       return;
     }
 

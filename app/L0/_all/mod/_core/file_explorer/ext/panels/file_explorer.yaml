@@ -1,5 +1,9 @@
 name: Files
 path: file_explorer
 description: Browse and edit app files.
+name_i18n:
+  pt-BR: Arquivos
+description_i18n:
+  pt-BR: Navegar e editar os arquivos do app.
 icon: folder_open
 color: "#8bd7ff"

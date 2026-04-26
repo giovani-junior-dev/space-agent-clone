@@ -1,5 +1,6 @@
 import { createHmac, randomBytes, timingSafeEqual } from "node:crypto";
 
+import { tError } from "../i18n.js";
 import { recordAppPathMutations } from "../customware/git_history.js";
 import { normalizeEntityId } from "../customware/layout.js";
 import {
@@ -886,7 +887,7 @@ export function createAuthService(options = {}) {
       return requestUser;
     }
 
-    throw new Error("Authentication required.");
+    throw new Error(tError("errors:auth.authenticationRequired"));
   }
 
   return {

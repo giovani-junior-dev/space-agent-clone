@@ -40,5 +40,37 @@
   "diffFallbackEyebrow": "Diff",
   "diffFallbackTitle": "Diff do arquivo",
   "loadingDiff": "Carregando diff...",
-  "fileDiff": "Diff do arquivo"
+  "fileDiff": "Diff do arquivo",
+  "pageOf": "{{from}}-{{to}} de {{total}}",
+  "pageRange": "{{from}}-{{to}}",
+  "showingOne_one": "Mostrando {{range}} ponto do histórico.",
+  "showingOne_other": "Mostrando {{range}} pontos do histórico.",
+  "showingWithBackend_one": "Mostrando {{range}} ponto do histórico. (git: {{backend}})",
+  "showingWithBackend_other": "Mostrando {{range}} pontos do histórico. (git: {{backend}})",
+  "noHistoryPointsYet": "Sem pontos no histórico ainda. Salve um arquivo após ativar o Histórico.",
+  "unableToLoadHistory": "Não foi possível carregar o histórico do Git.",
+  "unableToFindRepositories": "Não foi possível encontrar repositórios Git graváveis.",
+  "travellingTo": "Viajando para {{when}}...",
+  "revertingChanges": "Revertendo alterações...",
+  "travelledInTime": "Viagem no tempo concluída. Outros pontos do histórico continuam disponíveis.",
+  "revertedAsNewPoint": "Alterações revertidas como um novo ponto do histórico.",
+  "unableToLoadFileDiff": "Não foi possível carregar o diff do arquivo.",
+  "noTextDiff": "Nenhum diff de texto disponível para este arquivo.",
+  "diffTooLarge": "Este diff é maior que 1 MB, então o Histórico não vai renderizá-lo.",
+  "fileActions": {
+    "added": "Adicionado",
+    "modified": "Modificado",
+    "deleted": "Removido",
+    "removed": "Removido",
+    "changed": "Alterado"
+  },
+  "modal": {
+    "reviewRevertEyebrow": "Revisar reversão",
+    "reviewTravelEyebrow": "Revisar viagem",
+    "thisPoint": "este ponto",
+    "revertChangesFrom": "Reverter alterações de {{when}}",
+    "travelInTimeTo": "Viajar no tempo até {{when}}",
+    "revertDescription": "Isto vai criar um novo ponto de histórico que desfaz os arquivos afetados abaixo.",
+    "travelDescription": "Isto vai mover seus arquivos, configurações, espaços e desenvolvimento personalizado para corresponder aos arquivos afetados abaixo."
+  }
 }

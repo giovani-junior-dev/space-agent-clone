@@ -1,4 +1,25 @@
 export { loadEmptyCanvasExamples } from "./empty-canvas-examples.js";
+import { getLocale, t as i18nT, onLocaleChanged } from "/mod/_core/i18n/i18n.js";
+
+const LOCALE_BASE = (locale) => String(locale || "").split(/[-_]/u)[0];
+
+function resolveLocalizedExampleText(example, locale) {
+  if (!example) {
+    return "";
+  }
+  const map = example.textI18n;
+  if (map && typeof map === "object") {
+    const exact = map[locale];
+    if (exact) {
+      return exact;
+    }
+    const base = LOCALE_BASE(locale);
+    if (base && base !== locale && map[base]) {
+      return map[base];
+    }
+  }
+  return example.text;
+}
 
 const TAU = Math.PI * 2;
 const EMPTY_SPACE_FLOAT_PROFILE = Object.freeze({
@@ -490,7 +511,15 @@ export function createLoadingCanvasState() {
   const content = createElement("div", "spaces-empty-canvas-content spaces-loading-canvas-content");
   const title = createElement("h2", "spaces-empty-canvas-title spaces-loading-canvas-title");
 
-  title.appendChild(createElement("span", "spaces-empty-canvas-line", "Loading space..."));
+  const loadingLine = createElement("span", "spaces-empty-canvas-line", i18nT("spaces:view.loadingSpace"));
+  const refreshLoadingText = () => {
+    loadingLine.textContent = i18nT("spaces:view.loadingSpace");
+  };
+  const detachLocaleLoading = onLocaleChanged(refreshLoadingText);
+  // Stash the detach so callers can stop the listener if needed.
+  loadingLine.dataset.i18nKey = "spaces:view.loadingSpace";
+  loadingLine.__i18nDetach = detachLocaleLoading;
+  title.appendChild(loadingLine);
   content.appendChild(title);
   root.appendChild(content);
 
@@ -517,24 +546,29 @@ export function createEmptyCanvasState(exampleDefinitions = [], { initialStage =
   const secondFloater = createElement("div", "spaces-empty-canvas-floater spaces-empty-canvas-floater-intro-secondary");
   const thirdFloater = createElement("div", "spaces-empty-canvas-floater spaces-empty-canvas-floater-prompt");
   const fourthFloater = createElement("div", "spaces-empty-canvas-floater spaces-empty-canvas-floater-examples-copy");
-  const firstText = createElement("p", "spaces-empty-canvas-text spaces-empty-canvas-text-intro-primary", "Just an empty space here");
-  const secondText = createElement("p", "spaces-empty-canvas-text spaces-empty-canvas-text-intro-secondary", "for now");
+  const firstText = createElement("p", "spaces-empty-canvas-text spaces-empty-canvas-text-intro-primary", i18nT("spaces:emptyCanvas.introPrimary"));
+  firstText.dataset.i18nKey = "spaces:emptyCanvas.introPrimary";
+  const secondText = createElement("p", "spaces-empty-canvas-text spaces-empty-canvas-text-intro-secondary", i18nT("spaces:emptyCanvas.introSecondary"));
+  secondText.dataset.i18nKey = "spaces:emptyCanvas.introSecondary";
   const thirdText = createElement(
     "p",
     "spaces-empty-canvas-text spaces-empty-canvas-text-prompt",
-    "Tell your agent what to create"
+    i18nT("spaces:emptyCanvas.prompt")
   );
+  thirdText.dataset.i18nKey = "spaces:emptyCanvas.prompt";
   const fourthText = createElement(
     "p",
     "spaces-empty-canvas-text spaces-empty-canvas-text-examples-copy",
-    "or try one of the examples above"
+    i18nT("spaces:emptyCanvas.examplesCopy")
   );
+  fourthText.dataset.i18nKey = "spaces:emptyCanvas.examplesCopy";
   const examples = createElement("div", "spaces-empty-canvas-examples");
   const chatExampleButtons = [];
 
   copy.tabIndex = 0;
   copy.setAttribute("role", "button");
-  copy.setAttribute("aria-label", "Show all empty space guidance");
+  copy.setAttribute("aria-label", i18nT("spaces:emptyCanvas.showGuidance"));
+  copy.dataset.i18nAriaKey = "spaces:emptyCanvas.showGuidance";
   content.dataset.emptyCanvasStage = initialStage === "buttons" ? "buttons" : "boot";
   firstFloater.appendChild(firstText);
   secondFloater.appendChild(secondText);
@@ -543,16 +577,19 @@ export function createEmptyCanvasState(exampleDefinitions = [], { initialStage =
   primarySlot.append(firstFloater, thirdFloater);
   secondarySlot.append(secondFloater, fourthFloater);
   copy.append(primarySlot, secondarySlot);
+  const localizedExampleButtons = [];
   exampleDefinitions.forEach((exampleDefinition) => {
     const button = createElement("button", "spaces-empty-canvas-example");
     const accentColor = String(exampleDefinition.color || "").trim() || "#94bcff";
     const contentRow = createElement("span", "spaces-empty-canvas-example-content");
     const iconBadge = createElement("span", "spaces-empty-canvas-example-icon-badge");
     const icon = createElement("x-icon", "spaces-empty-canvas-example-icon", exampleDefinition.icon || "chat_bubble");
-    const label = createElement("span", "spaces-empty-canvas-example-label", exampleDefinition.text);
+    const initialLocalizedText = resolveLocalizedExampleText(exampleDefinition, getLocale());
+    const label = createElement("span", "spaces-empty-canvas-example-label", initialLocalizedText);
 
     button.type = "button";
-    button.title = exampleDefinition.text;
+    button.title = initialLocalizedText;
+    localizedExampleButtons.push({ button, label, exampleDefinition });
     if (exampleDefinition.kind === "chat") {
       button.classList.add("spaces-empty-canvas-example-chat");
       chatExampleButtons.push(button);
@@ -606,8 +643,36 @@ export function createEmptyCanvasState(exampleDefinitions = [], { initialStage =
   root.appendChild(content);
   const cleanup = startChatExampleButtonStatusSync(chatExampleButtons);
 
+  // Re-render localized copy on locale change. Lightweight: re-reads keys and
+  // updates textContent / aria-label on tracked nodes only — no DOM rebuild.
+  const refreshLocalizedCopy = () => {
+    const locale = getLocale();
+    [firstText, secondText, thirdText, fourthText].forEach((node) => {
+      if (node?.dataset?.i18nKey) {
+        node.textContent = i18nT(node.dataset.i18nKey);
+      }
+    });
+    if (copy?.dataset?.i18nAriaKey) {
+      copy.setAttribute("aria-label", i18nT(copy.dataset.i18nAriaKey));
+    }
+    localizedExampleButtons.forEach(({ button, label, exampleDefinition }) => {
+      const text = resolveLocalizedExampleText(exampleDefinition, locale);
+      label.textContent = text;
+      button.title = text;
+    });
+  };
+  const detachLocaleListener = onLocaleChanged(refreshLocalizedCopy);
+  const combinedCleanup = () => {
+    if (typeof detachLocaleListener === "function") {
+      detachLocaleListener();
+    }
+    if (typeof cleanup === "function") {
+      cleanup();
+    }
+  };
+
   return {
-    cleanup,
+    cleanup: combinedCleanup,
     copy,
     content,
     floaters: [firstFloater, secondFloater, thirdFloater, fourthFloater],

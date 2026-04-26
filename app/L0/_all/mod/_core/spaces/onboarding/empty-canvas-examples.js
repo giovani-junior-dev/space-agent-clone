@@ -106,6 +106,21 @@ async function compileExampleCode(source, label) {
   }
 }
 
+function normalizeI18nMap(rawMap) {
+  if (!rawMap || typeof rawMap !== "object" || Array.isArray(rawMap)) {
+    return {};
+  }
+  const out = {};
+  for (const [locale, value] of Object.entries(rawMap)) {
+    const normalizedLocale = String(locale || "").trim();
+    const normalizedValue = collapseWhitespace(value);
+    if (normalizedLocale && normalizedValue) {
+      out[normalizedLocale] = normalizedValue;
+    }
+  }
+  return out;
+}
+
 async function normalizeExampleDefinition(rawExample, index) {
   const normalizedExample =
     rawExample && typeof rawExample === "object" && !Array.isArray(rawExample)
@@ -117,6 +132,9 @@ async function normalizeExampleDefinition(rawExample, index) {
   const icon = normalizeExampleIcon(normalizedExample.icon);
   const color = normalizeExampleColor(normalizedExample.color ?? normalizedExample.iconColor ?? normalizedExample.icon_color);
   const kind = normalizeExampleKind(normalizedExample.kind, code);
+  const textI18n = normalizeI18nMap(
+    normalizedExample.text_i18n ?? normalizedExample.textI18n ?? normalizedExample.label_i18n ?? normalizedExample.labelI18n
+  );
 
   if (!text) {
     throw new Error(`Empty-canvas example ${index + 1} is missing text.`);
@@ -133,7 +151,8 @@ async function normalizeExampleDefinition(rawExample, index) {
     icon,
     kind,
     prompt,
-    text
+    text,
+    textI18n: Object.freeze({ ...textI18n })
   });
 
   return {

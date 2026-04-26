@@ -32,5 +32,27 @@
     "noPanels": "No panels are available for this account.",
     "panelsAriaLabel": "Dashboard panels",
     "openItem": "Open {{name}}"
+  },
+  "panels": {
+    "agent": {
+      "name": "Agent",
+      "description": "Basic information and personal prompt tuning for the browser agent."
+    },
+    "fileExplorer": {
+      "name": "Files",
+      "description": "Browse and edit app files."
+    },
+    "huggingface": {
+      "name": "Local LLM",
+      "description": "Load and test local LLMs with WebGPU and Hugging Face."
+    },
+    "timeTravel": {
+      "name": "Time Travel",
+      "description": "Undo settings, spaces, and custom development changes."
+    },
+    "user": {
+      "name": "User",
+      "description": "Update your full name and sign-in password."
+    }
   }
 }

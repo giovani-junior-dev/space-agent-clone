@@ -1,5 +1,9 @@
 name: Time Travel
 path: time_travel
 description: Undo settings, spaces, and custom development changes.
+name_i18n:
+  pt-BR: Histórico
+description_i18n:
+  pt-BR: Desfazer configurações, espaços e alterações de desenvolvimento personalizado.
 icon: history
 color: "#79edd8"

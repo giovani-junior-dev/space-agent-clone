@@ -10,6 +10,7 @@ import { handlePageRequest } from "./pages_handler.js";
 import { proxyExternalRequest } from "./proxy.js";
 import { sendApiResult, sendJson } from "./responses.js";
 import { applyApiCorsHeaders, handleApiPreflight } from "./cors.js";
+import { tError } from "../lib/i18n.js";
 import { handleModuleRequest } from "./mod_handler.js";
 import { handleAppFetchRequest } from "./app_fetch_handler.js";
 import { handleLocaleRequest, isLocaleRequest } from "./locales_handler.js";
@@ -128,7 +129,7 @@ function sendUnauthorized(res, requestContext, auth) {
     res,
     401,
     {
-      error: "Authentication required"
+      error: tError("errors:auth.authenticationRequired")
     },
     requestContext?.user?.shouldClearSessionCookie &&
       auth &&

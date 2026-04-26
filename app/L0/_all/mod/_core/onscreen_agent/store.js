@@ -10,6 +10,7 @@ import * as llmParams from "/mod/_core/onscreen_agent/llm-params.js";
 import * as skills from "/mod/_core/onscreen_agent/skills.js";
 import * as storage from "/mod/_core/onscreen_agent/storage.js";
 import * as agentView from "/mod/_core/onscreen_agent/view.js";
+import { t as i18nT } from "/mod/_core/i18n/i18n.js";
 import { renderMarkdown } from "/mod/_core/framework/js/markdown-frontmatter.js";
 import {
   normalizeAssistantEvaluationLogEntry,
@@ -1856,21 +1857,30 @@ const model = {
   },
 
   get primaryActionLabel() {
+    // Subscribe to locale changes so :aria-label/:title bindings re-evaluate.
+    try {
+      // eslint-disable-next-line no-unused-expressions
+      globalThis.Alpine?.store?.("spaceLocale")?.version;
+    } catch {
+      /* noop */
+    }
     if (this.isSending) {
       if (this.canQueueSubmissionWhileBusy) {
-        return this.hasQueuedSubmission ? "Add message to queue" : "Queue message for next step";
+        return this.hasQueuedSubmission
+          ? i18nT("onscreenAgent:addMessageToQueue")
+          : i18nT("onscreenAgent:queueMessageForNextStep");
       }
 
       if (this.hasQueuedSubmission) {
-        return this.queuedSubmissionCount === 1
-          ? "1 message queued for next step"
-          : `${this.queuedSubmissionCount} messages queued for next steps`;
+        return i18nT("onscreenAgent:messageQueuedOne", {
+          count: this.queuedSubmissionCount
+        });
       }
 
-      return "Stop current loop";
+      return i18nT("onscreenAgent:stopCurrentLoop");
     }
 
-    return "Send message";
+    return i18nT("onscreenAgent:sendMessageLabel");
   },
 
   get isPrimaryActionBusy() {
@@ -2012,11 +2022,19 @@ const model = {
   },
 
   get avatarButtonLabel() {
+    try {
+      // eslint-disable-next-line no-unused-expressions
+      globalThis.Alpine?.store?.("spaceLocale")?.version;
+    } catch {
+      /* noop */
+    }
     if (this.hiddenEdge) {
-      return "Reveal agent chat";
+      return i18nT("onscreenAgent:revealAgentChat");
     }
 
-    return this.isFullMode ? "Switch to compact chat mode" : "Switch to full chat mode";
+    return this.isFullMode
+      ? i18nT("onscreenAgent:switchToCompactChatMode")
+      : i18nT("onscreenAgent:switchToFullChatMode");
   },
 
   get shouldShowHistory() {

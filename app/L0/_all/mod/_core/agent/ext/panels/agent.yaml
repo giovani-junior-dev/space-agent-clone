@@ -1,5 +1,9 @@
 name: Agent
 path: agent
 description: Basic information and personal prompt tuning for the browser agent.
+name_i18n:
+  pt-BR: Agente
+description_i18n:
+  pt-BR: Informações básicas e ajuste pessoal do prompt do agente do navegador.
 icon: smart_toy
 color: "#94bcff"
