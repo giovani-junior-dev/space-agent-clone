@@ -1,1 +1,79 @@
-{}
+{
+  "dialogTitle": "File Browser",
+  "toolbar": {
+    "goToParent": "Go to parent folder",
+    "goToHome": "Go to home folder",
+    "refresh": "Refresh current folder",
+    "createFile": "Create file",
+    "createFolder": "Create folder"
+  },
+  "summary": {
+    "pasteHere": "Paste Here",
+    "selectAllInFolder": "Select all items in this folder",
+    "selectionActions": "Selection actions",
+    "clearSelection": "Clear selection",
+    "removeFromQueue": "Remove {{name}} from {{queue}}",
+    "actionsFor": "Actions for {{name}}",
+    "toggleEntry": "{{action}} {{name}}"
+  },
+  "clipboard": {
+    "cutQueue": "Cut queue",
+    "copyQueue": "Copy queue",
+    "hideList": "Hide list",
+    "showList": "Show list",
+    "cutLabel_one": "{{count}} item cut",
+    "cutLabel_other": "{{count}} items cut",
+    "copyLabel_one": "{{count}} item copied",
+    "copyLabel_other": "{{count}} items copied"
+  },
+  "counts": {
+    "items_one": "{{count}} item",
+    "items_other": "{{count}} items",
+    "selected_one": "{{count}} selected item",
+    "selected_other": "{{count}} selected items"
+  },
+  "list": {
+    "loadingTitle": "Loading folder...",
+    "loadingDetail": "Please wait while the browser reads the current path.",
+    "emptyTitle": "This folder is empty.",
+    "emptyDetail": "No readable files or subfolders were returned for the current path."
+  },
+  "errors": {
+    "loadFailed": "Failed to load files.",
+    "accessDenied": "Access denied",
+    "pathNotFound": "Path not found",
+    "openFolderFailed": "Unable to open folder",
+    "notAllowedView": "You are not allowed to view {{path}}.",
+    "noFolderAt": "No folder was found at {{path}}.",
+    "nameEmpty": "Name must not be empty.",
+    "nameRelativeMarker": "Name must not be a relative path marker.",
+    "nameSlashes": "Name must not include slashes.",
+    "nameExists": "An item with that name already exists.",
+    "openWritableFolderFirst": "Open a writable folder before creating an item.",
+    "onlyFilesEditable": "Only files can be edited.",
+    "fileTooLarge": "File is too large to edit in the browser ({{size}}). Limit is 1 MB.",
+    "downloadNoPermission": "You do not have permission to download {{name}}.",
+    "downloadUnavailable": "{{name}} is no longer available for download.",
+    "thisItem": "this item",
+    "thisItemCap": "This item"
+  },
+  "contextMenu": {
+    "rename": "Rename",
+    "edit": "Edit",
+    "download": "Download",
+    "cut": "Cut",
+    "copy": "Copy",
+    "remove": "Remove"
+  },
+  "dialogs": {
+    "createFile": "New file",
+    "createFolder": "New folder",
+    "renameTitle": "Rename {{name}}",
+    "renameTitleFallback": "Rename item",
+    "editTitle": "Edit {{name}}",
+    "editTitleFallback": "Edit file",
+    "deletionConfirmation": "Deletion confirmation",
+    "noFileSelected": "[No file selected]",
+    "loadingContents": "Loading file contents..."
+  }
+}

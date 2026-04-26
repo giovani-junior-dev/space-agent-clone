@@ -1,1 +1,26 @@
-{}
+{
+  "welcome": {
+    "eyebrow": "Bem-vindo",
+    "headline": "Comece rápido",
+    "intro": "Abra os links do projeto ou inicie um dos espaços de demonstração inclusos.",
+    "resourcesHeading": "Recursos",
+    "resourcesAriaLabel": "Recursos",
+    "demoSpacesHeading": "Espaços de demonstração",
+    "demoSpacesAriaLabel": "Espaços de demonstração",
+    "hideAriaLabel": "Ocultar painel de boas-vindas",
+    "showAriaLabel": "Mostrar painel de boas-vindas",
+    "showButtonLabel": "Boas-vindas",
+    "loadFailed": "Não foi possível carregar o painel de boas-vindas.",
+    "savePrefFailed": "Não foi possível salvar essa preferência.",
+    "openDemoFailed": "Não foi possível abrir esse espaço de demonstração.",
+    "openedSpace": "Aberto \"{{title}}\"."
+  },
+  "resources": {
+    "githubRepo": "Repositório no GitHub",
+    "deepwikiDocs": "Documentação no DeepWiki",
+    "agentZeroSite": "Agent Zero",
+    "discord": "Discord",
+    "youtube": "YouTube",
+    "x": "X"
+  }
+}

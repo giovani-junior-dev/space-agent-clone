@@ -1,1 +1,27 @@
-{}
+{
+  "tabs": {
+    "dashboard": "Dashboard",
+    "agent": "Agent",
+    "files": "Files",
+    "timeTravel": "Time Travel",
+    "modules": "Modules"
+  },
+  "quickActions": {
+    "openAgent": "Admin agent",
+    "openFiles": "Files",
+    "openTimeTravel": "Time Travel",
+    "openModules": "Modules"
+  },
+  "shell": {
+    "adminPanel": "Admin panel",
+    "adminNavigation": "Admin navigation",
+    "adminTabs": "Admin tabs",
+    "adminPanelControls": "Active admin panel controls",
+    "openAdminTabs": "Open admin tabs",
+    "leaveAdminArea": "Leave admin area",
+    "resizeSplitView": "Resize split view",
+    "dragToResize": "Drag to resize panels",
+    "mainApplication": "Main application",
+    "mainAppFrameTitle": "Space Agent main app"
+  }
+}

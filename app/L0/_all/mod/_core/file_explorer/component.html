@@ -20,8 +20,8 @@
                   type="button"
                   :disabled="$store.fileExplorer.isWorking || !$store.fileExplorer.canGoUp"
                   @click="$store.fileExplorer.navigateUp({ focusList: true })"
-                  title="Go to parent folder"
-                  aria-label="Go to parent folder"
+                  :title="$t('fileExplorer:toolbar.goToParent')"
+                  :aria-label="$t('fileExplorer:toolbar.goToParent')"
                 >
                   <x-icon>arrow_upward</x-icon>
                 </button>
@@ -31,8 +31,8 @@
                   type="button"
                   :disabled="$store.fileExplorer.isWorking"
                   @click="$store.fileExplorer.navigateHome({ focusList: true })"
-                  title="Go to home folder"
-                  aria-label="Go to home folder"
+                  :title="$t('fileExplorer:toolbar.goToHome')"
+                  :aria-label="$t('fileExplorer:toolbar.goToHome')"
                 >
                   <x-icon>home</x-icon>
                 </button>
@@ -53,8 +53,8 @@
                   type="button"
                   :disabled="$store.fileExplorer.isWorking"
                   @click="$store.fileExplorer.refresh({ focusList: true })"
-                  title="Refresh current folder"
-                  aria-label="Refresh current folder"
+                  :title="$t('fileExplorer:toolbar.refresh')"
+                  :aria-label="$t('fileExplorer:toolbar.refresh')"
                 >
                   <x-icon>refresh</x-icon>
                 </button>
@@ -64,8 +64,8 @@
                   type="button"
                   :disabled="!$store.fileExplorer.canCreateInCurrentDirectory"
                   @click="$store.fileExplorer.openCreateFileDialog()"
-                  title="Create file"
-                  aria-label="Create file"
+                  :title="$t('fileExplorer:toolbar.createFile')"
+                  :aria-label="$t('fileExplorer:toolbar.createFile')"
                 >
                   <x-icon>note_add</x-icon>
                 </button>
@@ -75,8 +75,8 @@
                   type="button"
                   :disabled="!$store.fileExplorer.canCreateInCurrentDirectory"
                   @click="$store.fileExplorer.openCreateFolderDialog()"
-                  title="Create folder"
-                  aria-label="Create folder"
+                  :title="$t('fileExplorer:toolbar.createFolder')"
+                  :aria-label="$t('fileExplorer:toolbar.createFolder')"
                 >
                   <x-icon>create_new_folder</x-icon>
                 </button>
@@ -97,7 +97,7 @@
                       @click="$store.fileExplorer.pasteClipboardIntoCurrentDirectory()"
                     >
                       <x-icon>content_paste</x-icon>
-                      <span>Paste Here</span>
+                      <span x-t="'fileExplorer:summary.pasteHere'"></span>
                     </button>
 
                     <button
@@ -130,7 +130,7 @@
                         class="secondary-button file-explorer-mini-action"
                         type="button"
                         @click="$store.fileExplorer.removeClipboardItem(item.path)"
-                        :title="`Remove ${item.name} from ${$store.fileExplorer.clipboardActionLabel.toLowerCase()}`"
+                        :title="$t('fileExplorer:summary.removeFromQueue', { name: item.name, queue: $store.fileExplorer.clipboardActionLabel.toLowerCase() })"
                       >
                         <x-icon>close</x-icon>
                       </button>
@@ -152,10 +152,10 @@
                       type="button"
                       :disabled="!$store.fileExplorer.canSelectAllEntries"
                       @click="$store.fileExplorer.selectAllEntries({ focusList: true })"
-                      title="Select all items in this folder"
+                      :title="$t('fileExplorer:summary.selectAllInFolder')"
                     >
                       <x-icon>select_all</x-icon>
-                      <span>Select All</span>
+                      <span x-t="'common:actions.selectAll'"></span>
                     </button>
 
                     <button
@@ -163,7 +163,7 @@
                       type="button"
                       :disabled="$store.fileExplorer.isWorking"
                       @click.stop="$store.fileExplorer.toggleActionMenuForSelection($event)"
-                      title="Selection actions"
+                      :title="$t('fileExplorer:summary.selectionActions')"
                     >
                       <x-icon>more_horiz</x-icon>
                     </button>
@@ -173,7 +173,7 @@
                       type="button"
                       :disabled="$store.fileExplorer.isWorking"
                       @click="$store.fileExplorer.clearSelection({ focusList: true })"
-                      title="Clear selection"
+                      :title="$t('fileExplorer:summary.clearSelection')"
                     >
                       <x-icon>close</x-icon>
                     </button>
@@ -205,8 +205,8 @@
               <template x-if="$store.fileExplorer.loading && !$store.fileExplorer.entries.length">
                 <div class="file-explorer-empty">
                   <x-icon>hourglass_empty</x-icon>
-                  <p>Loading folder...</p>
-                  <p>Please wait while the browser reads the current path.</p>
+                  <p x-t="'fileExplorer:list.loadingTitle'"></p>
+                  <p x-t="'fileExplorer:list.loadingDetail'"></p>
                 </div>
               </template>
 
@@ -221,8 +221,8 @@
               <template x-if="!$store.fileExplorer.loading && !$store.fileExplorer.errorTitle && !$store.fileExplorer.entries.length">
                 <div class="file-explorer-empty">
                   <x-icon>folder_off</x-icon>
-                  <p>This folder is empty.</p>
-                  <p>No readable files or subfolders were returned for the current path.</p>
+                  <p x-t="'fileExplorer:list.emptyTitle'"></p>
+                  <p x-t="'fileExplorer:list.emptyDetail'"></p>
                 </div>
               </template>
 
@@ -242,7 +242,7 @@
                     type="button"
                     tabindex="-1"
                     :disabled="$store.fileExplorer.isWorking"
-                    :title="`${$store.fileExplorer.isSelected(entry.path) ? 'Unselect' : 'Select'} ${entry.name}`"
+                    :title="$t('fileExplorer:summary.toggleEntry', { action: $store.fileExplorer.isSelected(entry.path) ? $t('common:actions.unselect') : $t('common:actions.select'), name: entry.name })"
                     @click.stop="$store.fileExplorer.toggleSelection(entry.path, { focusList: true, scrollIntoView: false })"
                   >
                     <x-icon x-text="$store.fileExplorer.isSelected(entry.path) ? 'check_box' : 'check_box_outline_blank'"></x-icon>
@@ -272,7 +272,7 @@
                     type="button"
                     tabindex="-1"
                     :disabled="$store.fileExplorer.isWorking"
-                    :title="`Actions for ${entry.name}`"
+                    :title="$t('fileExplorer:summary.actionsFor', { name: entry.name })"
                     @click.stop="$store.fileExplorer.toggleActionMenuForEntry(entry.path, $event)"
                   >
                     <x-icon>more_horiz</x-icon>
@@ -313,13 +313,13 @@
                 <form method="dialog" class="dialog-card file-explorer-dialog-card" @submit.prevent="$store.fileExplorer.submitCreateDialog()">
                   <header class="dialog-header">
                     <div>
-                      <p class="page-eyebrow">File Browser</p>
+                      <p class="page-eyebrow" x-t="'fileExplorer:dialogTitle'"></p>
                       <h2 x-text="$store.fileExplorer.createDialogTitle"></h2>
                     </div>
                   </header>
 
                   <label class="field">
-                    <span>Name</span>
+                    <span x-t="'common:labels.name'"></span>
                     <input type="text" autocomplete="off" x-model="$store.fileExplorer.createDraftName" />
                   </label>
 
@@ -332,9 +332,9 @@
                   </template>
 
                   <div class="dialog-actions">
-                    <button type="button" class="secondary-button" @click="$store.fileExplorer.closeCreateDialog()">Cancel</button>
+                    <button type="button" class="secondary-button" @click="$store.fileExplorer.closeCreateDialog()" x-t="'common:actions.cancel'"></button>
                     <button type="submit" class="confirm-button" :disabled="$store.fileExplorer.createDialogSaving">
-                      <span x-text="$store.fileExplorer.createDialogSaving ? 'Creating...' : 'Create'"></span>
+                      <span x-text="$store.fileExplorer.createDialogSaving ? $t('common:actions.creating') : $t('common:actions.create')"></span>
                     </button>
                   </div>
                 </form>
@@ -344,13 +344,13 @@
                 <form method="dialog" class="dialog-card file-explorer-dialog-card" @submit.prevent="$store.fileExplorer.submitRenameDialog()">
                   <header class="dialog-header">
                     <div>
-                      <p class="page-eyebrow">File Browser</p>
+                      <p class="page-eyebrow" x-t="'fileExplorer:dialogTitle'"></p>
                       <h2 x-text="$store.fileExplorer.renameDialogTitle"></h2>
                     </div>
                   </header>
 
                   <label class="field">
-                    <span>Name</span>
+                    <span x-t="'common:labels.name'"></span>
                     <input type="text" autocomplete="off" x-model="$store.fileExplorer.renameDraftName" />
                   </label>
 
@@ -359,9 +359,9 @@
                   </template>
 
                   <div class="dialog-actions">
-                    <button type="button" class="secondary-button" @click="$store.fileExplorer.closeRenameDialog()">Cancel</button>
+                    <button type="button" class="secondary-button" @click="$store.fileExplorer.closeRenameDialog()" x-t="'common:actions.cancel'"></button>
                     <button type="submit" class="confirm-button" :disabled="$store.fileExplorer.renameDialogSaving">
-                      <span x-text="$store.fileExplorer.renameDialogSaving ? 'Saving...' : 'Rename'"></span>
+                      <span x-text="$store.fileExplorer.renameDialogSaving ? $t('common:actions.saving') : $t('common:actions.rename')"></span>
                     </button>
                   </div>
                 </form>
@@ -371,8 +371,8 @@
                 <form method="dialog" class="dialog-card file-explorer-dialog-card" @submit.prevent="$store.fileExplorer.submitDeleteDialog()">
                   <header class="dialog-header">
                     <div>
-                      <p class="page-eyebrow">File Browser</p>
-                      <h2>Deletion confirmation</h2>
+                      <p class="page-eyebrow" x-t="'fileExplorer:dialogTitle'"></p>
+                      <h2 x-t="'fileExplorer:dialogs.deletionConfirmation'"></h2>
                     </div>
                   </header>
 
@@ -393,9 +393,9 @@
                   </template>
 
                   <div class="dialog-actions">
-                    <button type="button" class="secondary-button" @click="$store.fileExplorer.closeDeleteDialog()">Cancel</button>
+                    <button type="button" class="secondary-button" @click="$store.fileExplorer.closeDeleteDialog()" x-t="'common:actions.cancel'"></button>
                     <button type="submit" class="secondary-button danger" :disabled="$store.fileExplorer.deleteDialogSaving">
-                      <span x-text="$store.fileExplorer.deleteDialogSaving ? 'Removing...' : 'Remove'"></span>
+                      <span x-text="$store.fileExplorer.deleteDialogSaving ? $t('common:actions.removing') : $t('common:actions.remove')"></span>
                     </button>
                   </div>
                 </form>
@@ -405,17 +405,17 @@
                 <form method="dialog" class="dialog-card dialog-card-raw file-explorer-dialog-card" @submit.prevent="$store.fileExplorer.submitEditorDialog()">
                   <header class="dialog-header">
                     <div>
-                      <p class="page-eyebrow">File Browser</p>
+                      <p class="page-eyebrow" x-t="'fileExplorer:dialogTitle'"></p>
                       <h2 x-text="$store.fileExplorer.editorDialogTitle"></h2>
                     </div>
                   </header>
 
                   <p class="dialog-note">
-                    <code x-text="$store.fileExplorer.editorDialogPath || '[No file selected]'"></code>
+                    <code x-text="$store.fileExplorer.editorDialogPath || $t('fileExplorer:dialogs.noFileSelected')"></code>
                   </p>
 
                   <label class="field">
-                    <span>Contents</span>
+                    <span x-t="'common:labels.contents'"></span>
                     <textarea
                       rows="18"
                       spellcheck="false"
@@ -425,7 +425,7 @@
                   </label>
 
                   <template x-if="$store.fileExplorer.editorDialogLoading">
-                    <p class="dialog-note">Loading file contents...</p>
+                    <p class="dialog-note" x-t="'fileExplorer:dialogs.loadingContents'"></p>
                   </template>
 
                   <template x-if="$store.fileExplorer.editorDialogError">
@@ -433,13 +433,13 @@
                   </template>
 
                   <div class="dialog-actions">
-                    <button type="button" class="secondary-button" @click="$store.fileExplorer.closeEditorDialog()">Cancel</button>
+                    <button type="button" class="secondary-button" @click="$store.fileExplorer.closeEditorDialog()" x-t="'common:actions.cancel'"></button>
                     <button
                       type="submit"
                       class="confirm-button"
                       :disabled="$store.fileExplorer.editorDialogLoading || $store.fileExplorer.editorDialogSaving"
                     >
-                      <span x-text="$store.fileExplorer.editorDialogSaving ? 'Saving...' : 'Save'"></span>
+                      <span x-text="$store.fileExplorer.editorDialogSaving ? $t('common:actions.saving') : $t('common:actions.save')"></span>
                     </button>
                   </div>
                 </form>

@@ -1,6 +1,7 @@
 import { closeDialog, openDialog } from "/mod/_core/visual/forms/dialog.js";
 import { positionPopover } from "/mod/_core/visual/chrome/popover.js";
 import { showToast } from "/mod/_core/visual/chrome/toast.js";
+import { t } from "/mod/_core/i18n/i18n.js";
 
 const HOME_REQUEST_PATH = "~/";
 const MAX_TEXT_EDIT_FILE_BYTES = 1024 * 1024;
@@ -125,7 +126,7 @@ function createClipboardItems(entries) {
 }
 
 function readErrorMessage(error) {
-  return String(error?.message || "Failed to load files.");
+  return String(error?.message || t("fileExplorer:errors.loadFailed"));
 }
 
 function isPermissionError(error) {
@@ -154,6 +155,14 @@ function hashPath(path) {
 
 function formatCountLabel(count, singularLabel, pluralLabel = `${singularLabel}s`) {
   return `${count} ${count === 1 ? singularLabel : pluralLabel}`;
+}
+
+function formatItemCount(count) {
+  return t("fileExplorer:counts.items", { count });
+}
+
+function formatSelectedCount(count) {
+  return t("fileExplorer:counts.selected", { count });
 }
 
 function formatByteSize(value) {
@@ -191,15 +200,15 @@ function ensureZipFilename(value) {
 
 function validateChildName(name) {
   if (!name) {
-    return "Name must not be empty.";
+    return t("fileExplorer:errors.nameEmpty");
   }
 
   if (name === "." || name === "..") {
-    return "Name must not be a relative path marker.";
+    return t("fileExplorer:errors.nameRelativeMarker");
   }
 
   if (name.includes("/") || name.includes("\\")) {
-    return "Name must not include slashes.";
+    return t("fileExplorer:errors.nameSlashes");
   }
 
   return "";
@@ -209,11 +218,15 @@ function formatDownloadErrorMessage(entry, error) {
   const entryLabel = entry?.name || getPathName(entry?.path || "");
 
   if (isPermissionError(error)) {
-    return `You do not have permission to download ${entryLabel || "this item"}.`;
+    return t("fileExplorer:errors.downloadNoPermission", {
+      name: entryLabel || t("fileExplorer:errors.thisItem")
+    });
   }
 
   if (isNotFoundError(error)) {
-    return `${entryLabel || "This item"} is no longer available for download.`;
+    return t("fileExplorer:errors.downloadUnavailable", {
+      name: entryLabel || t("fileExplorer:errors.thisItemCap")
+    });
   }
 
   return readErrorMessage(error);
@@ -324,11 +337,15 @@ const filesModel = {
   },
 
   get clipboardActionLabel() {
-    return this.clipboardMode === "cut" ? "Cut queue" : "Copy queue";
+    return this.clipboardMode === "cut"
+      ? t("fileExplorer:clipboard.cutQueue")
+      : t("fileExplorer:clipboard.copyQueue");
   },
 
   get clipboardExpandedToggleLabel() {
-    return this.clipboardExpanded ? "Hide list" : "Show list";
+    return this.clipboardExpanded
+      ? t("fileExplorer:clipboard.hideList")
+      : t("fileExplorer:clipboard.showList");
   },
 
   get clipboardLabel() {
@@ -338,8 +355,9 @@ const filesModel = {
       return "";
     }
 
-    const suffix = this.clipboardMode === "cut" ? "cut" : "copied";
-    return `${formatCountLabel(itemCount, "item")} ${suffix}`;
+    return this.clipboardMode === "cut"
+      ? t("fileExplorer:clipboard.cutLabel", { count: itemCount })
+      : t("fileExplorer:clipboard.copyLabel", { count: itemCount });
   },
 
   get clipboardPreviewText() {
@@ -347,7 +365,9 @@ const filesModel = {
   },
 
   get editorDialogTitle() {
-    return this.editorDialogPath ? `Edit ${getPathName(this.editorDialogPath)}` : "Edit file";
+    return this.editorDialogPath
+      ? t("fileExplorer:dialogs.editTitle", { name: getPathName(this.editorDialogPath) })
+      : t("fileExplorer:dialogs.editTitleFallback");
   },
 
   get createDialogPathPreview() {
@@ -361,7 +381,9 @@ const filesModel = {
   },
 
   get createDialogTitle() {
-    return this.createDialogKind === "folder" ? "New folder" : "New file";
+    return this.createDialogKind === "folder"
+      ? t("fileExplorer:dialogs.createFolder")
+      : t("fileExplorer:dialogs.createFile");
   },
 
   get hasClipboard() {
@@ -385,11 +407,13 @@ const filesModel = {
   },
 
   get itemCountLabel() {
-    return formatCountLabel(this.entries.length, "item");
+    return formatItemCount(this.entries.length);
   },
 
   get renameDialogTitle() {
-    return this.renameDialogEntry ? `Rename ${this.renameDialogEntry.name}` : "Rename item";
+    return this.renameDialogEntry
+      ? t("fileExplorer:dialogs.renameTitle", { name: this.renameDialogEntry.name })
+      : t("fileExplorer:dialogs.renameTitleFallback");
   },
 
   get selectedEntries() {
@@ -397,7 +421,7 @@ const filesModel = {
   },
 
   get selectionLabel() {
-    return formatCountLabel(this.selectedPaths.length, "selected item");
+    return formatSelectedCount(this.selectedPaths.length);
   },
 
   get selectionPreviewText() {
@@ -417,7 +441,7 @@ const filesModel = {
       descriptors.push({
         id: "rename",
         icon: "edit_square",
-        label: "Rename"
+        label: t("fileExplorer:contextMenu.rename")
       });
     }
 
@@ -425,7 +449,7 @@ const filesModel = {
       descriptors.push({
         id: "edit",
         icon: "article",
-        label: "Edit"
+        label: t("fileExplorer:contextMenu.edit")
       });
     }
 
@@ -433,25 +457,25 @@ const filesModel = {
       descriptors.push({
         id: "download",
         icon: "download",
-        label: "Download"
+        label: t("fileExplorer:contextMenu.download")
       });
     }
 
     descriptors.push({
       id: "cut",
       icon: "content_cut",
-      label: "Cut"
+      label: t("fileExplorer:contextMenu.cut")
     });
     descriptors.push({
       id: "copy",
       icon: "content_copy",
-      label: "Copy"
+      label: t("fileExplorer:contextMenu.copy")
     });
     descriptors.push({
       danger: true,
       icon: "delete",
       id: "remove",
-      label: "Remove"
+      label: t("fileExplorer:contextMenu.remove")
     });
 
     return descriptors;
@@ -779,14 +803,14 @@ const filesModel = {
       this.draftPath = displayPath;
       this.loaded = true;
       this.errorTitle = isPermissionError(error)
-        ? "Access denied"
+        ? t("fileExplorer:errors.accessDenied")
         : isNotFoundError(error)
-          ? "Path not found"
-          : "Unable to open folder";
+          ? t("fileExplorer:errors.pathNotFound")
+          : t("fileExplorer:errors.openFolderFailed");
       this.errorDetail = isPermissionError(error)
-        ? `You are not allowed to view ${displayPath}.`
+        ? t("fileExplorer:errors.notAllowedView", { path: displayPath })
         : isNotFoundError(error)
-          ? `No folder was found at ${displayPath}.`
+          ? t("fileExplorer:errors.noFolderAt", { path: displayPath })
           : readErrorMessage(error);
     } finally {
       if (requestId === this.requestId) {
@@ -925,13 +949,13 @@ const filesModel = {
     }
 
     if (info?.isDirectory) {
-      this.setNotice("Only files can be edited.", "error");
+      this.setNotice(t("fileExplorer:errors.onlyFilesEditable"), "error");
       return;
     }
 
     if (Number(info?.size) > MAX_TEXT_EDIT_FILE_BYTES) {
       this.setNotice(
-        `File is too large to edit in the browser (${formatByteSize(info.size)}). Limit is 1 MB.`,
+        t("fileExplorer:errors.fileTooLarge", { size: formatByteSize(info.size) }),
         "error"
       );
       return;
@@ -1306,7 +1330,7 @@ const filesModel = {
     }
 
     if (!this.directoryPath) {
-      this.createDialogError = "Open a writable folder before creating an item.";
+      this.createDialogError = t("fileExplorer:errors.openWritableFolderFirst");
       return;
     }
 
@@ -1318,7 +1342,7 @@ const filesModel = {
     const nextPath = buildChildPath(this.directoryPath, name, isDirectory);
 
     if (this.hasEntryNamed(name)) {
-      this.createDialogError = "An item with that name already exists.";
+      this.createDialogError = t("fileExplorer:errors.nameExists");
       return;
     }
 
@@ -1373,12 +1397,12 @@ const filesModel = {
     }
 
     if (!nextName) {
-      this.renameDialogError = "Name must not be empty.";
+      this.renameDialogError = t("fileExplorer:errors.nameEmpty");
       return;
     }
 
     if (nextName.includes("/") || nextName.includes("\\")) {
-      this.renameDialogError = "Name must not include slashes.";
+      this.renameDialogError = t("fileExplorer:errors.nameSlashes");
       return;
     }
 

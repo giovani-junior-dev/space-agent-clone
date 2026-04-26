@@ -1,1 +1,27 @@
-{}
+{
+  "tabs": {
+    "dashboard": "Painel",
+    "agent": "Agente",
+    "files": "Arquivos",
+    "timeTravel": "Histórico",
+    "modules": "Módulos"
+  },
+  "quickActions": {
+    "openAgent": "Agente administrativo",
+    "openFiles": "Arquivos",
+    "openTimeTravel": "Histórico",
+    "openModules": "Módulos"
+  },
+  "shell": {
+    "adminPanel": "Painel administrativo",
+    "adminNavigation": "Navegação administrativa",
+    "adminTabs": "Abas administrativas",
+    "adminPanelControls": "Controles do painel administrativo ativo",
+    "openAdminTabs": "Abrir abas administrativas",
+    "leaveAdminArea": "Sair da área administrativa",
+    "resizeSplitView": "Redimensionar visualização dividida",
+    "dragToResize": "Arraste para redimensionar os painéis",
+    "mainApplication": "Aplicação principal",
+    "mainAppFrameTitle": "Aplicação principal do Space Agent"
+  }
+}

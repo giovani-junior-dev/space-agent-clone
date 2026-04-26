@@ -1,3 +1,33 @@
 {
-  "hello": "Hello"
+  "actions": {
+    "cancel": "Cancel",
+    "save": "Save",
+    "saving": "Saving...",
+    "create": "Create",
+    "creating": "Creating...",
+    "remove": "Remove",
+    "removing": "Removing...",
+    "rename": "Rename",
+    "edit": "Edit",
+    "download": "Download",
+    "cut": "Cut",
+    "copy": "Copy",
+    "paste": "Paste",
+    "select": "Select",
+    "unselect": "Unselect",
+    "selectAll": "Select All",
+    "close": "Close",
+    "refresh": "Refresh",
+    "back": "Back"
+  },
+  "labels": {
+    "name": "Name",
+    "contents": "Contents",
+    "loading": "Loading...",
+    "ready": "Ready",
+    "welcome": "Welcome"
+  },
+  "errors": {
+    "unknown": "An unexpected error occurred."
+  }
 }

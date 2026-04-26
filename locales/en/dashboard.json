@@ -1,1 +1,26 @@
-{}
+{
+  "welcome": {
+    "eyebrow": "Welcome",
+    "headline": "Start fast",
+    "intro": "Open the project links or launch one of the bundled demo spaces.",
+    "resourcesHeading": "Resources",
+    "resourcesAriaLabel": "Resources",
+    "demoSpacesHeading": "Demo Spaces",
+    "demoSpacesAriaLabel": "Demo spaces",
+    "hideAriaLabel": "Hide welcome panel",
+    "showAriaLabel": "Show welcome panel",
+    "showButtonLabel": "Welcome",
+    "loadFailed": "Unable to load the dashboard welcome panel.",
+    "savePrefFailed": "Unable to save that setting.",
+    "openDemoFailed": "Unable to open that demo space.",
+    "openedSpace": "Opened \"{{title}}\"."
+  },
+  "resources": {
+    "githubRepo": "GitHub Repo",
+    "deepwikiDocs": "DeepWiki Docs",
+    "agentZeroSite": "Agent Zero",
+    "discord": "Discord",
+    "youtube": "YouTube",
+    "x": "X"
+  }
+}
