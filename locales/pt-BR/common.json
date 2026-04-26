@@ -18,14 +18,19 @@
     "selectAll": "Selecionar tudo",
     "close": "Fechar",
     "refresh": "Atualizar",
-    "back": "Voltar"
+    "back": "Voltar",
+    "reload": "Recarregar",
+    "clear": "Limpar",
+    "send": "Enviar"
   },
   "labels": {
     "name": "Nome",
     "contents": "Conteúdo",
     "loading": "Carregando...",
     "ready": "Pronto",
-    "welcome": "Bem-vindo"
+    "welcome": "Bem-vindo",
+    "empty": "Vazio",
+    "none": "Nenhum"
   },
   "errors": {
     "unknown": "Ocorreu um erro inesperado."

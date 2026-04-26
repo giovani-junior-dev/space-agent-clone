@@ -1,30 +1,47 @@
+import { t as i18nT } from "/mod/_core/i18n/i18n.js";
+
 const SEARCH_DEBOUNCE_MS = 180;
 const DEFAULT_AREA = "l2_self";
-const FILE_BROWSER_PLACEHOLDER_TITLE = "Use the Files tab to browse module folders.";
 
-const baseAreaOptions = Object.freeze([
-  {
-    description: "Show modules installed in your own L2 directory.",
-    emptyDescription: "Modules installed into your L2 directory will appear here.",
-    label: "L2 / mine",
-    value: "l2_self"
-  },
-  {
-    description: "Show readable and writable modules installed in L1 group directories.",
-    emptyDescription: "Modules installed into accessible L1 group directories will appear here.",
-    label: "L1 / groups",
-    value: "l1"
-  }
-]);
+function getFileBrowserPlaceholderTitle() {
+  return i18nT("admin:modules.fileBrowserPlaceholder");
+}
 
-const adminAreaOptions = Object.freeze([
-  {
-    description: "Show aggregated L2 modules across user directories.",
-    emptyDescription: "User L2 modules will appear here once they are installed.",
-    label: "L2 / users",
-    value: "l2_users"
+function buildBaseAreaOptions() {
+  return [
+    {
+      description: i18nT("admin:modules.areas.l2_self.description"),
+      emptyDescription: i18nT("admin:modules.areas.l2_self.emptyDescription"),
+      label: i18nT("admin:modules.areas.l2_self.label"),
+      value: "l2_self"
+    },
+    {
+      description: i18nT("admin:modules.areas.l1.description"),
+      emptyDescription: i18nT("admin:modules.areas.l1.emptyDescription"),
+      label: i18nT("admin:modules.areas.l1.label"),
+      value: "l1"
+    }
+  ];
+}
+
+function buildAdminAreaOptions() {
+  return [
+    {
+      description: i18nT("admin:modules.areas.l2_users.description"),
+      emptyDescription: i18nT("admin:modules.areas.l2_users.emptyDescription"),
+      label: i18nT("admin:modules.areas.l2_users.label"),
+      value: "l2_users"
+    }
+  ];
+}
+
+function readSpaceLocaleVersion() {
+  try {
+    return globalThis.Alpine?.store?.("spaceLocale")?.version ?? 0;
+  } catch {
+    return 0;
   }
-]);
+}
 
 function createEmptyPendingMap() {
   return Object.create(null);
@@ -99,10 +116,13 @@ const moduleListModel = {
   searchDebounceHandle: 0,
 
   get areaOptions() {
-    const options = [...baseAreaOptions];
+    // Subscribe to locale changes so labels re-render reactively.
+    void readSpaceLocaleVersion();
+
+    const options = buildBaseAreaOptions();
 
     if (getAdminPageStore()?.isCurrentUserAdmin) {
-      options.push(...adminAreaOptions);
+      options.push(...buildAdminAreaOptions());
     }
 
     return options;
@@ -113,11 +133,13 @@ const moduleListModel = {
   },
 
   get emptyDescription() {
-    return this.currentAreaOption?.emptyDescription || "Installed modules will appear here.";
+    void readSpaceLocaleVersion();
+    return this.currentAreaOption?.emptyDescription || i18nT("admin:modules.emptyFallback");
   },
 
   get emptyTitle() {
-    return "No modules installed";
+    void readSpaceLocaleVersion();
+    return i18nT("admin:modules.noModulesInstalled");
   },
 
   createQuery() {
@@ -164,7 +186,7 @@ const moduleListModel = {
         return;
       }
 
-      this.error = error.message || "Failed to load modules.";
+      this.error = error.message || i18nT("admin:modules.loadFailed");
     } finally {
       if (this.activeRequestController === requestController) {
         this.activeRequestController = null;
@@ -223,7 +245,7 @@ const moduleListModel = {
 
   formatGitSummary(git) {
     if (!git) {
-      return "No Git checkout";
+      return i18nT("admin:modules.noGitCheckout");
     }
 
     if (git.error) {
@@ -296,7 +318,7 @@ const moduleListModel = {
   },
 
   getFileBrowserTitle() {
-    return FILE_BROWSER_PLACEHOLDER_TITLE;
+    return getFileBrowserPlaceholderTitle();
   },
 
   getRemoveTitle(mod) {

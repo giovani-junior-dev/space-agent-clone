@@ -22,5 +22,15 @@
     "discord": "Discord",
     "youtube": "YouTube",
     "x": "X"
+  },
+  "launcher": {
+    "spaces": "Espaços",
+    "panels": "Painéis",
+    "bigBang": "Big Bang",
+    "loadingPanels": "Carregando painéis…",
+    "tryAgain": "Tentar novamente",
+    "noPanels": "Nenhum painel disponível para esta conta.",
+    "panelsAriaLabel": "Painéis do dashboard",
+    "openItem": "Abrir {{name}}"
   }
 }

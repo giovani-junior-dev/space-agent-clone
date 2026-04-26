@@ -1,0 +1,20 @@
+{
+  "topbar": {
+    "newSpace": "Novo espaço",
+    "creating": "Criando…",
+    "createNewSpace": "Criar um novo espaço"
+  },
+  "launcher": {
+    "spaces": "Espaços",
+    "loadingYourSpaces": "Carregando seus espaços…",
+    "tryAgain": "Tentar novamente",
+    "noSpacesYet": "Você ainda não tem nenhum espaço.",
+    "createSpace": "Criar espaço",
+    "createNewSpace": "Criar novo espaço",
+    "creatingSpace": "Criando espaço…",
+    "creating": "Criando…",
+    "empty": "Vazio",
+    "duplicate": "Duplicar {{name}}",
+    "delete": "Excluir {{name}}"
+  }
+}

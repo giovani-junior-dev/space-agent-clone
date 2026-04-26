@@ -23,5 +23,87 @@
     "dragToResize": "Drag to resize panels",
     "mainApplication": "Main application",
     "mainAppFrameTitle": "Space Agent main app"
+  },
+  "dashboard": {
+    "infoCard": "This is the administration area of Space Agent. It is part of the framework firmware and is intentionally unmodifiable. This area can be used to fix problems when customware breaks or to help with customware development. Standard maintenance and enhancements can be done with standard Space Agent itself.",
+    "notAdminWarningHtml": "You are not a member of the <code>_admin</code> group, so you will only be able to modify your own directory and groups you are allowed to manage. <code>_admin</code> membership can be granted by other <code>_admin</code> members or through the CLI with <code>node space group add _admin user &lt;username&gt;</code>.",
+    "toolsAriaLabel": "Admin tools"
+  },
+  "agent": {
+    "agentOptionsAriaLabel": "Admin agent options",
+    "llmLabel": "LLM",
+    "instructionsLabel": "Instructions",
+    "compactHistory": "Compact history",
+    "history": "History",
+    "clear": "Clear",
+    "messageAdminAgent": "Message Admin agent",
+    "selectedAttachments": "Selected attachments",
+    "removeAttachment": "Remove {{name}}",
+    "composerHint": "Enter to send, Shift+Enter for newline",
+    "attach": "Attach",
+    "customInstructionsEyebrow": "Custom Instructions",
+    "customInstructionsTitle": "Custom system instructions",
+    "instructions": "Instructions",
+    "customInstructionsNote": "These instructions are appended at the end of the standard shared system prompt.",
+    "saveInstructions": "Save Instructions",
+    "llmEyebrow": "LLM",
+    "providerAndModelTitle": "Provider and model configuration",
+    "llmProvider": "LLM provider",
+    "providerApi": "API",
+    "providerLocal": "Local",
+    "providerEndpoint": "Provider API Endpoint URL",
+    "modelName": "Model Name",
+    "apiKey": "API Key",
+    "maxTokens": "Max Tokens",
+    "maxTokensNote": "Shared across both provider modes. Default <code>120000</code>. When prompt history exceeds this, compaction runs automatically before the next send.",
+    "promptBudget": "Prompt Budget",
+    "system": "System",
+    "historyBudget": "History",
+    "transient": "Transient",
+    "singleHistoryMessage": "Single History Message",
+    "promptBudgetNote": "System, history, and transient rebalance to 100% of <code>max tokens</code>. Single history message is a percentage of the history budget.",
+    "params": "Params",
+    "paramsNote": "YAML format. Passed through to the active provider. Example: <code>temperature:0.2</code>",
+    "settingsStorageNote": "These settings are stored in <code>~/conf/admin-chat.yaml</code>.",
+    "defaults": "Defaults",
+    "saveSettings": "Save Settings",
+    "rawOutputEyebrow": "Raw LLM Output",
+    "noRawOutputAvailable": "[No raw output available]",
+    "promptHistoryEyebrow": "Prompt History",
+    "promptHistoryMode": "Prompt history mode",
+    "text": "Text",
+    "json": "JSON",
+    "copyPromptHistory": "Copy prompt history"
+  },
+  "modules": {
+    "title": "Installed modules",
+    "search": "Search",
+    "searchPlaceholder": "Search author or module name",
+    "area": "Area",
+    "refresh": "Refresh",
+    "loading": "Loading modules...",
+    "empty": "Empty",
+    "noModulesInstalled": "No modules installed",
+    "emptyFallback": "Installed modules will appear here.",
+    "noGitCheckout": "No Git checkout",
+    "fileBrowserPlaceholder": "Use the Files tab to browse module folders.",
+    "loadFailed": "Failed to load modules.",
+    "areas": {
+      "l2_self": {
+        "label": "L2 / mine",
+        "description": "Show modules installed in your own L2 directory.",
+        "emptyDescription": "Modules installed into your L2 directory will appear here."
+      },
+      "l1": {
+        "label": "L1 / groups",
+        "description": "Show readable and writable modules installed in L1 group directories.",
+        "emptyDescription": "Modules installed into accessible L1 group directories will appear here."
+      },
+      "l2_users": {
+        "label": "L2 / users",
+        "description": "Show aggregated L2 modules across user directories.",
+        "emptyDescription": "User L2 modules will appear here once they are installed."
+      }
+    }
   }
 }

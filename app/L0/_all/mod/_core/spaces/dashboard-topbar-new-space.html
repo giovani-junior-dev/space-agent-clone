@@ -8,12 +8,12 @@
         type="button"
         class="space-topbar-button"
         :disabled="creating"
-        aria-label="Create a new space"
-        title="Create a new space"
+        :aria-label="$t('spaces:topbar.createNewSpace')"
+        :title="$t('spaces:topbar.createNewSpace')"
         @click="createSpace()"
       >
         <x-icon x-text="creating ? 'hourglass_top' : 'add'"></x-icon>
-        <span x-text="creating ? 'Creating…' : 'New Space'"></span>
+        <span x-text="creating ? $t('spaces:topbar.creating') : $t('spaces:topbar.newSpace')"></span>
       </button>
     </div>
   </body>

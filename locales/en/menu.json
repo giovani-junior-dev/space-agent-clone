@@ -1,0 +1,19 @@
+{
+  "shell": {
+    "pageControls": "Page controls",
+    "openHome": "Open home",
+    "home": "Home",
+    "openPageMenu": "Open page menu",
+    "pageMenu": "Page menu",
+    "logout": "Logout",
+    "leave": "Leave"
+  },
+  "items": {
+    "agent": "Agent",
+    "user": "User",
+    "files": "Files",
+    "browser": "Browser",
+    "timeTravel": "Time Travel",
+    "admin": "Admin"
+  }
+}

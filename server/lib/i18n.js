@@ -13,7 +13,18 @@ const DEFAULT_LOCALES_DIR = path.resolve(CURRENT_DIR, "..", "..", "locales");
 const SUPPORTED_LOCALES = ["en", "pt-BR"];
 const FALLBACK_LOCALE = "en";
 const DEFAULT_NAMESPACE = "common";
-const NAMESPACES = ["common", "errors", "admin", "fileExplorer", "dashboard"];
+const NAMESPACES = [
+  "common",
+  "errors",
+  "admin",
+  "fileExplorer",
+  "dashboard",
+  "menu",
+  "user",
+  "spaces",
+  "onscreenAgent",
+  "timeTravel"
+];
 
 let initializationPromise = null;
 let resolvedLocalesDir = DEFAULT_LOCALES_DIR;

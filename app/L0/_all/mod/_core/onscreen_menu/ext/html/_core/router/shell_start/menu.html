@@ -147,7 +147,7 @@
   @click.outside="isOpen = false"
   @keydown.escape.window="isOpen = false"
 >
-  <header class="onscreen-menu-bar" aria-label="Page controls">
+  <header class="onscreen-menu-bar" :aria-label="$t('menu:shell.pageControls')">
     <div class="space-topbar onscreen-menu-shell">
       <div class="onscreen-menu-side onscreen-menu-side--start">
         <x-extension id="_core/onscreen_menu/bar_start" x-ref="barStart"></x-extension>
@@ -161,8 +161,8 @@
         <button
           type="button"
           class="space-topbar-button space-topbar-button--icon onscreen-menu-button"
-          aria-label="Open home"
-          title="Home"
+          :aria-label="$t('menu:shell.openHome')"
+          :title="$t('menu:shell.home')"
           @click="openHome()"
         >
           <x-icon>home</x-icon>
@@ -173,7 +173,7 @@
             type="button"
             class="space-topbar-button space-topbar-button--icon onscreen-menu-button"
             :class="{ 'is-active': isOpen }"
-            aria-label="Open page menu"
+            :aria-label="$t('menu:shell.openPageMenu')"
             aria-haspopup="menu"
             aria-controls="onscreen-menu-panel"
             :aria-expanded="String(isOpen)"
@@ -189,7 +189,7 @@
             x-show="isOpen"
             x-transition.opacity.scale.origin.top.right.duration.160ms
             role="menu"
-            aria-label="Page menu"
+            :aria-label="$t('menu:shell.pageMenu')"
           >
             <x-extension id="_core/onscreen_menu/items" x-ref="items"></x-extension>
 
@@ -202,7 +202,7 @@
               <x-icon x-text="singleUserApp ? 'exit_to_app' : 'logout'"></x-icon>
               <span
                 class="space-topbar-menu-action-label"
-                x-text="singleUserApp ? 'Leave' : 'Logout'"
+                x-text="singleUserApp ? $t('menu:shell.leave') : $t('menu:shell.logout')"
               ></span>
             </button>
           </div>

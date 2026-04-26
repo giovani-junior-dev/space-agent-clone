@@ -1,0 +1,23 @@
+{
+  "messageOnscreenAgent": "Message onscreen agent",
+  "setLlmApiKey": "Set LLM API key",
+  "sendMessage": "Send message",
+  "openChatActions": "Open chat actions",
+  "switchToFullChat": "Switch to full chat mode",
+  "switchToCompactChat": "Switch to compact chat mode",
+  "openFullChat": "Open full chat",
+  "attachFiles": "Attach files",
+  "openChatSettings": "Open chat settings",
+  "compactContextWindow": "Compact context window",
+  "showContextWindow": "Show context window",
+  "resetChat": "Reset chat",
+  "settingsEyebrow": "Settings",
+  "settingsTitle": "Model, credentials, params, and instructions",
+  "customInstructions": "Custom Instructions",
+  "customInstructionsNote": "Appended after the fixed onscreen agent system prompt. Clear this field to use the default prompt only.",
+  "settingsStorageNote": "These values and custom instructions are stored in <code>~/conf/onscreen-agent.yaml</code>.",
+  "rawOutputEyebrow": "LLM Output",
+  "noRawOutputAvailable": "[No raw output available]",
+  "contextWindowEyebrow": "Context Window",
+  "ready": "Ready"
+}

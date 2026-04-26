@@ -3,7 +3,18 @@ import i18next from "/mod/_core/framework/js/vendor/i18next.js";
 const SUPPORTED_LOCALES = ["en", "pt-BR"];
 const FALLBACK_LOCALE = "en";
 const DEFAULT_NAMESPACE = "common";
-const NAMESPACES = ["common", "errors", "admin", "fileExplorer", "dashboard"];
+const NAMESPACES = [
+  "common",
+  "errors",
+  "admin",
+  "fileExplorer",
+  "dashboard",
+  "menu",
+  "user",
+  "spaces",
+  "onscreenAgent",
+  "timeTravel"
+];
 const STORAGE_KEY = "spaceLocale";
 const COOKIE_KEY = "space_locale";
 const COOKIE_MAX_AGE_SECONDS = 60 * 60 * 24 * 365; // 1 year

@@ -70,7 +70,7 @@
               aria-live="polite"
               aria-atomic="true"
               :tabindex="$store.onscreenAgent.isCompactMode ? '0' : '-1'"
-              :title="$store.onscreenAgent.isCompactMode ? 'Open full chat' : null"
+              :title="$store.onscreenAgent.isCompactMode ? $t('onscreenAgent:openFullChat') : null"
               @click.prevent.stop="$store.onscreenAgent.handleUiBubbleActivate($event)"
               @keydown.enter.prevent.stop="$store.onscreenAgent.handleUiBubbleActivate($event)"
               @keydown.space.prevent.stop="$store.onscreenAgent.handleUiBubbleActivate($event)"
@@ -149,7 +149,7 @@
                       x-ref="input"
                       name="message"
                       rows="1"
-                      aria-label="Message onscreen agent"
+                      :aria-label="$t('onscreenAgent:messageOnscreenAgent')"
                       :placeholder="$store.onscreenAgent.composerPlaceholder"
                       x-model="$store.onscreenAgent.draft"
                       :disabled="$store.onscreenAgent.isComposerInputDisabled || $store.onscreenAgent.shouldShowApiKeyWarning"
@@ -163,7 +163,7 @@
                           class="onscreen-agent-set-api-key-button"
                           @click="$store.onscreenAgent.openSettingsDialog()"
                         >
-                          Set LLM API key
+                          <span x-t="'onscreenAgent:setLlmApiKey'">Set LLM API key</span>
                         </button>
                       </div>
                     </template>
@@ -189,8 +189,8 @@
                       class="onscreen-agent-inline-button onscreen-agent-attach-button"
                       :disabled="$store.onscreenAgent.isAttachmentPickerDisabled"
                       @click="$store.onscreenAgent.openAttachmentPicker()"
-                      aria-label="Attach files"
-                      title="Attach files"
+                      :aria-label="$t('onscreenAgent:attachFiles')"
+                      :title="$t('onscreenAgent:attachFiles')"
                     >
                       <x-icon>attach_file</x-icon>
                     </button>
@@ -202,8 +202,8 @@
                       aria-controls="onscreen-agent-composer-menu"
                       aria-haspopup="menu"
                       @click="$store.onscreenAgent.toggleComposerActionMenu($event)"
-                      aria-label="Open chat actions"
-                      title="Open chat actions"
+                      :aria-label="$t('onscreenAgent:openChatActions')"
+                      :title="$t('onscreenAgent:openChatActions')"
                     >
                       <x-icon>more_horiz</x-icon>
                     </button>
@@ -234,8 +234,8 @@
                     type="button"
                     class="onscreen-agent-footer-icon"
                     @click="$store.onscreenAgent.showCompactMode()"
-                    aria-label="Switch to compact chat mode"
-                    title="Switch to compact chat mode"
+                    :aria-label="$t('onscreenAgent:switchToCompactChat')"
+                    :title="$t('onscreenAgent:switchToCompactChat')"
                   >
                     <x-icon>close_fullscreen</x-icon>
                   </button>
@@ -243,8 +243,8 @@
                     type="button"
                     class="chat-option onscreen-agent-llm-button"
                     @click="$store.onscreenAgent.openSettingsDialog()"
-                    aria-label="Open chat settings"
-                    title="Open chat settings"
+                    :aria-label="$t('onscreenAgent:openChatSettings')"
+                    :title="$t('onscreenAgent:openChatSettings')"
                   >
                     <span class="chat-option-value" x-text="$store.onscreenAgent.llmSummary"></span>
                   </button>
@@ -256,8 +256,8 @@
                       :class="{ 'is-active': $store.onscreenAgent.isCompactingHistory }"
                       :disabled="$store.onscreenAgent.isCompactDisabled"
                       @click="$store.onscreenAgent.handleCompactClick()"
-                      aria-label="Compact context window"
-                      title="Compact context window"
+                      :aria-label="$t('onscreenAgent:compactContextWindow')"
+                      :title="$t('onscreenAgent:compactContextWindow')"
                     >
                       <x-icon x-text="$store.onscreenAgent.compactButtonIcon"></x-icon>
                     </button>
@@ -265,8 +265,8 @@
                       type="button"
                       class="onscreen-agent-footer-icon"
                       @click="$store.onscreenAgent.openPromptHistoryDialog()"
-                      aria-label="Show context window"
-                      title="Show context window"
+                      :aria-label="$t('onscreenAgent:showContextWindow')"
+                      :title="$t('onscreenAgent:showContextWindow')"
                     >
                       <x-icon>notes</x-icon>
                     </button>
@@ -275,8 +275,8 @@
                       class="onscreen-agent-footer-icon danger"
                       :disabled="$store.onscreenAgent.isClearDisabled"
                       @click="$store.onscreenAgent.handleClearClick()"
-                      aria-label="Reset chat"
-                      title="Reset chat"
+                      :aria-label="$t('onscreenAgent:resetChat')"
+                      :title="$t('onscreenAgent:resetChat')"
                     >
                       <x-icon>restart_alt</x-icon>
                     </button>
@@ -324,8 +324,8 @@
                 <form method="dialog" class="dialog-card dialog-card-shell" @submit.prevent="$store.onscreenAgent.saveSettingsFromDialog()">
                   <header class="dialog-header">
                     <div>
-                      <p class="page-eyebrow">Settings</p>
-                      <h2>Model, credentials, params, and instructions</h2>
+                      <p class="page-eyebrow" x-t="'onscreenAgent:settingsEyebrow'">Settings</p>
+                      <h2 x-t="'onscreenAgent:settingsTitle'">Model, credentials, params, and instructions</h2>
                     </div>
                   </header>
                   <div class="dialog-scroll-body">
@@ -447,16 +447,16 @@
                       </p>
                     </label>
                     <label class="field">
-                      <span>Custom Instructions</span>
+                      <span x-t="'onscreenAgent:customInstructions'">Custom Instructions</span>
                       <textarea
                         rows="8"
                         x-model="$store.onscreenAgent.systemPromptDraft"
                       ></textarea>
-                      <p class="field-note">
+                      <p class="field-note" x-t="'onscreenAgent:customInstructionsNote'">
                         Appended after the fixed onscreen agent system prompt. Clear this field to use the default prompt only.
                       </p>
                     </label>
-                    <p class="dialog-note">
+                    <p class="dialog-note" x-html="$t('onscreenAgent:settingsStorageNote')">
                       These values and custom instructions are stored in <code>~/conf/onscreen-agent.yaml</code>.
                     </p>
                   </div>
@@ -479,12 +479,12 @@
                 <div class="dialog-card dialog-card-raw">
                   <header class="dialog-header">
                     <div>
-                      <p class="page-eyebrow">LLM Output</p>
+                      <p class="page-eyebrow" x-t="'onscreenAgent:rawOutputEyebrow'">LLM Output</p>
                       <h2 x-text="$store.onscreenAgent.rawOutputTitle"></h2>
                     </div>
                   </header>
                   <div class="raw-output-frame">
-                    <pre class="raw-output" x-text="$store.onscreenAgent.rawOutputContent || '[No raw output available]'"></pre>
+                    <pre class="raw-output" x-text="$store.onscreenAgent.rawOutputContent || $t('onscreenAgent:noRawOutputAvailable')"></pre>
                   </div>
                   <div class="dialog-actions">
                     <button type="button" class="secondary-button" @click="$store.onscreenAgent.closeRawDialog()">Close</button>
@@ -501,7 +501,7 @@
                 <div class="dialog-card dialog-card-raw dialog-card-shell">
                   <header class="dialog-header">
                     <div>
-                      <p class="page-eyebrow">Context Window</p>
+                      <p class="page-eyebrow" x-t="'onscreenAgent:contextWindowEyebrow'">Context Window</p>
                       <h2 x-text="$store.onscreenAgent.promptHistoryTitle"></h2>
                     </div>
                     <div class="dialog-header-actions">

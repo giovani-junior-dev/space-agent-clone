@@ -7,13 +7,13 @@
     <section class="dashboard-spaces-launcher" x-data="spacesDashboardLauncher()" x-init="init()">
       <div class="dashboard-spaces-launcher-shell">
         <div class="dashboard-section-header">
-          <h2 class="dashboard-section-title">Spaces</h2>
+          <h2 class="dashboard-section-title" x-t="'spaces:launcher.spaces'">Spaces</h2>
         </div>
 
         <template x-if="loading">
           <div class="dashboard-spaces-launcher-empty">
             <x-icon>schedule</x-icon>
-            <p>Loading your spaces…</p>
+            <p x-t="'spaces:launcher.loadingYourSpaces'">Loading your spaces…</p>
           </div>
         </template>
 
@@ -23,17 +23,17 @@
             <p x-text="loadErrorText"></p>
             <button type="button" class="secondary-button" @click="loadSpaces()">
               <x-icon>refresh</x-icon>
-              <span>Try Again</span>
+              <span x-t="'spaces:launcher.tryAgain'">Try Again</span>
             </button>
           </div>
         </template>
 
         <template x-if="!loading && !loadErrorText && !hasEntries">
           <div class="dashboard-spaces-launcher-empty">
-            <p class="dashboard-spaces-launcher-empty-title" x-ref="emptyTitle">You do not have any spaces yet.</p>
+            <p class="dashboard-spaces-launcher-empty-title" x-ref="emptyTitle" x-t="'spaces:launcher.noSpacesYet'">You do not have any spaces yet.</p>
             <button type="button" class="primary-button dashboard-spaces-launcher-empty-button" :disabled="creating" @click="createSpace()">
               <x-icon x-text="creating ? 'hourglass_top' : 'add'"></x-icon>
-              <span x-text="creating ? 'Creating…' : 'Create Space'"></span>
+              <span x-text="creating ? $t('spaces:launcher.creating') : $t('spaces:launcher.createSpace')"></span>
             </button>
           </div>
         </template>
@@ -47,7 +47,7 @@
                     <x-icon x-text="creating ? 'hourglass_top' : 'add'"></x-icon>
                   </span>
                   <div class="dashboard-space-card-create-copy">
-                    <strong x-text="creating ? 'Creating Space…' : 'Create New Space'"></strong>
+                    <strong x-text="creating ? $t('spaces:launcher.creatingSpace') : $t('spaces:launcher.createNewSpace')"></strong>
                   </div>
                 </button>
               </article>
@@ -86,7 +86,7 @@
                       </template>
 
                       <template x-if="!item.widgetPreviewNames.length">
-                        <span class="dashboard-space-card-tag is-muted">Empty</span>
+                        <span class="dashboard-space-card-tag is-muted" x-t="'spaces:launcher.empty'">Empty</span>
                       </template>
                     </div>
                   </button>
@@ -98,7 +98,7 @@
                       <button
                         type="button"
                         class="dashboard-space-card-action"
-                        :aria-label="`Duplicate ${item.displayTitle}`"
+                        :aria-label="$t('spaces:launcher.duplicate', { name: item.displayTitle })"
                         :disabled="deletingSpaceId === item.id || duplicatingSpaceId === item.id"
                         @click="duplicateSpace(item.id)"
                       >
@@ -108,7 +108,7 @@
                       <button
                         type="button"
                         class="dashboard-space-card-action dashboard-space-card-action--danger"
-                        :aria-label="`Delete ${item.displayTitle}`"
+                        :aria-label="$t('spaces:launcher.delete', { name: item.displayTitle })"
                         :disabled="deletingSpaceId === item.id || duplicatingSpaceId === item.id"
                         @click="deleteSpace(item.id)"
                       >

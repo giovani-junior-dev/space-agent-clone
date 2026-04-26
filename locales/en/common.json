@@ -18,14 +18,19 @@
     "selectAll": "Select All",
     "close": "Close",
     "refresh": "Refresh",
-    "back": "Back"
+    "back": "Back",
+    "reload": "Reload",
+    "clear": "Clear",
+    "send": "Send"
   },
   "labels": {
     "name": "Name",
     "contents": "Contents",
     "loading": "Loading...",
     "ready": "Ready",
-    "welcome": "Welcome"
+    "welcome": "Welcome",
+    "empty": "Empty",
+    "none": "None"
   },
   "errors": {
     "unknown": "An unexpected error occurred."

@@ -1,0 +1,19 @@
+{
+  "shell": {
+    "pageControls": "Controles da página",
+    "openHome": "Abrir página inicial",
+    "home": "Início",
+    "openPageMenu": "Abrir menu da página",
+    "pageMenu": "Menu da página",
+    "logout": "Sair",
+    "leave": "Sair"
+  },
+  "items": {
+    "agent": "Agente",
+    "user": "Usuário",
+    "files": "Arquivos",
+    "browser": "Navegador",
+    "timeTravel": "Histórico",
+    "admin": "Admin"
+  }
+}

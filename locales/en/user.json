@@ -1,0 +1,47 @@
+{
+  "account": {
+    "title": "Account",
+    "subtitle": "Keep your account details up to date and change your sign-in password when needed.",
+    "groups": "Groups",
+    "managedGroups": "Managed Groups",
+    "noneChip": "None",
+    "fallbackHandle": "@user",
+    "fallbackName": "User"
+  },
+  "profile": {
+    "title": "Profile",
+    "subtitle": "Choose the name shown for your account.",
+    "fullName": "Full Name",
+    "fullNamePlaceholder": "Your full name",
+    "reload": "Reload",
+    "save": "Save",
+    "saving": "Saving…",
+    "loaded": "Account settings loaded.",
+    "refreshing": "Refreshing account settings...",
+    "refreshed": "Account settings refreshed.",
+    "savingProfile": "Saving profile...",
+    "updated": "Profile updated.",
+    "loadFailed": "Unable to load account settings.",
+    "reloadFailed": "Unable to reload account settings.",
+    "saveFailed": "Unable to save account settings."
+  },
+  "password": {
+    "title": "Password",
+    "subtitle": "Change the password you use to sign in.",
+    "singleUserNote": "Password sign-in is not used here, so there is nothing to change.",
+    "current": "Current Password",
+    "new": "New Password",
+    "confirm": "Confirm New Password",
+    "mismatch": "New password and confirmation must match.",
+    "changeWarning": "Changing your password will sign you out everywhere, including this browser.",
+    "clear": "Clear",
+    "change": "Change Password",
+    "changing": "Changing…",
+    "changingStatus": "Changing password...",
+    "changed": "Password changed.",
+    "changedRedirect": "Password changed. Redirecting so you can sign in again.",
+    "notAvailableHere": "Password sign-in is not available here.",
+    "fillFields": "Enter the current password, a new password, and a matching confirmation.",
+    "changeFailed": "Unable to change password."
+  }
+}

@@ -4,6 +4,7 @@ import {
   loadUserSettings,
   saveUserFullName
 } from "/mod/_core/user/storage.js";
+import { t as i18nT } from "/mod/_core/i18n/i18n.js";
 
 const PASSWORD_REDIRECT_DELAY_MS = 900;
 
@@ -37,10 +38,10 @@ const model = {
     this.setProfileStatus("");
 
     try {
-      await this.loadSettings("Account settings loaded.");
+      await this.loadSettings(i18nT("user:profile.loaded"));
     } catch (error) {
       logUserPageError("init failed", error);
-      this.setProfileStatus(String(error?.message || "Unable to load account settings."), "error");
+      this.setProfileStatus(String(error?.message || i18nT("user:profile.loadFailed")), "error");
     } finally {
       this.loading = false;
     }
@@ -60,7 +61,7 @@ const model = {
   },
 
   get displayFullName() {
-    return this.currentFullName || this.username || "User";
+    return this.currentFullName || this.username || i18nT("user:account.fallbackName");
   },
 
   get isFullNameDirty() {
@@ -92,13 +93,13 @@ const model = {
     }
 
     this.loading = true;
-    this.setProfileStatus("Refreshing account settings...");
+    this.setProfileStatus(i18nT("user:profile.refreshing"));
 
     try {
-      await this.loadSettings("Account settings refreshed.");
+      await this.loadSettings(i18nT("user:profile.refreshed"));
     } catch (error) {
       logUserPageError("reloadProfile failed", error);
-      this.setProfileStatus(String(error?.message || "Unable to reload account settings."), "error");
+      this.setProfileStatus(String(error?.message || i18nT("user:profile.reloadFailed")), "error");
     } finally {
       this.loading = false;
     }
@@ -110,7 +111,7 @@ const model = {
     }
 
     this.profileSaving = true;
-    this.setProfileStatus("Saving profile...");
+    this.setProfileStatus(i18nT("user:profile.savingProfile"));
 
     try {
       const result = await saveUserFullName(this.fullNameDraft, {
@@ -119,10 +120,10 @@ const model = {
       this.currentFullName = result.fullName;
       this.fullNameDraft = result.fullName;
       this.lastSavedFullName = result.fullName;
-      this.setProfileStatus("Profile updated.", "success");
+      this.setProfileStatus(i18nT("user:profile.updated"), "success");
     } catch (error) {
       logUserPageError("saveFullName failed", error);
-      this.setProfileStatus(String(error?.message || "Unable to save account settings."), "error");
+      this.setProfileStatus(String(error?.message || i18nT("user:profile.saveFailed")), "error");
     } finally {
       this.profileSaving = false;
     }
@@ -136,22 +137,22 @@ const model = {
 
   async changePassword() {
     if (this.singleUserApp) {
-      this.setPasswordStatus("Password sign-in is not available here.", "error");
+      this.setPasswordStatus(i18nT("user:password.notAvailableHere"), "error");
       return;
     }
 
     if (this.passwordMismatch) {
-      this.setPasswordStatus("New password and confirmation must match.", "error");
+      this.setPasswordStatus(i18nT("user:password.mismatch"), "error");
       return;
     }
 
     if (!this.canChangePassword) {
-      this.setPasswordStatus("Enter the current password, a new password, and a matching confirmation.", "error");
+      this.setPasswordStatus(i18nT("user:password.fillFields"), "error");
       return;
     }
 
     this.passwordSaving = true;
-    this.setPasswordStatus("Changing password...");
+    this.setPasswordStatus(i18nT("user:password.changingStatus"));
 
     try {
       const result = await changeUserPassword(this.passwordCurrent, this.passwordNew);
@@ -159,8 +160,8 @@ const model = {
       this.reauthPending = Boolean(result?.signedOut);
       this.setPasswordStatus(
         this.reauthPending
-          ? "Password changed. Redirecting so you can sign in again."
-          : "Password changed.",
+          ? i18nT("user:password.changedRedirect")
+          : i18nT("user:password.changed"),
         "success"
       );
 
@@ -171,7 +172,7 @@ const model = {
       }
     } catch (error) {
       logUserPageError("changePassword failed", error);
-      this.setPasswordStatus(String(error?.message || "Unable to change password."), "error");
+      this.setPasswordStatus(String(error?.message || i18nT("user:password.changeFailed")), "error");
     } finally {
       this.passwordSaving = false;
     }

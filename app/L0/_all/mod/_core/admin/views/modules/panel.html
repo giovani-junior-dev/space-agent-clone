@@ -12,18 +12,18 @@
         >
           <div class="admin-modules-header">
             <div class="admin-modules-heading">
-              <h2 class="admin-modules-title">Installed modules</h2>
+              <h2 class="admin-modules-title" x-t="'admin:modules.title'">Installed modules</h2>
               <p class="admin-modules-subtitle" x-text="$store.adminModules.currentAreaOption.description"></p>
             </div>
 
             <div class="admin-modules-controls">
               <label class="admin-modules-control admin-modules-control--search">
-                <span>Search</span>
+                <span x-t="'admin:modules.search'">Search</span>
                 <div class="admin-modules-search-field">
                   <x-icon>search</x-icon>
                   <input
                     type="search"
-                    placeholder="Search author or module name"
+                    :placeholder="$t('admin:modules.searchPlaceholder')"
                     :value="$store.adminModules.search"
                     @input="$store.adminModules.setSearch($event.target.value)"
                   />
@@ -31,7 +31,7 @@
               </label>
 
               <label class="admin-modules-control admin-modules-control--area">
-                <span>Area</span>
+                <span x-t="'admin:modules.area'">Area</span>
                 <select
                   :value="$store.adminModules.area"
                   @change="$store.adminModules.setArea($event.target.value)"
@@ -47,7 +47,7 @@
                 type="button"
                 :disabled="$store.adminModules.loading"
                 @click="$store.adminModules.refresh()"
-                title="Refresh"
+                :title="$t('admin:modules.refresh')"
               >
                 <x-icon>refresh</x-icon>
               </button>
@@ -63,7 +63,7 @@
           <template x-if="$store.adminModules.loading && !$store.adminModules.loaded">
             <div class="admin-card admin-placeholder">
               <x-icon>hourglass_empty</x-icon>
-              <p>Loading modules...</p>
+              <p x-t="'admin:modules.loading'">Loading modules...</p>
             </div>
           </template>
 

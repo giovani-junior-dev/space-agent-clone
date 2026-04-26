@@ -23,5 +23,87 @@
     "dragToResize": "Arraste para redimensionar os painéis",
     "mainApplication": "Aplicação principal",
     "mainAppFrameTitle": "Aplicação principal do Space Agent"
+  },
+  "dashboard": {
+    "infoCard": "Esta é a área de administração do Space Agent. Ela faz parte do firmware do framework e é intencionalmente não modificável. Esta área pode ser usada para corrigir problemas quando o customware quebra ou para ajudar no desenvolvimento de customware. Manutenção e melhorias padrão podem ser feitas pelo próprio Space Agent.",
+    "notAdminWarningHtml": "Você não é membro do grupo <code>_admin</code>, portanto só poderá modificar seu próprio diretório e os grupos que você tem permissão para gerenciar. A associação ao <code>_admin</code> pode ser concedida por outros membros <code>_admin</code> ou via CLI com <code>node space group add _admin user &lt;username&gt;</code>.",
+    "toolsAriaLabel": "Ferramentas de administração"
+  },
+  "agent": {
+    "agentOptionsAriaLabel": "Opções do agente administrativo",
+    "llmLabel": "LLM",
+    "instructionsLabel": "Instruções",
+    "compactHistory": "Compactar histórico",
+    "history": "Histórico",
+    "clear": "Limpar",
+    "messageAdminAgent": "Enviar mensagem ao agente administrativo",
+    "selectedAttachments": "Anexos selecionados",
+    "removeAttachment": "Remover {{name}}",
+    "composerHint": "Enter para enviar, Shift+Enter para nova linha",
+    "attach": "Anexar",
+    "customInstructionsEyebrow": "Instruções Personalizadas",
+    "customInstructionsTitle": "Instruções de sistema personalizadas",
+    "instructions": "Instruções",
+    "customInstructionsNote": "Estas instruções são acrescentadas ao final do prompt de sistema compartilhado padrão.",
+    "saveInstructions": "Salvar Instruções",
+    "llmEyebrow": "LLM",
+    "providerAndModelTitle": "Configuração de provedor e modelo",
+    "llmProvider": "Provedor de LLM",
+    "providerApi": "API",
+    "providerLocal": "Local",
+    "providerEndpoint": "URL do endpoint da API",
+    "modelName": "Nome do modelo",
+    "apiKey": "Chave da API",
+    "maxTokens": "Máximo de tokens",
+    "maxTokensNote": "Compartilhado entre os dois modos de provedor. Padrão <code>120000</code>. Quando o histórico de prompts excede este valor, a compactação ocorre automaticamente antes do próximo envio.",
+    "promptBudget": "Orçamento do Prompt",
+    "system": "Sistema",
+    "historyBudget": "Histórico",
+    "transient": "Transitório",
+    "singleHistoryMessage": "Mensagem única de histórico",
+    "promptBudgetNote": "Sistema, histórico e transitório se rebalanceiam para 100% do <code>máximo de tokens</code>. A mensagem única de histórico é uma porcentagem do orçamento de histórico.",
+    "params": "Parâmetros",
+    "paramsNote": "Formato YAML. Repassado ao provedor ativo. Exemplo: <code>temperature:0.2</code>",
+    "settingsStorageNote": "Estas configurações são armazenadas em <code>~/conf/admin-chat.yaml</code>.",
+    "defaults": "Padrões",
+    "saveSettings": "Salvar Configurações",
+    "rawOutputEyebrow": "Saída Bruta do LLM",
+    "noRawOutputAvailable": "[Nenhuma saída bruta disponível]",
+    "promptHistoryEyebrow": "Histórico de Prompts",
+    "promptHistoryMode": "Modo do histórico de prompts",
+    "text": "Texto",
+    "json": "JSON",
+    "copyPromptHistory": "Copiar histórico de prompts"
+  },
+  "modules": {
+    "title": "Módulos instalados",
+    "search": "Buscar",
+    "searchPlaceholder": "Buscar autor ou nome do módulo",
+    "area": "Área",
+    "refresh": "Atualizar",
+    "loading": "Carregando módulos...",
+    "empty": "Vazio",
+    "noModulesInstalled": "Nenhum módulo instalado",
+    "emptyFallback": "Os módulos instalados aparecerão aqui.",
+    "noGitCheckout": "Sem checkout Git",
+    "fileBrowserPlaceholder": "Use a aba Arquivos para navegar nas pastas dos módulos.",
+    "loadFailed": "Falha ao carregar módulos.",
+    "areas": {
+      "l2_self": {
+        "label": "L2 / meus",
+        "description": "Mostrar módulos instalados em seu próprio diretório L2.",
+        "emptyDescription": "Os módulos instalados em seu diretório L2 aparecerão aqui."
+      },
+      "l1": {
+        "label": "L1 / grupos",
+        "description": "Mostrar módulos legíveis e graváveis instalados em diretórios L1 de grupos.",
+        "emptyDescription": "Os módulos instalados em diretórios L1 de grupos acessíveis aparecerão aqui."
+      },
+      "l2_users": {
+        "label": "L2 / usuários",
+        "description": "Mostrar módulos L2 agregados entre os diretórios de usuário.",
+        "emptyDescription": "Os módulos L2 de usuários aparecerão aqui assim que forem instalados."
+      }
+    }
   }
 }

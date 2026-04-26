@@ -1,0 +1,47 @@
+{
+  "account": {
+    "title": "Conta",
+    "subtitle": "Mantenha os dados da sua conta atualizados e altere a senha de acesso quando necessário.",
+    "groups": "Grupos",
+    "managedGroups": "Grupos Gerenciados",
+    "noneChip": "Nenhum",
+    "fallbackHandle": "@usuario",
+    "fallbackName": "Usuário"
+  },
+  "profile": {
+    "title": "Perfil",
+    "subtitle": "Escolha o nome exibido para sua conta.",
+    "fullName": "Nome completo",
+    "fullNamePlaceholder": "Seu nome completo",
+    "reload": "Recarregar",
+    "save": "Salvar",
+    "saving": "Salvando…",
+    "loaded": "Configurações da conta carregadas.",
+    "refreshing": "Atualizando configurações da conta...",
+    "refreshed": "Configurações da conta atualizadas.",
+    "savingProfile": "Salvando perfil...",
+    "updated": "Perfil atualizado.",
+    "loadFailed": "Não foi possível carregar as configurações da conta.",
+    "reloadFailed": "Não foi possível recarregar as configurações da conta.",
+    "saveFailed": "Não foi possível salvar as configurações da conta."
+  },
+  "password": {
+    "title": "Senha",
+    "subtitle": "Altere a senha usada para entrar.",
+    "singleUserNote": "O login por senha não é usado aqui, então não há nada para alterar.",
+    "current": "Senha atual",
+    "new": "Nova senha",
+    "confirm": "Confirmar nova senha",
+    "mismatch": "A nova senha e a confirmação devem coincidir.",
+    "changeWarning": "Alterar sua senha irá desconectá-lo em todos os lugares, incluindo este navegador.",
+    "clear": "Limpar",
+    "change": "Alterar senha",
+    "changing": "Alterando…",
+    "changingStatus": "Alterando senha...",
+    "changed": "Senha alterada.",
+    "changedRedirect": "Senha alterada. Redirecionando para você entrar novamente.",
+    "notAvailableHere": "O login por senha não está disponível aqui.",
+    "fillFields": "Informe a senha atual, uma nova senha e uma confirmação correspondente.",
+    "changeFailed": "Não foi possível alterar a senha."
+  }
+}

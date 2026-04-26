@@ -1,0 +1,23 @@
+{
+  "messageOnscreenAgent": "Enviar mensagem ao agente na tela",
+  "setLlmApiKey": "Definir chave da API do LLM",
+  "sendMessage": "Enviar mensagem",
+  "openChatActions": "Abrir ações do chat",
+  "switchToFullChat": "Mudar para modo de chat completo",
+  "switchToCompactChat": "Mudar para modo de chat compacto",
+  "openFullChat": "Abrir chat completo",
+  "attachFiles": "Anexar arquivos",
+  "openChatSettings": "Abrir configurações do chat",
+  "compactContextWindow": "Compactar janela de contexto",
+  "showContextWindow": "Mostrar janela de contexto",
+  "resetChat": "Reiniciar chat",
+  "settingsEyebrow": "Configurações",
+  "settingsTitle": "Modelo, credenciais, parâmetros e instruções",
+  "customInstructions": "Instruções Personalizadas",
+  "customInstructionsNote": "Acrescentadas após o prompt fixo do agente na tela. Limpe este campo para usar apenas o prompt padrão.",
+  "settingsStorageNote": "Estes valores e instruções personalizadas são armazenados em <code>~/conf/onscreen-agent.yaml</code>.",
+  "rawOutputEyebrow": "Saída do LLM",
+  "noRawOutputAvailable": "[Nenhuma saída bruta disponível]",
+  "contextWindowEyebrow": "Janela de Contexto",
+  "ready": "Pronto"
+}

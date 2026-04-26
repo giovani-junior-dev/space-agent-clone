@@ -2,6 +2,8 @@ import fs from "node:fs";
 import path from "node:path";
 import { Readable } from "node:stream";
 
+import { tError } from "../lib/i18n.js";
+
 const MIME_TYPES = {
   ".css": "text/css; charset=utf-8",
   ".gif": "image/gif",
@@ -52,7 +54,13 @@ function sendJson(res, statusCode, payload, headers = {}) {
 }
 
 function sendNotFound(res, headers = {}) {
-  sendJson(res, 404, { error: "File not found" }, headers);
+  let message;
+  try {
+    message = tError("errors:path.pathNotFound");
+  } catch {
+    message = "File not found";
+  }
+  sendJson(res, 404, { error: message || "File not found" }, headers);
 }
 
 function sendFile(res, filePath, options = {}) {

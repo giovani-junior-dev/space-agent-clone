@@ -1,0 +1,20 @@
+{
+  "topbar": {
+    "newSpace": "New Space",
+    "creating": "Creating…",
+    "createNewSpace": "Create a new space"
+  },
+  "launcher": {
+    "spaces": "Spaces",
+    "loadingYourSpaces": "Loading your spaces…",
+    "tryAgain": "Try Again",
+    "noSpacesYet": "You do not have any spaces yet.",
+    "createSpace": "Create Space",
+    "createNewSpace": "Create New Space",
+    "creatingSpace": "Creating Space…",
+    "creating": "Creating…",
+    "empty": "Empty",
+    "duplicate": "Duplicate {{name}}",
+    "delete": "Delete {{name}}"
+  }
+}

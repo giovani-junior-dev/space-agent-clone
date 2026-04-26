@@ -22,5 +22,15 @@
     "discord": "Discord",
     "youtube": "YouTube",
     "x": "X"
+  },
+  "launcher": {
+    "spaces": "Spaces",
+    "panels": "Panels",
+    "bigBang": "Big Bang",
+    "loadingPanels": "Loading panels…",
+    "tryAgain": "Try Again",
+    "noPanels": "No panels are available for this account.",
+    "panelsAriaLabel": "Dashboard panels",
+    "openItem": "Open {{name}}"
   }
 }
