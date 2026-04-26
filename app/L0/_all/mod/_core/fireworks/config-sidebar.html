@@ -1,0 +1,99 @@
+<div x-data>
+  <template x-if="$store.fireworks">
+    <aside class="fireworks-card">
+      <header class="fireworks-card-header">
+        <span class="fireworks-icon material-symbols-outlined">local_fire_department</span>
+        <div>
+          <h2 x-t="'providers:fireworks.title'">Fireworks AI</h2>
+          <p class="field-note" x-t="'providers:fireworks.subtitle'">
+            OpenAI-compatible endpoint. Pick a curated model and apply it to an agent surface.
+          </p>
+        </div>
+      </header>
+
+      <label class="fireworks-field">
+        <span x-t="'providers:fireworks.apiKeyLabel'">API key</span>
+        <input
+          type="password"
+          autocomplete="off"
+          spellcheck="false"
+          :placeholder="$t('providers:fireworks.apiKeyPlaceholder')"
+          :value="$store.fireworks.apiKey"
+          @input="$store.fireworks.setApiKey($event.target.value)"
+        />
+        <div class="fireworks-help-row">
+          <a
+            class="fireworks-link"
+            :href="$store.fireworks.apiKeysUrl"
+            target="_blank"
+            rel="noreferrer"
+            x-t="'providers:fireworks.getApiKey'"
+          >Get an API key</a>
+          <span class="field-note" x-t="'providers:fireworks.encryptedNote'">
+            Stored encrypted at rest with userCrypto.
+          </span>
+        </div>
+      </label>
+
+      <section class="fireworks-models" :aria-label="$t('providers:fireworks.modelLabel')">
+        <p class="field-note" x-t="'providers:fireworks.modelLabel'">Model</p>
+        <template x-for="entry in $store.fireworks.models" :key="entry.id">
+          <button
+            type="button"
+            class="fireworks-model"
+            :class="{ 'is-selected': $store.fireworks.selectedModelId === entry.id }"
+            @click="$store.fireworks.selectModel(entry.id)"
+          >
+            <div class="fireworks-model-head">
+              <span class="fireworks-model-title" x-text="entry.label"></span>
+              <template x-if="entry.firepass">
+                <span class="fireworks-firepass-badge" x-t="'providers:fireworks.firepassBadge'">Firepass</span>
+              </template>
+            </div>
+            <div class="fireworks-model-description" x-text="entry.description"></div>
+            <div class="fireworks-model-id" x-text="entry.id"></div>
+            <div class="fireworks-meta">
+              <span class="fireworks-meta-item">
+                <span x-t="'providers:fireworks.contextLabel'">Context</span>
+                <strong x-text="(entry.contextWindow || 0).toLocaleString()"></strong>
+              </span>
+              <template x-for="cap in entry.capabilities" :key="cap">
+                <span class="fireworks-meta-item">
+                  <strong x-text="cap"></strong>
+                </span>
+              </template>
+            </div>
+          </button>
+        </template>
+      </section>
+
+      <div class="fireworks-actions">
+        <button
+          type="button"
+          class="primary-button"
+          :disabled="!$store.fireworks.hasApiKey"
+          @click="$store.fireworks.applyToAdminAgent()"
+          x-t="'providers:fireworks.applyToAdmin'"
+        >Apply to admin agent</button>
+        <button
+          type="button"
+          class="secondary-button"
+          :disabled="!$store.fireworks.hasApiKey"
+          @click="$store.fireworks.applyToOnscreenAgent()"
+          x-t="'providers:fireworks.applyToOnscreen'"
+        >Apply to onscreen agent</button>
+        <a
+          class="secondary-button"
+          :href="$store.fireworks.firepassDocsUrl"
+          target="_blank"
+          rel="noreferrer"
+          x-t="'providers:fireworks.firepassDocsLink'"
+        >About Firepass</a>
+      </div>
+
+      <template x-if="$store.fireworks.status">
+        <div class="fireworks-status" :class="$store.fireworks.statusTone" x-text="$store.fireworks.status"></div>
+      </template>
+    </aside>
+  </template>
+</div>

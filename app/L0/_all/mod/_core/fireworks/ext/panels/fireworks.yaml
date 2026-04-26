@@ -1,0 +1,9 @@
+name: Fireworks AI
+path: fireworks
+description: Curated Fireworks AI provider with Firepass support.
+name_i18n:
+  pt-BR: Fireworks AI
+description_i18n:
+  pt-BR: Provedor Fireworks AI com modelos selecionados e suporte a Firepass.
+icon: local_fire_department
+color: "#ff7a32"

@@ -27,6 +27,21 @@
     "loadCustom": "Load custom",
     "vramRequired": "{{mb}} MB VRAM"
   },
+  "fireworks": {
+    "title": "Fireworks AI",
+    "subtitle": "OpenAI-compatible endpoint. Pick a curated model and apply it to an agent surface.",
+    "apiKeyLabel": "API key",
+    "apiKeyPlaceholder": "fw-...",
+    "getApiKey": "Get an API key",
+    "encryptedNote": "Stored encrypted at rest with userCrypto.",
+    "modelLabel": "Model",
+    "contextLabel": "Context",
+    "firepassBadge": "Firepass",
+    "firepassDocsLink": "About Firepass",
+    "applyToAdmin": "Apply to admin agent",
+    "applyToOnscreen": "Apply to onscreen agent",
+    "applied": "Fireworks settings applied."
+  },
   "huggingface": {
     "modelLabel": "Hugging Face model",
     "modelPlaceholder": "onnx-community/gemma-4-E4B-it-ONNX or https://huggingface.co/...",
