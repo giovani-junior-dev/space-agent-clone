@@ -29,5 +29,9 @@
   },
   "errors": {
     "unknown": "Ocorreu um erro inesperado."
+  },
+  "language": {
+    "label": "Idioma",
+    "selectLanguage": "Selecionar idioma"
   }
 }

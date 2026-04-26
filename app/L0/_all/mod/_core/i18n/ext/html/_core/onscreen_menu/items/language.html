@@ -1,0 +1,90 @@
+<div
+  x-data="{
+    submenuOpen: false,
+    locales: [
+      { code: 'en', label: 'English' },
+      { code: 'pt-BR', label: 'Português (Brasil)' }
+    ],
+    get current() {
+      // Subscribe to locale changes via the reactive store so currentLabel and
+      // the active-state highlighting refresh immediately on switch.
+      try {
+        const version = this.$store?.spaceLocale?.version;
+        // eslint-disable-next-line no-unused-expressions
+        version;
+      } catch {
+        /* noop */
+      }
+      try {
+        return (window.space?.i18n?.getLocale && window.space.i18n.getLocale()) || 'en';
+      } catch {
+        return 'en';
+      }
+    },
+    get currentLabel() {
+      const found = this.locales.find((l) => l.code === this.current);
+      return found ? found.label : this.current;
+    },
+    isActive(code) {
+      return this.current === code;
+    },
+    async pick(code) {
+      this.submenuOpen = false;
+      try {
+        if (window.space?.i18n?.setLocale) {
+          await window.space.i18n.setLocale(code);
+        }
+      } catch (error) {
+        console.error('[language-selector] setLocale failed', error);
+      }
+    }
+  }"
+  class="space-language-menu-wrapper"
+  data-order="140"
+  @click.outside="submenuOpen = false"
+  @keydown.escape.window="submenuOpen = false"
+  style="position: relative;"
+>
+  <button
+    type="button"
+    class="space-topbar-menu-action"
+    role="menuitem"
+    :aria-haspopup="'menu'"
+    :aria-expanded="String(submenuOpen)"
+    :title="$t('common:language.selectLanguage')"
+    @click.stop="submenuOpen = !submenuOpen"
+  >
+    <x-icon>language</x-icon>
+    <span class="space-topbar-menu-action-label" x-t="'common:language.label'"></span>
+    <span
+      class="space-language-menu-current"
+      x-text="currentLabel"
+      style="margin-left: auto; opacity: 0.7; font-size: 0.85em;"
+    ></span>
+  </button>
+
+  <div
+    class="space-topbar-menu-panel space-language-menu-panel"
+    x-cloak
+    x-show="submenuOpen"
+    x-transition.opacity.scale.origin.top.right.duration.160ms
+    role="menu"
+    :aria-label="$t('common:language.selectLanguage')"
+    style="position: absolute; right: 100%; top: 0; margin-right: 4px; min-width: 200px;"
+  >
+    <template x-for="locale in locales" :key="locale.code">
+      <button
+        type="button"
+        class="space-topbar-menu-action"
+        role="menuitemradio"
+        :aria-checked="String(isActive(locale.code))"
+        :class="{ 'is-active': isActive(locale.code) }"
+        @click="pick(locale.code)"
+      >
+        <x-icon x-show="isActive(locale.code)" x-cloak>check</x-icon>
+        <x-icon x-show="!isActive(locale.code)" x-cloak>radio_button_unchecked</x-icon>
+        <span class="space-topbar-menu-action-label" x-text="locale.label"></span>
+      </button>
+    </template>
+  </div>
+</div>

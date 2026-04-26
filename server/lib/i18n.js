@@ -205,8 +205,39 @@ async function reloadResources() {
   }
 }
 
+const LOCALE_COOKIE_KEY = "space_locale";
+
+function parseCookieHeader(headerValue) {
+  const value = String(headerValue || "");
+  if (!value) {
+    return {};
+  }
+
+  const out = {};
+  for (const piece of value.split(";")) {
+    const eq = piece.indexOf("=");
+    if (eq < 0) {
+      continue;
+    }
+    const name = piece.slice(0, eq).trim();
+    if (!name) {
+      continue;
+    }
+    let raw = piece.slice(eq + 1).trim();
+    if (raw.length >= 2 && raw[0] === "\"" && raw[raw.length - 1] === "\"") {
+      raw = raw.slice(1, -1);
+    }
+    try {
+      out[name] = decodeURIComponent(raw);
+    } catch {
+      out[name] = raw;
+    }
+  }
+  return out;
+}
+
 function getLocale(req) {
-  // 1. ?lang= query parameter
+  // 1. ?lang= query parameter (explicit override, e.g. for sharing links).
   const url = req?.url
     ? (() => {
         try {
@@ -222,7 +253,17 @@ function getLocale(req) {
     return fromQuery;
   }
 
-  // 2. Accept-Language header
+  // 2. space_locale cookie set by the frontend selector.
+  const cookieHeader = req?.headers?.cookie;
+  if (cookieHeader) {
+    const cookies = parseCookieHeader(cookieHeader);
+    const fromCookie = normalizeLocale(cookies[LOCALE_COOKIE_KEY]);
+    if (fromCookie) {
+      return fromCookie;
+    }
+  }
+
+  // 3. Accept-Language header
   const acceptLanguage = req?.headers?.["accept-language"];
   for (const tag of parseAcceptLanguageHeader(acceptLanguage)) {
     const matched = normalizeLocale(tag);
@@ -231,13 +272,13 @@ function getLocale(req) {
     }
   }
 
-  // 3. SPACE_LOCALE env
+  // 4. SPACE_LOCALE env
   const envLocale = normalizeLocale(process.env.SPACE_LOCALE);
   if (envLocale) {
     return envLocale;
   }
 
-  // 4. Fallback
+  // 5. Fallback
   return FALLBACK_LOCALE;
 }
 

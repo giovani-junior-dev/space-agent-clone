@@ -5,6 +5,8 @@ const FALLBACK_LOCALE = "en";
 const DEFAULT_NAMESPACE = "common";
 const NAMESPACES = ["common", "errors", "admin", "fileExplorer", "dashboard"];
 const STORAGE_KEY = "spaceLocale";
+const COOKIE_KEY = "space_locale";
+const COOKIE_MAX_AGE_SECONDS = 60 * 60 * 24 * 365; // 1 year
 const LOCALE_CHANGED_EVENT = "space:locale-changed";
 
 let initializationPromise = null;
@@ -45,6 +47,17 @@ function readStoredLocale() {
 function writeStoredLocale(locale) {
   try {
     window.localStorage?.setItem(STORAGE_KEY, locale);
+  } catch {
+    /* noop */
+  }
+
+  try {
+    if (typeof document !== "undefined" && typeof document.cookie === "string") {
+      const value = encodeURIComponent(locale);
+      const secure = window.location?.protocol === "https:" ? "; Secure" : "";
+      document.cookie =
+        `${COOKIE_KEY}=${value}; path=/; max-age=${COOKIE_MAX_AGE_SECONDS}; SameSite=Lax${secure}`;
+    }
   } catch {
     /* noop */
   }
@@ -166,6 +179,25 @@ async function initI18n() {
       initImmediate: false
     });
 
+    // Persist initial locale to cookie so backend honors the active choice on
+    // subsequent requests, even when navigator.language disagrees.
+    writeStoredLocale(initialLocale);
+
+    // Expose a tiny runtime API so UI surfaces (e.g. the language selector)
+    // can read/change the locale without importing this module directly.
+    try {
+      const space = (globalThis.space = globalThis.space || {});
+      space.i18n = {
+        t,
+        getLocale,
+        setLocale,
+        onLocaleChanged,
+        supportedLocales: [...SUPPORTED_LOCALES]
+      };
+    } catch {
+      /* noop */
+    }
+
     return i18next;
   })();
 
@@ -211,8 +243,37 @@ function registerAlpineBindings(Alpine) {
     return;
   }
 
+  // Reactive store so any expression that calls $t(...) implicitly subscribes
+  // to locale changes via the .version counter access below. This is what
+  // lets `:title="$t(...)"`, `:aria-label="$t(...)"` etc. re-evaluate live
+  // without needing to walk the DOM.
+  if (typeof Alpine.store === "function") {
+    Alpine.store("spaceLocale", { current: getLocale(), version: 0 });
+    window.addEventListener(LOCALE_CHANGED_EVENT, (event) => {
+      try {
+        const store = Alpine.store("spaceLocale");
+        if (store) {
+          store.current = event?.detail?.locale || getLocale();
+          store.version = (store.version || 0) + 1;
+        }
+      } catch {
+        /* noop */
+      }
+    });
+  }
+
   // $t magic — usable as $t('common.hello') or $t('admin:users.title', { count: 3 })
-  Alpine.magic("t", () => (key, options = {}) => t(key, options));
+  // Reads `spaceLocale.version` so Alpine re-runs every expression that uses
+  // $t whenever the locale changes.
+  Alpine.magic("t", () => (key, options = {}) => {
+    try {
+      // eslint-disable-next-line no-unused-expressions
+      Alpine.store?.("spaceLocale")?.version;
+    } catch {
+      /* noop */
+    }
+    return t(key, options);
+  });
 
   // x-t directive — sets textContent, re-renders on locale change
   if (typeof Alpine.directive === "function") {
