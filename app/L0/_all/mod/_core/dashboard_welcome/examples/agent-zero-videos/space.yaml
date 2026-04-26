@@ -4,6 +4,10 @@ schema: spaces/v2
 updated_at: 2026-04-09T15:35:59.062Z
 title: Agent Zero Videos
 description: Latest AgentZero videos with a built-in player.
+title_i18n:
+  pt-BR: Vídeos do Agent Zero
+description_i18n:
+  pt-BR: Os vídeos mais recentes do AgentZero com um player integrado.
 icon: smart_display
 icon_color: "#ff5a4f"
 layout_order:

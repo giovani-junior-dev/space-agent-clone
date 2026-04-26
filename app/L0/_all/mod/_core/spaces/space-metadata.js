@@ -28,6 +28,60 @@ export function normalizeSpaceTitle(value) {
   return String(value ?? "").trim();
 }
 
+/**
+ * Resolve a localized field from a space manifest or record.
+ *
+ * Looks up `${fieldName}_i18n[locale]` (and the camelCase `${fieldName}I18n`
+ * fallback) on the supplied record. If no localized variant is found the
+ * raw `fieldName` value is returned, preserving the EN fallback contract.
+ *
+ * Safe for any input — returns `""` when the record is null/undefined or
+ * not an object. Never throws.
+ *
+ * @param {object} record  - Space manifest, runtime record, or YAML metadata.
+ * @param {string} fieldName - Base field key (e.g. "title", "description").
+ * @param {string} [locale] - Target locale (e.g. "pt-BR"). Optional.
+ * @returns {*} Localized value if present, otherwise the base field value.
+ */
+export function localizedField(record, fieldName, locale) {
+  if (!record || typeof record !== "object" || Array.isArray(record)) {
+    return record;
+  }
+
+  const baseValue = record[fieldName];
+  const targetLocale = String(locale || "").trim();
+
+  if (!targetLocale) {
+    return baseValue;
+  }
+
+  const snakeKey = `${fieldName}_i18n`;
+  const camelKey = `${fieldName}I18n`;
+  const localizedMap = record[snakeKey] ?? record[camelKey];
+
+  if (
+    localizedMap &&
+    typeof localizedMap === "object" &&
+    !Array.isArray(localizedMap)
+  ) {
+    const localizedValue = localizedMap[targetLocale];
+    if (localizedValue !== undefined && localizedValue !== null && localizedValue !== "") {
+      return localizedValue;
+    }
+
+    // Try base language fallback (e.g. "pt" for "pt-BR") before giving up.
+    const base = targetLocale.split(/[-_]/u)[0];
+    if (base && base !== targetLocale && localizedMap[base] !== undefined) {
+      const baseLocalized = localizedMap[base];
+      if (baseLocalized !== undefined && baseLocalized !== null && baseLocalized !== "") {
+        return baseLocalized;
+      }
+    }
+  }
+
+  return baseValue;
+}
+
 function normalizeSpaceInstructions(value) {
   return normalizeLineEndings(value).trim();
 }
@@ -46,9 +100,25 @@ export function normalizeSpaceIconColor(value) {
   return normalizeIconHexColor(value);
 }
 
-export function getSpaceDisplayTitle(value) {
-  const normalizedTitle = normalizeSpaceTitle(readMetadataValue(value, "title"));
+export function getSpaceDisplayTitle(value, locale = "") {
+  const rawTitle = locale
+    ? localizedField(value, "title", locale)
+    : readMetadataValue(value, "title");
+  const normalizedTitle = normalizeSpaceTitle(rawTitle);
   return normalizedTitle || UNTITLED_SPACE_LABEL;
+}
+
+/**
+ * Resolve a display-ready, locale-aware description for a space record.
+ * Returns "" when no description is set (description is optional in the UI).
+ */
+export function getSpaceDisplayDescription(value, locale = "") {
+  const rawDescription = locale
+    ? localizedField(value, "description", locale)
+    : readMetadataValue(value, "description", "summary");
+  return String(rawDescription ?? "")
+    .replace(/\s+/gu, " ")
+    .trim();
 }
 
 export function getSpaceDisplayIcon(value) {

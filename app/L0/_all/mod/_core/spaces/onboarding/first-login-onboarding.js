@@ -1,6 +1,7 @@
 import { DEFAULT_ROUTE_PATH, parseRouteTarget } from "../../router/route-path.js";
 import { SPACES_ROUTE_PATH } from "../constants.js";
 import { installExampleSpace, listSpaces } from "../storage.js";
+import { getLocale } from "../../i18n/i18n.js";
 
 export const FIRST_LOGIN_SPACE_SOURCE_PATH = "L0/_all/mod/_core/spaces/onboarding/onboarding_space/";
 
@@ -69,7 +70,15 @@ export async function ensureFirstLoginSpace({
     };
   }
 
+  let activeLocale = "";
+  try {
+    activeLocale = getLocale();
+  } catch {
+    /* noop — locale resolution best-effort */
+  }
+
   const createdSpace = await installExampleSpaceImpl({
+    locale: activeLocale,
     sourcePath: FIRST_LOGIN_SPACE_SOURCE_PATH
   });
 

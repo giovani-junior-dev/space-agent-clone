@@ -6,10 +6,12 @@ import {
   subscribeDashboardWelcomeHiddenChange
 } from "/mod/_core/dashboard_welcome/dashboard-prefs.js";
 import {
+  getSpaceDisplayDescription,
   getSpaceDisplayIcon,
   getSpaceDisplayIconColor,
   getSpaceDisplayTitle
 } from "/mod/_core/spaces/space-metadata.js";
+import { getLocale, onLocaleChanged } from "/mod/_core/i18n/i18n.js";
 
 const EXAMPLE_MANIFEST_PATTERN = "mod/_core/dashboard_welcome/examples/*/space.yaml";
 const EXAMPLE_ORDER = Object.freeze([
@@ -89,10 +91,12 @@ function logDashboardWelcomeError(context, error) {
   console.error(`[dashboard-welcome] ${context}`, error);
 }
 
-function normalizeExampleDescription(value) {
-  return String(value ?? "")
-    .replace(/\s+/gu, " ")
-    .trim();
+function safeGetLocale() {
+  try {
+    return getLocale();
+  } catch {
+    return "";
+  }
 }
 
 function parseExampleManifestPath(path) {
@@ -111,13 +115,14 @@ function parseExampleManifestPath(path) {
 }
 
 function normalizeExampleEntry(example = {}, manifest = {}) {
+  const locale = safeGetLocale();
   return {
-    description: normalizeExampleDescription(manifest.description ?? manifest.summary),
+    description: getSpaceDisplayDescription(manifest, locale),
     displayIcon: getSpaceDisplayIcon(manifest),
     displayIconColor: getSpaceDisplayIconColor(manifest),
     id: example.id,
     sourcePath: example.sourcePath,
-    title: getSpaceDisplayTitle(manifest)
+    title: getSpaceDisplayTitle(manifest, locale)
   };
 }
 
@@ -187,6 +192,7 @@ async function loadExamples() {
 globalThis.dashboardWelcome = function dashboardWelcome() {
   return {
     dashboardWelcomeHiddenChangeCleanup: null,
+    localeChangeCleanup: null,
     examples: [],
     hidden: false,
     installingExampleId: "",
@@ -197,6 +203,15 @@ globalThis.dashboardWelcome = function dashboardWelcome() {
     async init() {
       this.dashboardWelcomeHiddenChangeCleanup = subscribeDashboardWelcomeHiddenChange((nextHidden) => {
         this.hidden = nextHidden;
+      });
+
+      // Re-render example cards when the user switches locale at runtime.
+      this.localeChangeCleanup = onLocaleChanged(async () => {
+        try {
+          this.examples = await loadExamples();
+        } catch (error) {
+          logDashboardWelcomeError("locale change reload failed", error);
+        }
       });
 
       try {
@@ -219,6 +234,12 @@ globalThis.dashboardWelcome = function dashboardWelcome() {
       }
 
       this.dashboardWelcomeHiddenChangeCleanup = null;
+
+      if (typeof this.localeChangeCleanup === "function") {
+        this.localeChangeCleanup();
+      }
+
+      this.localeChangeCleanup = null;
     },
 
     get isInstalling() {
@@ -265,13 +286,15 @@ globalThis.dashboardWelcome = function dashboardWelcome() {
       this.installingExampleId = example.id;
 
       try {
+        const localizedTitle = example.title;
         const createdSpace = await globalThis.space.spaces.installExampleSpace({
           id: example.id,
           replace: false,
-          sourcePath: example.sourcePath
+          sourcePath: example.sourcePath,
+          title: localizedTitle
         });
 
-        showToast(`Opened "${getSpaceDisplayTitle(createdSpace)}".`, {
+        showToast(`Opened "${getSpaceDisplayTitle(createdSpace, safeGetLocale())}".`, {
           tone: "success"
         });
       } catch (error) {
