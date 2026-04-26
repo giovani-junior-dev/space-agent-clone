@@ -1,3 +1,4 @@
+import { tError } from "../lib/i18n.js";
 import { readHostedCloudShareMeta } from "../lib/share/service.js";
 import { areGuestUsersAllowed } from "../lib/utils/runtime_params.js";
 
@@ -11,7 +12,7 @@ function createHttpError(message, statusCode) {
 
 export async function get(context) {
   if (!areGuestUsersAllowed(context.runtimeParams)) {
-    throw createHttpError("Cloud share not found.", 404);
+    throw createHttpError(tError("errors:cloud.shareNotFound"), 404);
   }
 
   const shareInfo = await readHostedCloudShareMeta(

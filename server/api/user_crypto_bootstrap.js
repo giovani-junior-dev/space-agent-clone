@@ -6,6 +6,7 @@ import {
   readUserCryptoServerShare,
   USER_CRYPTO_STATUS_READY
 } from "../lib/auth/user_crypto.js";
+import { tError } from "../lib/i18n.js";
 import { runTrackedMutation } from "../runtime/request_mutations.js";
 
 function createHttpError(message, statusCode) {
@@ -41,7 +42,7 @@ export async function post(context) {
   const username = String(context.user?.username || "").trim();
 
   if (!username) {
-    throw createHttpError("Authentication is required.", 401);
+    throw createHttpError(tError("errors:auth.authenticationIsRequired"), 401);
   }
 
   const payload = readPayload(context);
@@ -66,7 +67,7 @@ export async function post(context) {
   const provisioningShare = String(payload.provisioningShare || "").trim();
 
   if (!provisioningShare) {
-    throw createHttpError("A provisioning share is required to bootstrap user crypto.", 400);
+    throw createHttpError(tError("errors:auth.userCryptoProvisioningRequired"), 400);
   }
 
   await runTrackedMutation(context, async () =>

@@ -7,6 +7,7 @@ import { FILE_INDEX_AREA } from "../../runtime/state_areas.js";
 import { cloneGitRepository, createGitClient } from "../git/client_create.js";
 import { sanitizeRemoteUrl } from "../git/shared.js";
 import { createAppAccessController, createHttpError, toAppRelativePath } from "./file_access.js";
+import { tError } from "../i18n.js";
 import { recordAppPathMutations } from "./git_history.js";
 import { getLayerOrder, normalizeMaxLayer } from "./layer_limit.js";
 import {
@@ -78,7 +79,7 @@ function normalizeModuleListArea(value) {
   }
 
   if (!MODULE_LIST_AREAS.has(normalizedArea)) {
-    throw createHttpError(`Unsupported module list area: ${normalizedArea}`, 400);
+    throw createHttpError(tError("errors:module.unsupportedListArea", { area: normalizedArea }), 400);
   }
 
   return normalizedArea;
@@ -184,11 +185,11 @@ function collectVisibleModuleDirectoryEntries(options = {}) {
     (area === "l2_user" && normalizedOwnerId !== accessController.username);
 
   if (requiresAdmin && !accessController.isAdmin) {
-    throw createHttpError("Admin access required.", 403);
+    throw createHttpError(tError("errors:auth.adminAccessRequired"), 403);
   }
 
   if (area === "l2_user" && !normalizedOwnerId) {
-    throw createHttpError("Module list area l2_user requires ownerId.", 400);
+    throw createHttpError(tError("errors:module.listAreaRequiresOwner"), 400);
   }
 
   const shardIds = [];
@@ -316,7 +317,7 @@ function normalizeModuleTargetPath(inputPath, options = {}) {
   });
 
   if (!accessController.canWriteProjectPath(normalizedProjectPath)) {
-    throw createHttpError("Write access denied.", 403);
+    throw createHttpError(tError("errors:access.writeDenied"), 403);
   }
 
   return {
@@ -390,7 +391,7 @@ async function ensureRemoteConfig(gitClient, repoUrl) {
     : await gitClient.readConfig(`remote.${DEFAULT_REMOTE}.url`);
 
   if (!configuredRemoteUrl) {
-    throw createHttpError("Module install requires a repository URL.", 400);
+    throw createHttpError(tError("errors:module.installRequiresRepoUrl"), 400);
   }
 
   await gitClient.writeConfig(`remote.${DEFAULT_REMOTE}.url`, configuredRemoteUrl);
@@ -412,7 +413,7 @@ async function updateTrackedBranch(gitClient, defaultBranch) {
 
   if (!branchName) {
     throw createHttpError(
-      "Module update could not determine a branch to attach or fast-forward.",
+      tError("errors:module.updateCannotDetermineBranch"),
       400
     );
   }
@@ -421,7 +422,7 @@ async function updateTrackedBranch(gitClient, defaultBranch) {
     if (defaultBranch && branchName !== defaultBranch && (await gitClient.hasRemoteBranch(DEFAULT_REMOTE, defaultBranch))) {
       branchName = defaultBranch;
     } else {
-      throw createHttpError(`Remote ${DEFAULT_REMOTE} does not have branch ${branchName}.`, 400);
+      throw createHttpError(tError("errors:module.remoteBranchNotFound", { remote: DEFAULT_REMOTE, branch: branchName }), 400);
     }
   }
 
@@ -436,7 +437,7 @@ async function checkoutRequestedRevision(gitClient, options = {}) {
     const revision = await gitClient.resolveTagRevision(options.tag);
 
     if (!revision) {
-      throw createHttpError(`Could not resolve tag ${options.tag}.`, 400);
+      throw createHttpError(tError("errors:module.couldNotResolveTag", { tag: options.tag }), 400);
     }
 
     await gitClient.checkoutDetached(revision);
@@ -453,7 +454,7 @@ async function checkoutRequestedRevision(gitClient, options = {}) {
     });
 
     if (!revision) {
-      throw createHttpError(`Could not resolve commit ${options.commit}.`, 400);
+      throw createHttpError(tError("errors:module.couldNotResolveCommit", { commit: options.commit }), 400);
     }
 
     await gitClient.checkoutDetached(revision);
@@ -556,7 +557,7 @@ async function updateExistingPath(targetPathInfo, options = {}) {
     });
   } catch (error) {
     throw createHttpError(
-      error.message || `Module path is not a valid Git repository: ${targetPathInfo.appPath}`,
+      error.message || tError("errors:module.pathNotValidGitRepo", { path: targetPathInfo.appPath }),
       400
     );
   }
@@ -692,7 +693,7 @@ async function readModuleInfo(options = {}) {
 
 async function installModule(options = {}) {
   if (options.tag && options.commit) {
-    throw createHttpError("Specify either tag or commit, not both.", 400);
+    throw createHttpError(tError("errors:module.specifyTagOrCommitNotBoth"), 400);
   }
 
   const targetPathInfo = normalizeModuleTargetPath(options.path, options);
@@ -707,11 +708,11 @@ async function installModule(options = {}) {
     hasPath(pathIndex, targetPathInfo.projectPath) || hasDescendantPath(pathIndex, targetPathInfo.projectPath);
 
   if (hasPath(pathIndex, conflictingFilePath)) {
-    throw createHttpError(`Module path already exists as a file: ${targetPathInfo.appPath}`, 400);
+    throw createHttpError(tError("errors:module.pathExistsAsFile", { path: targetPathInfo.appPath }), 400);
   }
 
   if (!existsAsDirectory && !options.repoUrl) {
-    throw createHttpError("Module install requires a repository URL.", 400);
+    throw createHttpError(tError("errors:module.installRequiresRepoUrl"), 400);
   }
 
   try {

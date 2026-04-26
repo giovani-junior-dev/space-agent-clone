@@ -1,4 +1,5 @@
 import { isGuestUsername } from "../lib/auth/user_manage.js";
+import { tError } from "../lib/i18n.js";
 import { areGuestUsersAllowed, isLoginAllowed, isSingleUserApp } from "../lib/utils/runtime_params.js";
 
 export const allowAnonymous = true;
@@ -11,7 +12,7 @@ function createHttpError(message, statusCode) {
 
 export async function post(context) {
   if (isSingleUserApp(context.runtimeParams)) {
-    throw createHttpError("Password login is disabled in single-user mode.", 403);
+    throw createHttpError(tError("errors:auth.passwordLoginDisabledSingleUser"), 403);
   }
 
   const payload =
@@ -23,7 +24,7 @@ export async function post(context) {
     const username = String(payload.username || "");
 
     if (!(areGuestUsersAllowed(context.runtimeParams) && isGuestUsername(username))) {
-      throw createHttpError("Login is disabled in this system.", 403);
+      throw createHttpError(tError("errors:auth.loginDisabled"), 403);
     }
   }
 
@@ -34,6 +35,6 @@ export async function post(context) {
       username: payload.username
     });
   } catch (error) {
-    throw createHttpError(error.message || "Login challenge failed.", Number(error.statusCode) || 401);
+    throw createHttpError(error.message || tError("errors:auth.loginChallengeFailed"), Number(error.statusCode) || 401);
   }
 }

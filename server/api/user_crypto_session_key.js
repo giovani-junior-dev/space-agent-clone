@@ -1,3 +1,5 @@
+import { tError } from "../lib/i18n.js";
+
 function createHttpError(message, statusCode) {
   const error = new Error(message);
   error.statusCode = statusCode;
@@ -6,7 +8,7 @@ function createHttpError(message, statusCode) {
 
 export async function get(context) {
   if (!context.user?.isAuthenticated) {
-    throw createHttpError("Authentication is required.", 401);
+    throw createHttpError(tError("errors:auth.authenticationIsRequired"), 401);
   }
 
   const sessionKey =
@@ -15,7 +17,7 @@ export async function get(context) {
       : "";
 
   if (!String(sessionKey || "").trim()) {
-    throw createHttpError("Session-scoped user crypto key is unavailable.", 403);
+    throw createHttpError(tError("errors:auth.sessionUserCryptoUnavailable"), 403);
   }
 
   return {

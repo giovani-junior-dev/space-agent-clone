@@ -1,4 +1,5 @@
 import { createHttpError } from "../lib/customware/file_access.js";
+import { tError } from "../lib/i18n.js";
 import { normalizeMaxLayer } from "../lib/customware/layer_limit.js";
 import { readModuleInfo } from "../lib/customware/module_manage.js";
 
@@ -17,7 +18,7 @@ function readOptionalBoolean(value) {
     return false;
   }
 
-  throw createHttpError(`Invalid boolean value: ${String(value || "")}`, 400);
+  throw createHttpError(tError("errors:module.invalidBoolean", { value: String(value || "") }), 400);
 }
 
 function readPayload(context) {
@@ -84,6 +85,6 @@ export async function get(context) {
       username: context.user?.username,
     });
   } catch (error) {
-    throw createHttpError(error.message || "Module info lookup failed.", Number(error.statusCode) || 500);
+    throw createHttpError(error.message || tError("errors:module.infoLookupFailed"), Number(error.statusCode) || 500);
   }
 }

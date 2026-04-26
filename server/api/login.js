@@ -1,3 +1,4 @@
+import { tError } from "../lib/i18n.js";
 import { isSingleUserApp } from "../lib/utils/runtime_params.js";
 import { runTrackedMutation } from "../runtime/request_mutations.js";
 
@@ -27,7 +28,7 @@ async function waitForMinimumDuration(startedAtMs, minimumDurationMs) {
 
 export async function post(context) {
   if (isSingleUserApp(context.runtimeParams)) {
-    throw createHttpError("Password login is disabled in single-user mode.", 403);
+    throw createHttpError(tError("errors:auth.passwordLoginDisabledSingleUser"), 403);
   }
 
   const startedAtMs = Date.now();
@@ -63,7 +64,7 @@ export async function post(context) {
     };
   } catch (error) {
     await waitForMinimumDuration(startedAtMs, FAILED_LOGIN_MIN_DURATION_MS);
-    throw createHttpError(error.message || "Login failed.", Number(error.statusCode) || 401);
+    throw createHttpError(error.message || tError("errors:auth.loginFailed"), Number(error.statusCode) || 401);
   }
 
   return response;

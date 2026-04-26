@@ -1,4 +1,5 @@
 import { createHttpError, getAppPathInfo } from "../lib/customware/file_access.js";
+import { tError } from "../lib/i18n.js";
 import { resolveRequestMaxLayer } from "../lib/customware/layer_limit.js";
 
 function readPayload(context) {
@@ -29,7 +30,7 @@ function handleInfo(context) {
       watchdog: context.watchdog
     });
   } catch (error) {
-    throw createHttpError(error.message || "File info failed.", Number(error.statusCode) || 500);
+    throw createHttpError(error.message || tError("errors:file.infoFailed"), Number(error.statusCode) || 500);
   }
 }
 

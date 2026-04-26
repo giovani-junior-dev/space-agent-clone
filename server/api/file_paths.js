@@ -1,4 +1,5 @@
 import { createHttpError, listAppPathsByPatterns } from "../lib/customware/file_access.js";
+import { tError } from "../lib/i18n.js";
 import { parseOptionalMaxLayer } from "../lib/customware/layer_limit.js";
 
 function readPatternValues(context) {
@@ -31,7 +32,7 @@ function readPatternValues(context) {
 function readPatterns(context) {
   return readPatternValues(context).map((value) => {
     if (typeof value !== "string") {
-      throw createHttpError("File patterns must be strings.", 400);
+      throw createHttpError(tError("errors:file.patternsMustBeStrings"), 400);
     }
 
     return value;
@@ -77,7 +78,7 @@ function handleFilePaths(context) {
       watchdog: context.watchdog
     });
   } catch (error) {
-    throw createHttpError(error.message || "File path lookup failed.", Number(error.statusCode) || 500);
+    throw createHttpError(error.message || tError("errors:file.pathLookupFailed"), Number(error.statusCode) || 500);
   }
 }
 

@@ -1,6 +1,7 @@
 import fs from "node:fs";
 
 import { createHttpError, getAppFolderDownloadInfo } from "../lib/customware/file_access.js";
+import { tError } from "../lib/i18n.js";
 import { resolveRequestMaxLayer } from "../lib/customware/layer_limit.js";
 import {
   createArchiveReadStream,
@@ -59,7 +60,7 @@ async function handleDownload(context) {
       stream: createArchiveReadStream(archiveInfo.archivePath)
     };
   } catch (error) {
-    throw createHttpError(error.message || "Folder download failed.", Number(error.statusCode) || 500);
+    throw createHttpError(error.message || tError("errors:folder.downloadFailed"), Number(error.statusCode) || 500);
   }
 }
 
@@ -73,7 +74,7 @@ export function head(context) {
       }
     };
   } catch (error) {
-    throw createHttpError(error.message || "Folder download validation failed.", Number(error.statusCode) || 500);
+    throw createHttpError(error.message || tError("errors:folder.downloadValidationFailed"), Number(error.statusCode) || 500);
   }
 }
 

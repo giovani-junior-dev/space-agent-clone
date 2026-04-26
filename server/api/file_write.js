@@ -1,4 +1,5 @@
 import { createHttpError, writeAppFile, writeAppFiles } from "../lib/customware/file_access.js";
+import { tError } from "../lib/i18n.js";
 import { resolveRequestMaxLayer } from "../lib/customware/layer_limit.js";
 import { runTrackedMutation } from "../runtime/request_mutations.js";
 
@@ -45,6 +46,6 @@ export async function post(context) {
         : writeAppFile(options);
     });
   } catch (error) {
-    throw createHttpError(error.message || "File write failed.", Number(error.statusCode) || 500);
+    throw createHttpError(error.message || tError("errors:file.writeFailed"), Number(error.statusCode) || 500);
   }
 }

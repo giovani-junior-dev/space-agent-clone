@@ -1,3 +1,4 @@
+import { tError } from "../lib/i18n.js";
 import { cloneHostedCloudShareToGuest } from "../lib/share/service.js";
 import { areGuestUsersAllowed } from "../lib/utils/runtime_params.js";
 import { runTrackedMutation } from "../runtime/request_mutations.js";
@@ -12,7 +13,7 @@ function createHttpError(message, statusCode) {
 
 export async function post(context) {
   if (!areGuestUsersAllowed(context.runtimeParams)) {
-    throw createHttpError("Cloud share not found.", 404);
+    throw createHttpError(tError("errors:cloud.shareNotFound"), 404);
   }
 
   const cloneResult = await runTrackedMutation(context, async () =>

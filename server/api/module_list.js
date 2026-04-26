@@ -1,4 +1,5 @@
 import { createHttpError } from "../lib/customware/file_access.js";
+import { tError } from "../lib/i18n.js";
 import { listInstalledModules } from "../lib/customware/module_manage.js";
 
 function readListArea(context) {
@@ -30,6 +31,6 @@ export async function get(context) {
       username: context.user?.username,
     });
   } catch (error) {
-    throw createHttpError(error.message || "Module list failed.", Number(error.statusCode) || 500);
+    throw createHttpError(error.message || tError("errors:module.listFailed"), Number(error.statusCode) || 500);
   }
 }

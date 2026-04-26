@@ -1,4 +1,5 @@
 import { createHttpError, deleteAppPath } from "../lib/customware/file_access.js";
+import { tError } from "../lib/i18n.js";
 import { normalizeMaxLayer } from "../lib/customware/layer_limit.js";
 import { normalizeModuleTargetPath, readModuleInfo } from "../lib/customware/module_manage.js";
 import { runTrackedMutation } from "../runtime/request_mutations.js";
@@ -53,6 +54,6 @@ export async function post(context) {
       })
     };
   } catch (error) {
-    throw createHttpError(error.message || "Module remove failed.", Number(error.statusCode) || 500);
+    throw createHttpError(error.message || tError("errors:module.removeFailed"), Number(error.statusCode) || 500);
   }
 }

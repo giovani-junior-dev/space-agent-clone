@@ -1,6 +1,7 @@
 import { createHash } from "node:crypto";
 
 import { createAppAccessController, createHttpError, toAppRelativePath } from "../lib/customware/file_access.js";
+import { tError } from "../lib/i18n.js";
 import { normalizeAppProjectPath } from "../lib/customware/layout.js";
 
 function isPlainObject(value) {
@@ -19,7 +20,7 @@ function resolveUserShorthandPath(rawPath, username) {
   }
 
   if (!username) {
-    throw createHttpError("User-relative paths require an authenticated user.", 400);
+    throw createHttpError(tError("errors:path.userPathRequiresAuthenticatedUser"), 400);
   }
 
   if (inputPath === "~" || inputPath === "~/") {
@@ -30,14 +31,14 @@ function resolveUserShorthandPath(rawPath, username) {
     return `L2/${username}/${inputPath.slice(2)}`;
   }
 
-  throw createHttpError(`Invalid user-relative path: ${inputPath}`, 400);
+  throw createHttpError(tError("errors:path.invalidUserPath", { path: inputPath }), 400);
 }
 
 function normalizeRequestedProjectPath(rawPath, username) {
   const normalizedInputPath = resolveUserShorthandPath(rawPath, username);
 
   if (!normalizedInputPath) {
-    throw createHttpError("Path must not be empty.", 400);
+    throw createHttpError(tError("errors:path.pathMustNotBeEmpty"), 400);
   }
 
   const normalizedProjectPath = normalizeAppProjectPath(normalizedInputPath, {
@@ -46,7 +47,7 @@ function normalizeRequestedProjectPath(rawPath, username) {
   });
 
   if (!normalizedProjectPath) {
-    throw createHttpError(`Invalid path: ${String(rawPath || "")}`, 400);
+    throw createHttpError(tError("errors:path.invalidPath", { path: String(rawPath || "") }), 400);
   }
 
   return normalizedProjectPath;
@@ -111,7 +112,7 @@ function listRequestedPrefixes(payload, username) {
 
 function ensureReadableProjectPath(projectPath, accessController) {
   if (!accessController.canReadProjectPath(projectPath)) {
-    throw createHttpError(`Read access denied for ${toAppRelativePath(projectPath) || projectPath}`, 403);
+    throw createHttpError(tError("errors:access.readDeniedFor", { path: toAppRelativePath(projectPath) || projectPath }), 403);
   }
 }
 
@@ -151,7 +152,7 @@ function handleDebugPathIndex(context) {
   const requestedPrefixes = listRequestedPrefixes(payload, context.user?.username);
 
   if (requestedPaths.length === 0 && requestedPrefixes.length === 0) {
-    throw createHttpError("Provide at least one path or prefix.", 400);
+    throw createHttpError(tError("errors:path.providePathOrPrefix"), 400);
   }
 
   const accessController = createAppAccessController({

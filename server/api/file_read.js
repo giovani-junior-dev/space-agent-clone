@@ -1,4 +1,5 @@
 import { createHttpError, readAppFile, readAppFiles } from "../lib/customware/file_access.js";
+import { tError } from "../lib/i18n.js";
 import { resolveRequestMaxLayer } from "../lib/customware/layer_limit.js";
 
 function readPayload(context) {
@@ -49,7 +50,7 @@ function handleRead(context) {
 
     return readAppFile(options);
   } catch (error) {
-    throw createHttpError(error.message || "File read failed.", Number(error.statusCode) || 500);
+    throw createHttpError(error.message || tError("errors:file.readFailed"), Number(error.statusCode) || 500);
   }
 }
 

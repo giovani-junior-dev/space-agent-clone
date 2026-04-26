@@ -1,3 +1,5 @@
+import { tError } from "../lib/i18n.js";
+
 function createHttpError(message, statusCode) {
   const error = new Error(message);
   error.statusCode = statusCode;
@@ -14,11 +16,11 @@ export function post(context) {
   const payload = readPayload(context);
 
   if (typeof payload.password !== "string") {
-    throw createHttpError("Password must be provided as a string.", 400);
+    throw createHttpError(tError("errors:auth.passwordMustBeString"), 400);
   }
 
   if (!context.auth || typeof context.auth.generatePasswordVerifier !== "function") {
-    throw createHttpError("Password generation is unavailable.", 500);
+    throw createHttpError(tError("errors:auth.passwordGenerationUnavailable"), 500);
   }
 
   return {

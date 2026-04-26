@@ -1,3 +1,4 @@
+import { tError } from "../lib/i18n.js";
 import { importSpaceArchiveForUser } from "../lib/share/service.js";
 import { runTrackedMutation } from "../runtime/request_mutations.js";
 
@@ -16,7 +17,7 @@ export async function post(context) {
   const username = String(context.user?.username || "").trim();
 
   if (!username) {
-    throw createHttpError("Authentication required.", 401);
+    throw createHttpError(tError("errors:auth.authenticationRequired"), 401);
   }
 
   const result = await runTrackedMutation(context, async () =>

@@ -1,4 +1,5 @@
 import { copyAppPath, copyAppPaths, createHttpError } from "../lib/customware/file_access.js";
+import { tError } from "../lib/i18n.js";
 import { resolveRequestMaxLayer } from "../lib/customware/layer_limit.js";
 import { runTrackedMutation } from "../runtime/request_mutations.js";
 
@@ -38,6 +39,6 @@ export async function post(context) {
       return hasBatchCopy(payload) ? copyAppPaths(options) : copyAppPath(options);
     });
   } catch (error) {
-    throw createHttpError(error.message || "File copy failed.", Number(error.statusCode) || 500);
+    throw createHttpError(error.message || tError("errors:file.copyFailed"), Number(error.statusCode) || 500);
   }
 }

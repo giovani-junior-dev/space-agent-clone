@@ -1,4 +1,5 @@
 import { createHttpError } from "../lib/customware/file_access.js";
+import { tError } from "../lib/i18n.js";
 import { rollbackLayerHistory } from "../lib/customware/git_history.js";
 import { runTrackedMutation } from "../runtime/request_mutations.js";
 
@@ -46,6 +47,6 @@ export async function post(context) {
       })
     );
   } catch (error) {
-    rethrowGitHistoryHttpError(error, "Git history rollback failed.");
+    rethrowGitHistoryHttpError(error, tError("errors:git.historyRollbackFailed"));
   }
 }

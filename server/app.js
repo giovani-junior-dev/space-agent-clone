@@ -11,6 +11,7 @@ import {
   SERVER_TMP_DIR
 } from "./config.js";
 import { loadApiRegistry } from "./lib/api/registry.js";
+import { initializeI18n } from "./lib/i18n.js";
 import { createAuthService } from "./lib/auth/service.js";
 import { flushGitHistoryCommits } from "./lib/customware/git_history.js";
 import { ensureCustomwareDirectories } from "./lib/customware/layout.js";
@@ -165,6 +166,7 @@ async function createAgentServer(overrides = {}) {
       watchdog
     });
 
+  await initializeI18n();
   const apiRegistry = await loadApiRegistry(apiDir);
   const requestHandler = createRequestHandler({
     apiDir,

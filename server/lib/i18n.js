@@ -1,8 +1,11 @@
 import fs from "node:fs/promises";
+import fsSync from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import i18next from "i18next";
+
+import { getRequestContext } from "../router/request_context.js";
 
 const CURRENT_DIR = path.dirname(fileURLToPath(import.meta.url));
 const DEFAULT_LOCALES_DIR = path.resolve(CURRENT_DIR, "..", "..", "locales");
@@ -128,6 +131,64 @@ async function initializeI18n(options = {}) {
   return initializationPromise;
 }
 
+function loadNamespaceResourcesSync(localesDir) {
+  const resources = {};
+
+  for (const locale of SUPPORTED_LOCALES) {
+    resources[locale] = {};
+
+    for (const namespace of NAMESPACES) {
+      const filePath = path.join(localesDir, locale, `${namespace}.json`);
+      try {
+        const raw = fsSync.readFileSync(filePath, "utf8");
+        resources[locale][namespace] = raw.trim() ? JSON.parse(raw) : {};
+      } catch (error) {
+        if (error && error.code === "ENOENT") {
+          resources[locale][namespace] = {};
+          continue;
+        }
+        throw new Error(
+          `Failed to load locale resource ${locale}/${namespace}.json: ${error.message}`
+        );
+      }
+    }
+  }
+
+  return resources;
+}
+
+// Synchronous fallback initializer used by code paths that hit `t()` before the
+// async `initializeI18n()` ran (tests, scripts, early boot). Safe to call
+// repeatedly — i18next.init returns a noop after the first run.
+function initializeI18nSync(options = {}) {
+  if (i18next.isInitialized) {
+    return i18next;
+  }
+
+  resolvedLocalesDir = options.localesDir
+    ? path.resolve(options.localesDir)
+    : DEFAULT_LOCALES_DIR;
+
+  const resources = loadNamespaceResourcesSync(resolvedLocalesDir);
+
+  i18next.init({
+    resources,
+    lng: FALLBACK_LOCALE,
+    fallbackLng: FALLBACK_LOCALE,
+    supportedLngs: SUPPORTED_LOCALES,
+    ns: NAMESPACES,
+    defaultNS: DEFAULT_NAMESPACE,
+    interpolation: {
+      escapeValue: false
+    },
+    returnNull: false,
+    returnEmptyString: false,
+    initImmediate: false
+  });
+
+  return i18next;
+}
+
 async function reloadResources() {
   const resources = await loadNamespaceResources(resolvedLocalesDir);
 
@@ -182,7 +243,11 @@ function getLocale(req) {
 
 function t(key, options = {}) {
   if (!i18next.isInitialized) {
-    return String(key);
+    try {
+      initializeI18nSync();
+    } catch {
+      return String(key);
+    }
   }
 
   const { lng, ...rest } = options || {};
@@ -190,13 +255,38 @@ function t(key, options = {}) {
   return i18next.t(key, { ...rest, lng: targetLng });
 }
 
+// Resolve the active locale for the in-flight request without requiring callers
+// to pass `req` down through every layer. Falls back to the default locale when
+// no request context is active (e.g. boot-time code or background jobs).
+function getRequestLocale() {
+  try {
+    const context = getRequestContext();
+    if (context && context.req) {
+      return getLocale(context.req);
+    }
+  } catch {
+    // ignore - storage not initialized
+  }
+  return FALLBACK_LOCALE;
+}
+
+// Convenience helper for backend error messages: looks up the request-scoped
+// locale automatically, so call sites stay short:
+//   throw createHttpError(tError("errors:file.copyFailed"), 500);
+function tError(key, vars = {}) {
+  return t(key, { ...vars, lng: getRequestLocale() });
+}
+
 export {
   FALLBACK_LOCALE,
   NAMESPACES,
   SUPPORTED_LOCALES,
   getLocale,
+  getRequestLocale,
   initializeI18n,
+  initializeI18nSync,
   normalizeLocale,
   reloadResources,
-  t
+  t,
+  tError
 };

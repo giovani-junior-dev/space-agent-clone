@@ -21,6 +21,7 @@ import {
   readAbsolutePathSize
 } from "./user_quota.js";
 import { createEmptyGroupIndex } from "./overrides.js";
+import { tError } from "../i18n.js";
 import { globToRegExp, normalizePathSegment } from "../utils/app_files.js";
 import { isProjectPathWithinMaxLayer, normalizeMaxLayer } from "./layer_limit.js";
 
@@ -47,7 +48,7 @@ function resolveUserShorthandPath(inputPath, username) {
   }
 
   if (!username) {
-    throw createHttpError("User-relative paths require an authenticated user.", 400);
+    throw createHttpError(tError("errors:path.userPathRequiresAuthenticatedUser"), 400);
   }
 
   if (rawPath === "~") {
@@ -58,7 +59,7 @@ function resolveUserShorthandPath(inputPath, username) {
     return `L2/${username}/${rawPath.slice(2)}`;
   }
 
-  throw createHttpError(`Invalid user-relative path: ${rawPath}`, 400);
+  throw createHttpError(tError("errors:path.invalidUserPath", { path: rawPath }), 400);
 }
 
 function toAppRelativePath(projectPath) {
@@ -110,7 +111,7 @@ function normalizeFilePathPattern(value) {
   const rawValue = String(value ?? "").trim();
 
   if (!rawValue) {
-    throw createHttpError("File pattern must not be empty.", 400);
+    throw createHttpError(tError("errors:file.patternMustNotBeEmpty"), 400);
   }
 
   try {
@@ -122,7 +123,7 @@ function normalizeFilePathPattern(value) {
 
     return normalizedPattern;
   } catch {
-    throw createHttpError(`Invalid file pattern: ${rawValue}`, 400);
+    throw createHttpError(tError("errors:file.invalidPattern", { pattern: rawValue }), 400);
   }
 }
 
@@ -159,7 +160,7 @@ function normalizeAccessMode(value = "read") {
     return "write";
   }
 
-  throw createHttpError(`Unsupported access mode: ${String(value || "")}`, 400);
+  throw createHttpError(tError("errors:file.unsupportedAccessMode", { mode: String(value || "") }), 400);
 }
 
 function ensureProjectPathAccess(projectPath, accessController, accessMode = "read") {
@@ -342,23 +343,23 @@ function createAppAccessController(options = {}) {
 
 function ensureReadableProjectPath(projectPath, accessController) {
   if (!accessController.canReadProjectPath(projectPath)) {
-    throw createHttpError("Read access denied.", 403);
+    throw createHttpError(tError("errors:access.readDenied"), 403);
   }
 }
 
 function ensureWritableProjectPath(projectPath, accessController) {
   if (isReservedAppProjectPath(projectPath)) {
-    throw createHttpError("App-file access to Git metadata is not allowed.", 403);
+    throw createHttpError(tError("errors:access.appFileGitMetadataNotAllowed"), 403);
   }
 
   if (!accessController.canWriteProjectPath(projectPath)) {
-    throw createHttpError("Write access denied.", 403);
+    throw createHttpError(tError("errors:access.writeDenied"), 403);
   }
 }
 
 function ensurePublicAppProjectPath(projectPath) {
   if (isReservedAppProjectPath(projectPath)) {
-    throw createHttpError("App-file access to Git metadata is not allowed.", 403);
+    throw createHttpError(tError("errors:access.appFileGitMetadataNotAllowed"), 403);
   }
 }
 
@@ -519,7 +520,7 @@ function ensureValidReadEncoding(encoding) {
     return encoding;
   }
 
-  throw createHttpError(`Unsupported read encoding: ${String(encoding || "")}`, 400);
+  throw createHttpError(tError("errors:file.unsupportedReadEncoding", { encoding: String(encoding || "") }), 400);
 }
 
 function ensureValidWriteEncoding(encoding) {
@@ -527,20 +528,20 @@ function ensureValidWriteEncoding(encoding) {
     return encoding;
   }
 
-  throw createHttpError(`Unsupported write encoding: ${String(encoding || "")}`, 400);
+  throw createHttpError(tError("errors:file.unsupportedWriteEncoding", { encoding: String(encoding || "") }), 400);
 }
 
 function normalizeReadEntries(options = {}) {
   if (Array.isArray(options.files)) {
     if (options.files.length === 0) {
-      throw createHttpError("File read batch must not be empty.", 400);
+      throw createHttpError(tError("errors:file.readBatchEmpty"), 400);
     }
 
     return options.files;
   }
 
   if ("files" in options) {
-    throw createHttpError("File read batch must provide a files array.", 400);
+    throw createHttpError(tError("errors:file.readBatchRequiresArray"), 400);
   }
 
   return [
@@ -565,7 +566,7 @@ function normalizeReadRequests(options = {}) {
     const requestedPath = String(request.path || "").trim();
 
     if (!requestedPath) {
-      throw createHttpError("File path must not be empty.", 400);
+      throw createHttpError(tError("errors:path.filePathMustNotBeEmpty"), 400);
     }
 
     const resolvedPath = resolveExistingProjectPath(
@@ -574,11 +575,11 @@ function normalizeReadRequests(options = {}) {
     );
 
     if (!resolvedPath.projectPath || !resolvedPath.exists) {
-      throw createHttpError(`File not found: ${requestedPath}`, 404);
+      throw createHttpError(tError("errors:path.fileNotFound", { path: requestedPath }), 404);
     }
 
     if (resolvedPath.isDirectory) {
-      throw createHttpError(`Expected a file path: ${requestedPath}`, 400);
+      throw createHttpError(tError("errors:path.expectedFilePath", { path: requestedPath }), 400);
     }
 
     ensurePublicAppProjectPath(resolvedPath.projectPath);
@@ -628,7 +629,7 @@ function resolveReadableExistingAppPath(options = {}) {
   const requestedPath = String(options.path || "").trim();
 
   if (!requestedPath) {
-    throw createHttpError("Path must not be empty.", 400);
+    throw createHttpError(tError("errors:path.pathMustNotBeEmpty"), 400);
   }
 
   const resolvedPath = resolveExistingProjectPath(
@@ -637,15 +638,15 @@ function resolveReadableExistingAppPath(options = {}) {
   );
 
   if (!resolvedPath.projectPath || !resolvedPath.exists) {
-    throw createHttpError(`Path not found: ${requestedPath}`, 404);
+    throw createHttpError(tError("errors:path.pathNotFoundDetail", { path: requestedPath }), 404);
   }
 
   if (options.expectedKind === "directory" && !resolvedPath.isDirectory) {
-    throw createHttpError(`Expected a folder path: ${requestedPath}`, 400);
+    throw createHttpError(tError("errors:path.expectedFolderPath", { path: requestedPath }), 400);
   }
 
   if (options.expectedKind === "file" && resolvedPath.isDirectory) {
-    throw createHttpError(`Expected a file path: ${requestedPath}`, 400);
+    throw createHttpError(tError("errors:path.expectedFilePath", { path: requestedPath }), 400);
   }
 
   ensurePublicAppProjectPath(resolvedPath.projectPath);
@@ -715,7 +716,7 @@ function ensureValidWriteOperation(operation) {
     return normalizedOperation;
   }
 
-  throw createHttpError("Unsupported write operation: " + String(operation || ""), 400);
+  throw createHttpError(tError("errors:write.unsupportedOperation", { operation: String(operation || "") }), 400);
 }
 
 function normalizeWriteInsertTarget(request, options, operation, requestedPath) {
@@ -727,7 +728,7 @@ function normalizeWriteInsertTarget(request, options, operation, requestedPath) 
   if (operation !== "insert") {
     if (targetCount > 0) {
       throw createHttpError(
-        "Write operation " + operation + " does not accept line, before, or after: " + requestedPath,
+        tError("errors:write.operationDoesNotAcceptTargets", { operation, path: requestedPath }),
         400
       );
     }
@@ -737,7 +738,7 @@ function normalizeWriteInsertTarget(request, options, operation, requestedPath) 
 
   if (targetCount !== 1) {
     throw createHttpError(
-      "Insert writes require exactly one of line, before, or after: " + requestedPath,
+      tError("errors:write.insertRequiresExactlyOneTarget", { path: requestedPath }),
       400
     );
   }
@@ -745,7 +746,7 @@ function normalizeWriteInsertTarget(request, options, operation, requestedPath) 
   if (rawLine !== undefined) {
     const line = Number(rawLine);
     if (!Number.isInteger(line) || line < 1) {
-      throw createHttpError("Insert line must be a positive integer: " + requestedPath, 400);
+      throw createHttpError(tError("errors:write.insertLineMustBePositiveInteger", { path: requestedPath }), 400);
     }
 
     return {
@@ -757,7 +758,7 @@ function normalizeWriteInsertTarget(request, options, operation, requestedPath) 
   if (rawBefore !== undefined) {
     const pattern = String(rawBefore ?? "");
     if (!pattern) {
-      throw createHttpError("Insert before pattern must not be empty: " + requestedPath, 400);
+      throw createHttpError(tError("errors:write.insertBeforePatternEmpty", { path: requestedPath }), 400);
     }
 
     return {
@@ -768,7 +769,7 @@ function normalizeWriteInsertTarget(request, options, operation, requestedPath) 
 
   const pattern = String(rawAfter ?? "");
   if (!pattern) {
-    throw createHttpError("Insert after pattern must not be empty: " + requestedPath, 400);
+    throw createHttpError(tError("errors:write.insertAfterPatternEmpty", { path: requestedPath }), 400);
   }
 
   return {
@@ -798,7 +799,7 @@ function resolveTextInsertOffset(existingText, insertTarget, requestedPath) {
     const offsets = createLineInsertOffsets(existingText);
 
     if (insertTarget.line > offsets.length) {
-      throw createHttpError("Insert line " + insertTarget.line + " is out of range: " + requestedPath, 400);
+      throw createHttpError(tError("errors:write.insertLineOutOfRange", { line: insertTarget.line, path: requestedPath }), 400);
     }
 
     return offsets[insertTarget.line - 1];
@@ -808,7 +809,7 @@ function resolveTextInsertOffset(existingText, insertTarget, requestedPath) {
   const matchIndex = existingText.indexOf(pattern);
 
   if (matchIndex === -1) {
-    throw createHttpError("Insert pattern not found: " + requestedPath, 404);
+    throw createHttpError(tError("errors:write.insertPatternNotFound", { path: requestedPath }), 404);
   }
 
   return insertTarget.type === "after" ? matchIndex + pattern.length : matchIndex;
@@ -822,7 +823,7 @@ function readExistingWriteBuffer(absolutePath, requestedPath) {
   const stats = fs.statSync(absolutePath);
 
   if (stats.isDirectory()) {
-    throw createHttpError("Expected a file path: " + requestedPath, 400);
+    throw createHttpError(tError("errors:path.expectedFilePath", { path: requestedPath }), 400);
   }
 
   return fs.readFileSync(absolutePath);
@@ -849,7 +850,7 @@ function buildWriteBuffer(options = {}) {
   }
 
   if (encoding !== "utf8") {
-    throw createHttpError("Insert writes require utf8 encoding: " + options.requestedPath, 400);
+    throw createHttpError(tError("errors:write.insertRequiresUtf8", { path: options.requestedPath }), 400);
   }
 
   const existingText = existingBuffer.toString("utf8");
@@ -864,14 +865,14 @@ function buildWriteBuffer(options = {}) {
 function normalizeWriteEntries(options = {}) {
   if (Array.isArray(options.files)) {
     if (options.files.length === 0) {
-      throw createHttpError("File write batch must not be empty.", 400);
+      throw createHttpError(tError("errors:file.writeBatchEmpty"), 400);
     }
 
     return options.files;
   }
 
   if ("files" in options) {
-    throw createHttpError("File write batch must provide a files array.", 400);
+    throw createHttpError(tError("errors:file.writeBatchRequiresArray"), 400);
   }
 
   return [
@@ -898,7 +899,7 @@ function normalizeWriteRequests(options = {}) {
 
   return entries.map((entry) => {
     if (!isPlainObject(entry)) {
-      throw createHttpError("Each file write entry must be an object.", 400);
+      throw createHttpError(tError("errors:file.writeEntryMustBeObject"), 400);
     }
 
     const requestedPath = String(entry.path || "").trim();
@@ -911,11 +912,11 @@ function normalizeWriteRequests(options = {}) {
     );
 
     if (!normalizedProjectPath) {
-      throw createHttpError("Expected a writable path: " + (requestedPath || "(empty)"), 400);
+      throw createHttpError(tError("errors:path.expectedWritablePath", { path: requestedPath || "(empty)" }), 400);
     }
 
     if (seenProjectPaths.has(normalizedProjectPath)) {
-      throw createHttpError("Duplicate file write path: " + toAppRelativePath(normalizedProjectPath), 400);
+      throw createHttpError(tError("errors:file.duplicateWritePath", { path: toAppRelativePath(normalizedProjectPath) }), 400);
     }
 
     seenProjectPaths.add(normalizedProjectPath);
@@ -929,11 +930,11 @@ function normalizeWriteRequests(options = {}) {
       const content = entry.content;
 
       if (content !== undefined && content !== null && content !== "") {
-        throw createHttpError("Directory writes do not accept content: " + requestedPath, 400);
+        throw createHttpError(tError("errors:file.directoryWriteNoContent", { path: requestedPath }), 400);
       }
 
       if (operation !== "replace") {
-        throw createHttpError("Directory writes do not support " + operation + ": " + requestedPath, 400);
+        throw createHttpError(tError("errors:file.directoryWriteUnsupportedOp", { operation, path: requestedPath }), 400);
       }
 
       return {
@@ -1034,14 +1035,14 @@ function writeAppFile(options = {}) {
 function normalizeTransferEntries(options = {}, actionLabel) {
   if (Array.isArray(options.entries)) {
     if (options.entries.length === 0) {
-      throw createHttpError(`File ${actionLabel} batch must not be empty.`, 400);
+      throw createHttpError(tError("errors:file.actionBatchEmpty", { action: actionLabel }), 400);
     }
 
     return options.entries;
   }
 
   if ("entries" in options) {
-    throw createHttpError(`File ${actionLabel} batch must provide an entries array.`, 400);
+    throw createHttpError(tError("errors:file.actionBatchRequiresArray", { action: actionLabel }), 400);
   }
 
   return [
@@ -1063,18 +1064,18 @@ function normalizeTransferRequests(options = {}, actionType) {
   const entries = normalizeTransferEntries(options, actionLabel);
   const requests = entries.map((entry) => {
     if (!isPlainObject(entry)) {
-      throw createHttpError(`Each file ${actionLabel} entry must be an object.`, 400);
+      throw createHttpError(tError("errors:file.actionEntryMustBeObject", { action: actionLabel }), 400);
     }
 
     const requestedFromPath = String(entry.fromPath || entry.path || entry.sourcePath || "").trim();
     const requestedToPath = String(entry.toPath || entry.targetPath || entry.destinationPath || "").trim();
 
     if (!requestedFromPath) {
-      throw createHttpError(`File ${actionLabel} source path must not be empty.`, 400);
+      throw createHttpError(tError("errors:file.actionSourcePathMustNotBeEmpty", { action: actionLabel }), 400);
     }
 
     if (!requestedToPath) {
-      throw createHttpError(`File ${actionLabel} destination path must not be empty.`, 400);
+      throw createHttpError(tError("errors:file.actionDestinationPathMustNotBeEmpty", { action: actionLabel }), 400);
     }
 
     const resolvedSourcePath = resolveExistingProjectPath(
@@ -1083,7 +1084,7 @@ function normalizeTransferRequests(options = {}, actionType) {
     );
 
     if (!resolvedSourcePath.projectPath || !resolvedSourcePath.exists) {
-      throw createHttpError(`Path not found: ${requestedFromPath}`, 404);
+      throw createHttpError(tError("errors:path.pathNotFoundDetail", { path: requestedFromPath }), 404);
     }
 
     ensurePublicAppProjectPath(resolvedSourcePath.projectPath);
@@ -1101,29 +1102,29 @@ function normalizeTransferRequests(options = {}, actionType) {
     );
 
     if (!destinationProjectPath) {
-      throw createHttpError(`Expected a writable destination path: ${requestedToPath}`, 400);
+      throw createHttpError(tError("errors:path.expectedWritableDestination", { path: requestedToPath }), 400);
     }
 
     ensurePublicAppProjectPath(destinationProjectPath);
     if (destinationProjectPath === resolvedSourcePath.projectPath) {
-      throw createHttpError(`Source and destination must differ: ${requestedFromPath}`, 400);
+      throw createHttpError(tError("errors:file.sourceDestinationMustDiffer", { path: requestedFromPath }), 400);
     }
 
     const destinationParentProjectPath = getParentDirectoryProjectPath(destinationProjectPath);
 
     if (!destinationParentProjectPath || !hasPath(pathIndex, destinationParentProjectPath)) {
-      throw createHttpError(`Destination parent folder not found: ${requestedToPath}`, 404);
+      throw createHttpError(tError("errors:file.destinationParentNotFound", { path: requestedToPath }), 404);
     }
 
     ensureWritableProjectPath(destinationProjectPath, accessController);
     ensureWritableProjectPath(destinationParentProjectPath, accessController);
 
     if (hasExistingProjectPathConflict(pathIndex, destinationProjectPath)) {
-      throw createHttpError(`Destination already exists: ${toAppRelativePath(destinationProjectPath)}`, 400);
+      throw createHttpError(tError("errors:file.destinationAlreadyExists", { path: toAppRelativePath(destinationProjectPath) }), 400);
     }
 
     if (resolvedSourcePath.isDirectory && isDescendantPath(resolvedSourcePath.projectPath, destinationProjectPath)) {
-      throw createHttpError(`Cannot ${actionLabel} a folder into itself: ${requestedFromPath}`, 400);
+      throw createHttpError(tError("errors:file.cannotActionFolderIntoItself", { action: actionLabel, path: requestedFromPath }), 400);
     }
 
     return {
@@ -1148,11 +1149,11 @@ function normalizeTransferRequests(options = {}, actionType) {
   requests.forEach((request, index) => {
     requests.slice(0, index).forEach((previousRequest) => {
       if (request.sourceProjectPath === previousRequest.sourceProjectPath) {
-        throw createHttpError(`Duplicate file ${actionLabel} source path: ${request.fromPath}`, 400);
+        throw createHttpError(tError("errors:file.duplicateActionSourcePath", { action: actionLabel, path: request.fromPath }), 400);
       }
 
       if (request.destinationProjectPath === previousRequest.destinationProjectPath) {
-        throw createHttpError(`Duplicate file ${actionLabel} destination path: ${request.toPath}`, 400);
+        throw createHttpError(tError("errors:file.duplicateActionDestinationPath", { action: actionLabel, path: request.toPath }), 400);
       }
 
       if (
@@ -1160,7 +1161,11 @@ function normalizeTransferRequests(options = {}, actionType) {
         isDescendantPath(previousRequest.sourceProjectPath, request.sourceProjectPath)
       ) {
         throw createHttpError(
-          `Overlapping file ${actionLabel} source paths are not allowed: ${previousRequest.fromPath} and ${request.fromPath}`,
+          tError("errors:file.overlappingActionSourcePaths", {
+            action: actionLabel,
+            previousPath: previousRequest.fromPath,
+            currentPath: request.fromPath
+          }),
           400
         );
       }
@@ -1170,7 +1175,11 @@ function normalizeTransferRequests(options = {}, actionType) {
         isDescendantPath(previousRequest.destinationProjectPath, request.destinationProjectPath)
       ) {
         throw createHttpError(
-          `Overlapping file ${actionLabel} destination paths are not allowed: ${previousRequest.toPath} and ${request.toPath}`,
+          tError("errors:file.overlappingActionDestinationPaths", {
+            action: actionLabel,
+            previousPath: previousRequest.toPath,
+            currentPath: request.toPath
+          }),
           400
         );
       }
@@ -1289,14 +1298,14 @@ function moveAppPath(options = {}) {
 function normalizeDeleteEntries(options = {}) {
   if (Array.isArray(options.paths)) {
     if (options.paths.length === 0) {
-      throw createHttpError("File delete batch must not be empty.", 400);
+      throw createHttpError(tError("errors:file.deleteBatchEmpty"), 400);
     }
 
     return options.paths;
   }
 
   if (options.paths !== undefined) {
-    throw createHttpError("File delete batch must provide a paths array.", 400);
+    throw createHttpError(tError("errors:file.deleteBatchRequiresArray"), 400);
   }
 
   return [options.path];
@@ -1315,7 +1324,7 @@ function normalizeDeleteRequests(options = {}) {
     const requestedPath = String(request.path || "").trim();
 
     if (!requestedPath) {
-      throw createHttpError("File path must not be empty.", 400);
+      throw createHttpError(tError("errors:path.filePathMustNotBeEmpty"), 400);
     }
 
     const resolvedPath = resolveExistingProjectPath(
@@ -1324,7 +1333,7 @@ function normalizeDeleteRequests(options = {}) {
     );
 
     if (!resolvedPath.projectPath || !resolvedPath.exists) {
-      throw createHttpError(`Path not found: ${requestedPath}`, 404);
+      throw createHttpError(tError("errors:path.pathNotFoundDetail", { path: requestedPath }), 404);
     }
 
     ensurePublicAppProjectPath(resolvedPath.projectPath);
@@ -1345,7 +1354,7 @@ function normalizeDeleteRequests(options = {}) {
   requests.forEach((request, index) => {
     requests.slice(0, index).forEach((previousRequest) => {
       if (request.projectPath === previousRequest.projectPath) {
-        throw createHttpError(`Duplicate file delete path: ${request.path}`, 400);
+        throw createHttpError(tError("errors:file.duplicateDeletePath", { path: request.path }), 400);
       }
 
       if (
@@ -1353,7 +1362,10 @@ function normalizeDeleteRequests(options = {}) {
         isDescendantPath(previousRequest.projectPath, request.projectPath)
       ) {
         throw createHttpError(
-          `Overlapping file delete paths are not allowed: ${previousRequest.path} and ${request.path}`,
+          tError("errors:file.overlappingDeletePaths", {
+            previousPath: previousRequest.path,
+            currentPath: request.path
+          }),
           400
         );
       }
@@ -1474,7 +1486,7 @@ function listAppPaths(options = {}) {
     const targetPathInfo = parseAppProjectPath(baseProjectPath);
 
     if (!baseProjectPath) {
-      throw createHttpError("Path not found.", 404);
+      throw createHttpError(tError("errors:path.pathNotFound"), 404);
     }
 
     if (targetPathInfo && targetPathInfo.kind === "owner-path") {
@@ -1507,7 +1519,7 @@ function listAppPaths(options = {}) {
   );
 
   if (!resolvedPath.projectPath || !resolvedPath.exists) {
-    throw createHttpError("Path not found.", 404);
+    throw createHttpError(tError("errors:path.pathNotFound"), 404);
   }
 
   ensurePublicAppProjectPath(resolvedPath.projectPath);

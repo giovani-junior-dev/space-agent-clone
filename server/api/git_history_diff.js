@@ -1,4 +1,5 @@
 import { createHttpError } from "../lib/customware/file_access.js";
+import { tError } from "../lib/i18n.js";
 import { getLayerHistoryCommitDiff } from "../lib/customware/git_history.js";
 
 function rethrowGitHistoryHttpError(error, fallbackMessage) {
@@ -58,7 +59,7 @@ async function handleDiff(context) {
       watchdog: context.watchdog
     });
   } catch (error) {
-    rethrowGitHistoryHttpError(error, "Git history diff failed.");
+    rethrowGitHistoryHttpError(error, tError("errors:git.historyDiffFailed"));
   }
 }
 

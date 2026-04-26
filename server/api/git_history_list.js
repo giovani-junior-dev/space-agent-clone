@@ -1,4 +1,5 @@
 import { createHttpError } from "../lib/customware/file_access.js";
+import { tError } from "../lib/i18n.js";
 import { listLayerHistoryCommits } from "../lib/customware/git_history.js";
 
 function rethrowGitHistoryHttpError(error, fallbackMessage) {
@@ -46,7 +47,7 @@ async function handleList(context) {
       watchdog: context.watchdog
     });
   } catch (error) {
-    rethrowGitHistoryHttpError(error, "Git history list failed.");
+    rethrowGitHistoryHttpError(error, tError("errors:git.historyListFailed"));
   }
 }
 
